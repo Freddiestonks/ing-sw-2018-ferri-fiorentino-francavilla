@@ -17,5 +17,5 @@ public class Cell {
 
     }
 
-    protected boolean placeable(Dice dice){}
+    protected boolean placeable(Die dice){}
 }

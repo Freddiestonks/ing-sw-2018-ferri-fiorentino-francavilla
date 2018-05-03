@@ -4,19 +4,21 @@ public class WindowFrame {
     //Attributes
     private PatternCard pc;
     private boolean wcFace;
-    private Dice[][] placements;
+    private Die[][] placements;
 
     //Methods
 
 
     public WindowFrame(PatternCard pc) {
         this.pc = pc;
-        this.placements = new Dice[4][5];
+        this.placements = new Die[4][5];
     }
 
-    public void placeDice(Dice dice){
+    public void placeDice(Die dice){
         //richiesta utente su posizionamento e poi inserimento
     }
 
-    public boolean wcFace(){}
+    public boolean wcFace(){
+        return wcFace;
+    }
 }

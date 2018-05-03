@@ -7,6 +7,8 @@ public class Player {
     private WindowFrame wf;
     private int tokens;
     private PrivObjCard privateCard;
+    private int score = 0;
+    private boolean state = true;
 
     //Methods
 
@@ -20,5 +22,11 @@ public class Player {
 
     public void setTokens(Integer tokens){}
 
-    public int calculateScore(PubObjCard[] pubocs){}
+    public int calculateScore(PubObjCard[] pubocs){
+        return score;
+    }
+
+    public void setConnection(boolean newState){
+        this.state = newState;
+    }
 }

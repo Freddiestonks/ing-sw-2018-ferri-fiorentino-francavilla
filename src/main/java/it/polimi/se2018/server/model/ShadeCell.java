@@ -8,7 +8,7 @@ public class ShadeCell extends Cell {
     }
 
     @Override
-    public boolean placeable(Dice dice) {
+    public boolean placeable(Die dice) {
         return super.placeable(dice);
     }
 }
