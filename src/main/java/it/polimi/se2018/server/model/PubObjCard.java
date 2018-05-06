@@ -21,4 +21,6 @@ public abstract class PubObjCard {
     public boolean isUsed() {
         return used;
     }
+
+    public abstract int calculateScore(WindowFrame wf);
 }

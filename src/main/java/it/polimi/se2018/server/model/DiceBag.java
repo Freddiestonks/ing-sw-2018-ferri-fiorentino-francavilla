@@ -10,7 +10,9 @@ public class DiceBag {
         return instance;
     }
 
-    public Die extract(){}
+    public Die extract(){
+        //TODO: pick an available color randomly for the die and then roll it
+    }
 
-    public void replace(Die dice){}
+    public void replace(Die die){}
 }

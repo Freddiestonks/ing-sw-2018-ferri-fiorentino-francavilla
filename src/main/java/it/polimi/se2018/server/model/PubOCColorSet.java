@@ -1,12 +1,11 @@
 package it.polimi.se2018.server.model;
 
-public class PubOCShadeDet extends PubObjCard {
+public class PubOCColorSet extends PubObjCard {
     //attributes
-    boolean rows;
-    boolean diagonals;
+    int[] set;
 
     //methods
-    public PubOCShadeDet(String desc) {
+    public PubOCColorSet(String desc) {
         super(desc);
     }
 

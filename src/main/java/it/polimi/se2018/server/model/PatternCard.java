@@ -8,8 +8,6 @@ public class PatternCard {
     private int levelB;
 
     //Methods
-
-
     public PatternCard(int levelB, int levelF) {
         //in questa parte si potrebbe definire ogni singola cella in
         //base al fatto che sia shade o color

@@ -1,14 +1,16 @@
 package it.polimi.se2018.server.model;
 
 public class ColorCell extends Cell{
-    //Methods
+    //Attributes
+    private Color color;
 
+    //Methods
     public ColorCell(Color color) {
-        super(color, 0);
+        this.color = color;
     }
 
     @Override
-    public boolean placeable(Die dice){
-        return super.placeable(dice);
+    public boolean placeable(Die die){
+        return dice.getColor() == color;
     }
 }

@@ -5,5 +5,7 @@ public class PrivObjCard {
     private Color color;
 
     //Methods
-    public PrivObjCard(Color color){}
+    public PrivObjCard(Color color){
+        this.color = color;
+    }
 }

@@ -1,6 +1,6 @@
 package it.polimi.se2018.server.model;
 
-public class ToolCard {
+public class ToolCard implements ToolCardInterface {
     //Attributes
     private String description;
     private int price;
@@ -8,5 +8,9 @@ public class ToolCard {
     private Color color;
     private int idRes;
     //Methods
+
     public void putTokens(){}
+
+    //TODO: insert player's move information among parameters
+    public void performActions(Model model, WindowFrame wf){}
 }

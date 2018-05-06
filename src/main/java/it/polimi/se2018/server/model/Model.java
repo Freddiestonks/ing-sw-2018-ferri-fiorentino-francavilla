@@ -1,8 +1,10 @@
 package it.polimi.se2018.server.model;
 
+import it.polimi.se2018.server.utils.Observable;
+
 import java.util.ArrayList;
 
-public class Model{
+public class Model extends Observable {
     //Attributes
     final private static Model instance = new Model();
     private int idMatch;
@@ -14,7 +16,7 @@ public class Model{
     private int numPlayers = 0;
     private DiceBag diceBag;
     private ArrayList<Die> draftPool = new ArrayList<Die>();
-    private ArrayList<Die>[] roundTrack = new ArrayList<Die>()[10];
+    private ArrayList<Die>[] roundTrack;
     private PubObjCard[] pubOCs = new PubObjCard[10];
     private PrivObjCard[] privOCs = new PrivObjCard[5];
     private ToolCard[] toolCards = new ToolCard[12];
@@ -22,6 +24,9 @@ public class Model{
 
     //Methods
     private Model() {
+        for(int i = 0; i < 10; i++) {
+            roundTrack[i] = new ArrayList<>();
+        }
     }
 
     public static Model instance(){
@@ -44,11 +49,11 @@ public class Model{
 
     }
 
-    public void updateTurn(){
+    public void updateTurn() throws InvalidTurnException{
         if(round == 10 && backward && turn == 1) {
-            // TODO: exception
+            throw new InvalidTurnException();
         }
-        if(!backward && (turn == numPlayers)){
+        if(!backward && (turn == numPlayers)) {
             backward = true;
         }
         else if(backward && (turn == 1)) {
