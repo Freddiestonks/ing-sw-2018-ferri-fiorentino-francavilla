@@ -7,15 +7,13 @@ public class WindowFrame {
     private Die[][] placements;
 
     //Methods
-
-
     public WindowFrame(PatternCard pc) {
         this.pc = pc;
         this.placements = new Die[4][5];
     }
 
     public void placeDice(Die dice){
-        //richiesta utente su posizionamento e poi inserimento
+        //TODO: implement user request about positioning and insertion
     }
 
     public boolean wcFace(){

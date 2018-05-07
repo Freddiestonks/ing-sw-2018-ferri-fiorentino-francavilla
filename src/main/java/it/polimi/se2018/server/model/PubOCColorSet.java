@@ -10,6 +10,5 @@ public class PubOCColorSet extends PubObjCard {
     }
 
     public int calculateScore(WindowFrame wf) {
-
     }
 }

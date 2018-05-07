@@ -9,14 +9,12 @@ public class PatternCard {
 
     //Methods
     public PatternCard(int levelB, int levelF) {
-        //in questa parte si potrebbe definire ogni singola cella in
-        //base al fatto che sia shade o color
         this.front = new Cell[4][5];
         this.back = new Cell[4][5];
         this.levelB = levelB;
         this.levelF = levelF;
     }
-
+    //TODO: implement front-back generation
     public boolean isUsed(){}
 
     public void use(){}
