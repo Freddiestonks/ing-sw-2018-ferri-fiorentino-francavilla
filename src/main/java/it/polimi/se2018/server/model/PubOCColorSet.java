@@ -2,7 +2,7 @@ package it.polimi.se2018.server.model;
 
 public class PubOCColorSet extends PubObjCard {
     //attributes
-    int[] set;
+    Color[] set;
 
     //methods
     public PubOCColorSet(String desc) {

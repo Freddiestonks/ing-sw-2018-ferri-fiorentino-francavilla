@@ -8,6 +8,7 @@ public class Die {
     private Color color;
 
     public Die(Color color) {
+        this.roll();
         this.color = color;
     }
 
@@ -23,5 +24,9 @@ public class Die {
 
     public Color getColor() {
         return color;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }

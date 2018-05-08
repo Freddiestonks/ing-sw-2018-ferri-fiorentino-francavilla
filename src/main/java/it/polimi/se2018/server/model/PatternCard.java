@@ -19,4 +19,11 @@ public class PatternCard {
 
     public void use(){}
 
+    public int getLevelF() {
+        return levelF;
+    }
+
+    public int getLevelB() {
+        return levelB;
+    }
 }

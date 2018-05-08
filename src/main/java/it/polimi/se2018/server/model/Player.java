@@ -4,7 +4,7 @@ package it.polimi.se2018.server.model;
 public class Player {
     //Attr.
     private String username;
-    private WindowFrame wf;
+    private WindowFrame wf = null;
     private int tokens;
     private PrivObjCard privateCard;
     private int score = 0;
@@ -16,13 +16,26 @@ public class Player {
         this.username = username;
     }
 
-    public void setWinFrame(WindowFrame wf){}
+    public void setWinFrame(WindowFrame wf){
+        this.wf = wf;
+        this.tokens = wf.cardDifficulty();
+    }
 
-    public void setPrivOC(PrivObjCard privoc){}
+    public void setPrivOC(PrivObjCard privoc){
+        if(!privoc.isUsed()){
+            this.privateCard = privoc;
+        }
+    }
 
-    public void setTokens(Integer tokens){}
+    public void spendTokens(int tokens){
+
+        if(this.tokens >= tokens && tokens >= 0){
+            this.tokens -= tokens;
+        }
+    }
 
     public int calculateScore(PubObjCard[] pubocs){
+        //TODO: score calculation missing.
         return score;
     }
 

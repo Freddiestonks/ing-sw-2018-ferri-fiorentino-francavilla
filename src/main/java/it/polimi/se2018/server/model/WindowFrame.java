@@ -3,7 +3,7 @@ package it.polimi.se2018.server.model;
 public class WindowFrame {
     //Attributes
     private PatternCard pc;
-    private boolean wcFace;
+    private boolean wcFace; //true for front
     private Die[][] placements;
 
     //Methods
@@ -18,5 +18,9 @@ public class WindowFrame {
 
     public boolean wcFace(){
         return wcFace;
+    }
+
+    public int cardDifficulty(){
+        return (wcFace ? pc.getLevelF() : pc.getLevelB());
     }
 }

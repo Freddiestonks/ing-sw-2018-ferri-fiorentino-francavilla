@@ -5,12 +5,12 @@ public class ShadeCell extends Cell {
     private int shade;
 
     //Methods
-    public ShadeCell(int shade) throws InvalidValueException {
+    public ShadeCell(int shade) {
         if((shade >= 1) && (shade <= 6)){
             this.shade = shade;
         }
         else {
-            throw new InvalidValueException();
+            throw new IllegalArgumentException();
         }
     }
 
