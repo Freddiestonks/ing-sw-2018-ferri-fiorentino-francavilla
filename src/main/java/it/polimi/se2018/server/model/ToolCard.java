@@ -1,6 +1,6 @@
 package it.polimi.se2018.server.model;
 
-public class ToolCard implements ToolCardInterface {
+public abstract class ToolCard {
     //Attributes
     private String description;
     private int price;

@@ -16,9 +16,6 @@ public class ShadeCell extends Cell {
 
     @Override
     public boolean placeable(Die die) {
-        if (die.getNumber() == shade)
-            return true;
-        else
-            return false;
+        return die.getNumber() == shade;
     }
 }

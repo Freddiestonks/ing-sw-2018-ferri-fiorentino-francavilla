@@ -15,8 +15,8 @@ public class Model extends Observable {
     private boolean backward = false;
     private int numPlayers = 0;
     private DiceBag diceBag;
-    private ArrayList<Die> draftPool = new ArrayList<Die>();
-    private ArrayList<Die>[] roundTrack;
+    private ArrayList<Die> draftPool = new ArrayList<>();
+    private ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
     private PubObjCard[] pubOCs = new PubObjCard[10];
     private PrivObjCard[] privOCs = new PrivObjCard[5];
     private ToolCard[] toolCards = new ToolCard[12];
@@ -25,7 +25,7 @@ public class Model extends Observable {
     //Methods
     private Model() {
         for(int i = 0; i < 10; i++) {
-            roundTrack[i] = new ArrayList<>();
+            roundTrack.add(new ArrayList<>());
         }
     }
 

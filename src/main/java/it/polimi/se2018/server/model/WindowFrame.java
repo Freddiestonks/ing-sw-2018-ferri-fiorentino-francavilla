@@ -12,7 +12,7 @@ public class WindowFrame {
         this.placements = new Die[4][5];
     }
 
-    public void placeDice(Die dice){
+    public void placeDice(Die die){
         //TODO: implement user request about positioning and insertion
     }
 
