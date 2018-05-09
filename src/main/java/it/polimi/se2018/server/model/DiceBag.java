@@ -1,71 +1,49 @@
 package it.polimi.se2018.server.model;
 
+import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Random;
-
-import static java.lang.String.valueOf;
 
 public class DiceBag {
     //Attributes
     final private static DiceBag instance = new DiceBag();
+    private ArrayList<Color> availableColors;
     private int[] content = new int[5];
+
     //Methods
     private DiceBag(){
-        content[0] = 18;
-        content[1] = 18;
-        content[2] = 18;
-        content[3] = 18;
-        content[4] = 18;
-
+        // there are 18 dice for each color
+        for(int i = 0; i < 5; i++) {
+            content[i] = 18;
+        }
+        // get all the dice colors
+        availableColors = new ArrayList<Color>(Arrays.asList(Color.values()));
     }
     public static DiceBag instance(){
         return instance;
     }
 
-    public Die extract(){
-        Random randomColors = new Random();
-        Die newDie;
-        int num = 1 + randomColors.nextInt(5);
-
-        /*Color[] colors = Color.values();
-        newDie = new Die(colors[num]);
-        content[num]--;*/
-
-        while(content[num]<=0) {
-            num = 1 + randomColors.nextInt(5);
+    public Die extract() throws EmptyDiceBagException{
+        if(availableColors.isEmpty()) {
+            throw new EmptyDiceBagException();
         }
-
-        if (num == 1) {
-            newDie = new Die(Color.RED);
-
-        } else if (num == 2) {
-            newDie = new Die(Color.YELLOW);
-        } else if (num == 3) {
-            newDie = new Die(Color.GREEN);
-        } else if (num == 4) {
-            newDie = new Die(Color.BLUE);
-        } else if (num == 5) {
-            newDie = new Die(Color.PURPLE);
+        Random random = new Random();
+        // pick a color from the available ones in the dice bag
+        int colorNum = random.nextInt(availableColors.size());
+        Color color = availableColors.get(colorNum);
+        // get the die
+        Die newDie = new Die(color);
+        if(content[color.ordinal()] == 1) {
+            // if it is the last die of that color being extracted
+            availableColors.remove(color);
         }
-        content[num]--;
-
+        // in either case one die fewer of that color
+        content[color.ordinal()]--;
         return newDie;
     }
 
     public void replace(Die die){
-        if(die.getColor() == Color.RED){
-            content[0]++;
-        }
-        else if(die.getColor() == Color.YELLOW){
-            content[1]++;
-        }
-        else if(die.getColor() == Color.GREEN){
-            content[2]++;
-        }
-        else if(die.getColor() == Color.BLUE){
-            content[3]++;
-        }
-        else if(die.getColor() == Color.PURPLE){
-            content[4]++;
-        }
+        // increase the dice number of that color
+        content[die.getColor().ordinal()]++;
     }
 }
