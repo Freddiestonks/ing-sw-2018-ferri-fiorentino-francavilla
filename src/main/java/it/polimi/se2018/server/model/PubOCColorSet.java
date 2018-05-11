@@ -1,8 +1,10 @@
 package it.polimi.se2018.server.model;
 
+import java.util.ArrayList;
+
 public class PubOCColorSet extends PubObjCard {
     //attributes
-    Color[] set;
+    private ArrayList<Integer> usedColors = new ArrayList<>(5);
 
     //methods
     public PubOCColorSet(String desc) {
@@ -10,5 +12,7 @@ public class PubOCColorSet extends PubObjCard {
     }
 
     public int calculateScore(WindowFrame wf) {
+        int score =0;
+        return 0;
     }
 }

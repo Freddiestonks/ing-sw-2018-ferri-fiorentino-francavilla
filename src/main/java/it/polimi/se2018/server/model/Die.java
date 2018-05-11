@@ -15,7 +15,7 @@ public class Die {
     //Methods
     public void roll() {
         Random randomNumbers = new Random();
-        number = 1 + randomNumbers.nextInt(5);
+        number = 1 + randomNumbers.nextInt(6);
     }
 
     public int getNumber() {

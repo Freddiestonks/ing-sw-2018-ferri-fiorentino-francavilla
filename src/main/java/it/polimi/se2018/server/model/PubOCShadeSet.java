@@ -9,5 +9,8 @@ public class PubOCShadeSet extends PubObjCard {
         super(desc);
     }
 
-    public int calculateScore(WindowFrame wf) {}
+    public int calculateScore(WindowFrame wf) {
+        int score = 0;
+        return score;
+    }
 }

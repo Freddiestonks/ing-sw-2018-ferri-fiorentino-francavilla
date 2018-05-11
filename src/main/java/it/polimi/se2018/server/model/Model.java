@@ -4,6 +4,8 @@ import it.polimi.se2018.server.utils.Observable;
 
 import java.util.ArrayList;
 
+import static sun.audio.AudioPlayer.player;
+
 public class Model extends Observable {
     //Attributes
     final private static Model instance = new Model();
@@ -21,6 +23,7 @@ public class Model extends Observable {
     private PrivObjCard[] privOCs = new PrivObjCard[5];
     private ToolCard[] toolCards = new ToolCard[12];
     private PatternCard[] patCards = new PatternCard[12];
+    private Player[] leaderboard = new  Player[4];
 
     //Methods
     private Model() {
@@ -41,12 +44,13 @@ public class Model extends Observable {
     }
 
     public void removePlayer(Player player){
-        // method setConnection used to update the player's status (online/offline)
+        // method setConnection used to update the player's status (offline)
         player.setConnection(false);
     }
 
-    public void reinsertPlayer(){
-
+    public void reinsertPlayer(Player player){
+        // method setConnection used to update the player's status (online)
+        player.setConnection(true);
     }
 
     public void updateTurn() throws InvalidTurnException{

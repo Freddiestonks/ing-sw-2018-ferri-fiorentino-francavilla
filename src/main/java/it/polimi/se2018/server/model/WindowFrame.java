@@ -23,4 +23,8 @@ public class WindowFrame {
     public int cardDifficulty(){
         return (wcFace ? pc.getLevelF() : pc.getLevelB());
     }
+
+    public Die getDie(int row, int col){
+        return placements[row][col];
+    }
 }

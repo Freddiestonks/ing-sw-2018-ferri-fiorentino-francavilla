@@ -11,6 +11,6 @@ public class ColorCell extends Cell{
 
     @Override
     public boolean placeable(Die die){
-        return die.getColor() == color
+        return (die.getColor() == color);
     }
 }
