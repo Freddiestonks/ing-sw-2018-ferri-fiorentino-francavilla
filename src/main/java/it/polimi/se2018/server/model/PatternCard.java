@@ -6,6 +6,7 @@ public class PatternCard {
     private Cell[][] back;
     private int levelF;
     private int levelB;
+    private boolean usedCard;
 
     //Methods
     public PatternCard(int levelB, int levelF) {
@@ -14,10 +15,26 @@ public class PatternCard {
         this.levelB = levelB;
         this.levelF = levelF;
     }
-    //TODO: implement front-back generation
-    public boolean isUsed(){}
 
-    public void use(){}
+    public boolean isUsed(){
+        return usedCard;
+    }
+
+    public void use(boolean selection){
+        usedCard = selection;
+    }
+
+    public Cell[][] selected(){
+        if(isUsed()) {
+            return front;
+        }
+
+        else {
+            return back;
+        }
+    }
+
+
 
     public int getLevelF() {
         return levelF;
