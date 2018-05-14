@@ -1,22 +1,19 @@
 package it.polimi.se2018.server.model;
 
-import java.util.ArrayList;
-
 public class WindowFrame {
     //Attributes
     private PatternCard pc;
     private boolean wcFace; //true for front
-    private ArrayList<ArrayList<Die>> placements;
+    private Die[][] placements = new Die[4][5];
     private boolean empty = true;
 
     //Methods
-    public WindowFrame(PatternCard pc) {
+    public WindowFrame(PatternCard pc, boolean wcFace) {
         this.pc = pc;
-        this.placements = new ArrayList<>();
-        for(int i=0; i<5; i++) {
-            placements.add(new ArrayList<Die>());
-            for(int j=0; j<4; j++){
-                placements.get(i).add(j,null);
+        this.wcFace = wcFace;
+        for(int i=0; i<4; i++) {
+            for(int j=0; j<5; j++){
+                placements[i][j] = null;
             }
         }
 
@@ -24,9 +21,9 @@ public class WindowFrame {
 
     public boolean smallCheck(Die die, int row, int col){
         boolean checkedOK = true;
-        if(placements.get(col).get(row) != null){
-            if (!(placements.get(col).get(row).getColor() != die.getColor() &&
-                    placements.get(col).get(row).getNumber() != die.getNumber())){
+        if(placements[row][col] != null){
+            if (!(placements[row][col].getColor() != die.getColor() &&
+                    placements[row][col].getValue() != die.getValue())){
                 checkedOK = false;
             }
         }
@@ -36,30 +33,33 @@ public class WindowFrame {
     public boolean checkNeighborhood(int row, int col){
         //a first check of at least one die near the focused place.
         //if there's not any die, the insertion cannot take place.
+        if(row < 0 || col < 0 || row > 4 || col > 5) {
+            throw new IllegalArgumentException();
+        }
         boolean atLeastOne = false;
         switch(col){
             case 0:
                 switch(row){
                     case 0:
-                        if (placements.get(col + 1).get(row) != null ||
-                                placements.get(col).get(row + 1) != null ||
-                                placements.get(col+1).get(row + 1) != null) {
+                        if (placements[row][col + 1] != null ||
+                                placements[row + 1][col] != null ||
+                                placements[row + 1][col + 1] != null) {
                             atLeastOne = true;
                         }
                         break;
                     case 3:
-                        if (placements.get(col + 1).get(row) != null ||
-                                placements.get(col).get(row - 1) != null ||
-                                placements.get(col+1).get(row - 1) != null){
+                        if (placements[row][col + 1] != null ||
+                                placements[row - 1][col] != null ||
+                                placements[row - 1][col + 1] != null){
                             atLeastOne = true;
                         }
                         break;
                     default:
-                        if (placements.get(col + 1).get(row) != null ||
-                                placements.get(col).get(row - 1) != null ||
-                                placements.get(col).get(row + 1) != null ||
-                                placements.get(col+1).get(row + 1) != null ||
-                                placements.get(col+1).get(row - 1) != null) {
+                        if (placements[row][col + 1] != null ||
+                                placements[row - 1][col] != null ||
+                                placements[row + 1][col] != null ||
+                                placements[row + 1][col + 1] != null ||
+                                placements[row - 1][col + 1] != null) {
                             atLeastOne = true;
                         }
                         break;
@@ -68,25 +68,25 @@ public class WindowFrame {
             case 4:
                 switch(row){
                     case 0:
-                        if (placements.get(col - 1).get(row) != null ||
-                                placements.get(col).get(row + 1) != null ||
-                                placements.get(col-1).get(row + 1) != null) {
+                        if (placements[row][col - 1] != null ||
+                                placements[row + 1][col] != null ||
+                                placements[row + 1][col - 1] != null) {
                             atLeastOne = true;
                         }
                         break;
                     case 3:
-                        if (placements.get(col - 1).get(row) != null ||
-                                placements.get(col).get(row - 1) != null ||
-                                placements.get(col-1).get(row - 1) != null) {
+                        if (placements[row][col - 1] != null ||
+                                placements[row - 1][col] != null ||
+                                placements[row - 1][col - 1] != null) {
                             atLeastOne = true;
                         }
                         break;
                     default:
-                        if (placements.get(col + 1).get(row) != null ||
-                                placements.get(col).get(row - 1) != null ||
-                                placements.get(col).get(row + 1) != null ||
-                                placements.get(col-1).get(row + 1) != null ||
-                                placements.get(col-1).get(row - 1) != null) {
+                        if (placements[row][col + 1] != null ||
+                                placements[row - 1][col] != null ||
+                                placements[row + 1][col] != null ||
+                                placements[row + 1][col - 1] != null ||
+                                placements[row - 1][col - 1] != null) {
                             atLeastOne = true;
                         }
                         break;
@@ -95,32 +95,32 @@ public class WindowFrame {
             default:
                 switch(row){
                     case 0:
-                        if (placements.get(col - 1).get(row) != null ||
-                                placements.get(col + 1).get(row) != null ||
-                                placements.get(col).get(row + 1) != null ||
-                                placements.get(col+1).get(row + 1) != null ||
-                                placements.get(col-1).get(row + 1) != null) {
+                        if (placements[row][col - 1] != null ||
+                                placements[row][col + 1] != null ||
+                                placements[row + 1][col] != null ||
+                                placements[row + 1][col + 1] != null ||
+                                placements[row + 1][col - 1] != null) {
                             atLeastOne = true;
                         }
                         break;
                     case 3:
-                        if (placements.get(col - 1).get(row) != null ||
-                                placements.get(col + 1).get(row) != null ||
-                                placements.get(col).get(row - 1) != null ||
-                                placements.get(col-1).get(row - 1) != null ||
-                                placements.get(col+1).get(row - 1) != null) {
+                        if (placements[row][col - 1] != null ||
+                                placements[row][col + 1] != null ||
+                                placements[row - 1][col] != null ||
+                                placements[row - 1][col - 1] != null ||
+                                placements[row + 1][col - 1] != null) {
                             atLeastOne = true;
                         }
                         break;
                     default:
-                        if (placements.get(col - 1).get(row) != null ||
-                                placements.get(col + 1).get(row) != null ||
-                                placements.get(col).get(row - 1) != null ||
-                                placements.get(col).get(row + 1) != null ||
-                                placements.get(col-1).get(row + 1) != null ||
-                                placements.get(col+1).get(row + 1) != null ||
-                                placements.get(col-1).get(row - 1) != null ||
-                                placements.get(col+1).get(row - 1) != null) {
+                        if (placements[row][col - 1] != null ||
+                                placements[row][col + 1] != null ||
+                                placements[row - 1][col] != null ||
+                                placements[row + 1][col] != null ||
+                                placements[row + 1][col - 1] != null ||
+                                placements[row + 1][col + 1] != null ||
+                                placements[row - 1][col - 1] != null ||
+                                placements[row - 1][col + 1] != null) {
                             atLeastOne = true;
                         }
                         break;
@@ -130,7 +130,7 @@ public class WindowFrame {
         return atLeastOne;
     }
 
-    public void placeDice(Die die, int row, int col) throws DieNotValidException {
+    public void placeDie(Die die, int row, int col) throws DieNotValidException {
         //is a bool variable that helps to save the right conditions for die insertion.
         boolean feelRight = false;
         //controls the empty case
@@ -224,13 +224,16 @@ public class WindowFrame {
             }
         }
 
-        if (feelRight && placements.get(col).get(row) == null) {
-            placements.get(col).add(row, die);
+        if (feelRight && placements[row][col] == null) {
+            placements[row][col] = die;
         } else {
             throw new DieNotValidException();
         }
     }
 
+    public void removeDie(int row, int col) {
+        placements[row][col] = null;
+    }
 
     public boolean wcFace(){
         return wcFace;
@@ -241,6 +244,6 @@ public class WindowFrame {
     }
 
     public Die getDie(int row, int col){
-        return placements.get(col).get(row);
+        return placements[row][col];
     }
 }

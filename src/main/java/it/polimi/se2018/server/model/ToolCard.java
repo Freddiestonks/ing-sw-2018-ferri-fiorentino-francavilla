@@ -11,6 +11,7 @@ public abstract class ToolCard {
 
     public void putTokens(){}
 
-    //TODO: insert player's move information among parameters
-    public void performActions(Model model, WindowFrame wf){}
+    public abstract void performAction(Model model, WindowFrame wf, PlayerAction pa);
+
+    public abstract boolean validAction(Model model, WindowFrame wf, PlayerAction pa);
 }

@@ -4,8 +4,6 @@ import it.polimi.se2018.server.utils.Observable;
 
 import java.util.ArrayList;
 
-import static sun.audio.AudioPlayer.player;
-
 public class Model extends Observable {
     //Attributes
     final private static Model instance = new Model();
@@ -78,6 +76,32 @@ public class Model extends Observable {
 
     public int getTurn(){
         return turn;
+    }
+
+    public Die getDraftPoolDie(int pos) {
+        return draftPool.get(pos);
+    }
+
+    public void addDraftPoolDie(Die die) {
+        draftPool.add(die);
+        //TODO: increase DP counter
+    }
+
+    public void removeDraftPoolDie(int pos) {
+        draftPool.remove(pos);
+        //TODO: decrease DP counter
+    }
+
+    public Die getRoundTrackDie(int round, int i) {
+        return roundTrack.get(round).get(i);
+    }
+
+    public void addRoundTrackDie(Die die, int round) {
+        roundTrack.get(round).add(die);
+    }
+
+    public void removeRoundTrackDie(int round, int i) {
+        roundTrack.get(round).remove(i);
     }
 
     public void calculateScore(){
