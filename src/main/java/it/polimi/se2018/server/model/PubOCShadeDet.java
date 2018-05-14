@@ -21,22 +21,22 @@ public class PubOCShadeDet extends PubObjCard {
 
     private void updateCheck(ArrayList<Integer> localCheck, int row , int col, WindowFrame wf){
         //UpdateCheck is used to fill the "Check" vector with how many times each shade appears on a line
-        if(wf.getDie(row,col).getNumber() == 1){
+        if(wf.getDie(row,col).getValue() == 1){
             localCheck.set(0,localCheck.get(0) + 1);
         }
-        else if(wf.getDie(row,col).getNumber() == 2){
+        else if(wf.getDie(row,col).getValue() == 2){
             localCheck.set(1,localCheck.get(1) + 1);
         }
-        else if(wf.getDie(row,col).getNumber() == 3){
+        else if(wf.getDie(row,col).getValue() == 3){
             localCheck.set(2,localCheck.get(2) + 1);
         }
-        else if(wf.getDie(row,col).getNumber() == 4){
+        else if(wf.getDie(row,col).getValue() == 4){
             localCheck.set(3,localCheck.get(3) + 1);
         }
-        else if(wf.getDie(row,col).getNumber() == 5){
+        else if(wf.getDie(row,col).getValue() == 5){
             localCheck.set(4,localCheck.get(4) + 1);
         }
-        else if(wf.getDie(row,col).getNumber() == 6){
+        else if(wf.getDie(row,col).getValue() == 6){
             localCheck.set(5,localCheck.get(5) + 1);
         }
     }

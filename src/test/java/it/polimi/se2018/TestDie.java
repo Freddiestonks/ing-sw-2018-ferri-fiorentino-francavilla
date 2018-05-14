@@ -1,9 +1,9 @@
 package it.polimi.se2018;
-import static org.junit.Assert.*;
-
 import it.polimi.se2018.server.model.Color;
 import it.polimi.se2018.server.model.Die;
 import org.junit.Test;
+
+import static org.junit.Assert.fail;
 
 public class TestDie {
     @Test
@@ -12,7 +12,7 @@ public class TestDie {
 
         die1.roll();
 
-        if(die1.getNumber()<=0 && die1.getNumber()>=7){
+        if(die1.getValue()<=0 && die1.getValue()>=7){
               fail();
         }
         
@@ -20,9 +20,9 @@ public class TestDie {
             fail();
         }
 
-        die1.setNumber(4);
+        die1.setValue(4);
 
-        if (die1.getNumber()!=4){
+        if (die1.getValue()!=4){
             fail();
         }
     }

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Die {
     //Attributes
-    private int number;
+    private int value;
     private Color color;
 
     public Die(Color color) {
@@ -18,15 +18,15 @@ public class Die {
         number = 1 + randomNumbers.nextInt(6);
     }
 
-    public int getNumber() {
-        return number;
+    public int getValue() {
+        return value;
     }
 
     public Color getColor() {
         return color;
     }
 
-    public void setNumber(int number) {
+    public void setValue(int number) {
         this.number = number;
     }
 }
