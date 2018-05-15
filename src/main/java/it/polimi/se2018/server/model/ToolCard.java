@@ -13,7 +13,7 @@ public abstract class ToolCard {
 
     public void putTokens(){}
 
-    public abstract void performAction(Model model, WindowFrame wf, PlayerAction pa);
+    public abstract void performAction(Model model, WindowFrame wf, PlayerAction pa) throws DieNotValidException;
 
     public abstract boolean validAction(Model model, WindowFrame wf, PlayerAction pa);
 }

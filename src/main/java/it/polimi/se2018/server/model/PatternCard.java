@@ -6,7 +6,6 @@ public class PatternCard {
     private Cell[][] back;
     private int levelF;
     private int levelB;
-    private boolean usedCard;
 
     //Methods
     public PatternCard(int levelB, int levelF) {
@@ -16,21 +15,13 @@ public class PatternCard {
         this.levelF = levelF;
     }
 
-    public boolean isUsed(){
-        return usedCard;
-    }
-
-    public void use(boolean selection){
-        usedCard = selection;
-    }
-
-    public Cell[][] selected(){
-        if(isUsed()) {
-            return front;
+    public Cell selected(boolean wcFace, int row, int col){
+        if(wcFace) {
+            return front[row][col];
         }
 
         else {
-            return back;
+            return back[row][col];
         }
     }
 

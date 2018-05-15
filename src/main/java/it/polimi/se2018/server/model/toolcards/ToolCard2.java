@@ -9,7 +9,7 @@ public class ToolCard2 extends ToolCard {
         super();
     }
 
-    public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
+    public void performAction(Model model, WindowFrame wf, PlayerAction pa) throws DieNotValidException {
         Die die = wf.getDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
         // move the die
         wf.removeDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);

@@ -136,11 +136,11 @@ public class WindowFrame {
         //controls the empty case
         if(empty){
             //die must be inserted on the edge or in the corners.
-            if ((row == 0 || row == 3 || col == 0 || col == 4) && pc.selected()[row][col].placeable(die))
+            if (row == 0 || row == 3 || col == 0 || col == 4)
                 feelRight = true;
         }
         //controls if row-col position is placeable for the die.
-        else if (pc.selected()[row][col].placeable(die) && checkNeighborhood(row,col)) {
+        else {
             //controls if orthogonal rules are respected.
             switch (col) {
                 case 0:
@@ -235,7 +235,7 @@ public class WindowFrame {
         placements[row][col] = null;
     }
 
-    public boolean wcFace(){
+    public boolean getWCFace(){
         return wcFace;
     }
 
@@ -245,5 +245,9 @@ public class WindowFrame {
 
     public Die getDie(int row, int col){
         return placements[row][col];
+    }
+
+    public Cell getPCCell(int row, int col){
+        return pc.selected(wcFace, row, col);
     }
 }

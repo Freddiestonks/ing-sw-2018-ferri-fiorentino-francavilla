@@ -20,7 +20,11 @@ public class TestColorCell {
         Die yellow = new Die(Color.YELLOW);
         Die red = new Die(Color.RED);
         Die purple = new Die(Color.PURPLE);
-        if(!(bcell.placeable(blue) && gcell.placeable(green) && ycell.placeable(yellow)&& rcell.placeable(red)&& pcell.placeable(purple))){
+        if(!(bcell.placeableColor(blue) &&
+                gcell.placeableColor(green) &&
+                ycell.placeableColor(yellow) &&
+                rcell.placeableColor(red) &&
+                pcell.placeableColor(purple))){
             fail();
         }
     }
