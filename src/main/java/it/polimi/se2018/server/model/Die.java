@@ -15,7 +15,7 @@ public class Die {
     //Methods
     public void roll() {
         Random randomNumbers = new Random();
-        number = 1 + randomNumbers.nextInt(6);
+        value = 1 + randomNumbers.nextInt(6);
     }
 
     public int getValue() {
@@ -27,6 +27,6 @@ public class Die {
     }
 
     public void setValue(int number) {
-        this.number = number;
+        this.value = number;
     }
 }

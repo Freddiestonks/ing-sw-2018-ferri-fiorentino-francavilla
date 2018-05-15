@@ -59,7 +59,7 @@ public class PubOCShadeDet extends PubObjCard {
                     //if in one row each shade came out once then we can add 6 points to the score
                     score = score + 5;
                 }
-                for(int l = 0; l<5;l++){
+                for(int l = 0; l<6;l++){
                     //we need to reset the elements of the ArrayList to 0
                     check.set(l, 0);
                 }

@@ -1,5 +1,6 @@
 package it.polimi.se2018.server.model.toolcards;
 
+import it.polimi.se2018.server.controller.PlayerAction;
 import it.polimi.se2018.server.model.Die;
 import it.polimi.se2018.server.model.Model;
 import it.polimi.se2018.server.model.ToolCard;
@@ -14,12 +15,12 @@ public class ToolCard1 extends ToolCard {
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
-        Die die = model.getDraftPoolDie(pa.getPosDPDie());
+        Die die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
         die.setValue(pa.getNewDieValue());
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
-        Die die = model.getDraftPoolDie(pa.getPosDPDie());
+        Die die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
         if((die.getValue() != pa.getNewDieValue() - 1)
                && (die.getValue() != pa.getNewDieValue() + 1)) {
             return false;

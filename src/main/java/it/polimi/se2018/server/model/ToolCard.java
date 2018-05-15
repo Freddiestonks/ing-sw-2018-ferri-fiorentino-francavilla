@@ -1,5 +1,7 @@
 package it.polimi.se2018.server.model;
 
+import it.polimi.se2018.server.controller.PlayerAction;
+
 public abstract class ToolCard {
     //Attributes
     private String description;

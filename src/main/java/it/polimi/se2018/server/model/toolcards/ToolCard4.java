@@ -1,9 +1,7 @@
 package it.polimi.se2018.server.model.toolcards;
 
-import it.polimi.se2018.server.model.Die;
-import it.polimi.se2018.server.model.Model;
-import it.polimi.se2018.server.model.ToolCard;
-import it.polimi.se2018.server.model.WindowFrame;
+import it.polimi.se2018.server.controller.PlayerAction;
+import it.polimi.se2018.server.model.*;
 
 public class ToolCard4 extends ToolCard {
 
@@ -12,8 +10,8 @@ public class ToolCard4 extends ToolCard {
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
-        Die die1 = wf.getDie(pa.getPlaceWFDie()[0]);
-        Die die2 = wf.getDie(pa.getPlaceWFDie()[1]);
+        Die die1 = wf.getDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
+        Die die2 = wf.getDie(pa.getPlaceWFDie()[1][0], pa.getPlaceWFDie()[1][1]);
         // move the first die
         wf.removeDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
         wf.placeDie(die1, pa.getPlaceNewWFDie()[0][0], pa.getPlaceNewWFDie()[0][1]);
@@ -23,6 +21,16 @@ public class ToolCard4 extends ToolCard {
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
-        //TODO: check all the restrctions
+        Die die1 = wf.getDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
+        Die die2 = wf.getDie(pa.getPlaceWFDie()[1][0], pa.getPlaceWFDie()[1][1]);
+        Cell cell = wf.getPCCell(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
+
+        if (!cell.placeableColor(die1) || !wf.checkNeighborhood(pa.getPlaceNewWFDie()[0][0], pa.getPlaceNewWFDie()[0][1])) {
+            return false;
+        }
+        if (!cell.placeableColor(die2) || !wf.checkNeighborhood(pa.getPlaceNewWFDie()[1][0], pa.getPlaceNewWFDie()[1][1])) {
+            return false;
+        }
+        return true;
     }
 }

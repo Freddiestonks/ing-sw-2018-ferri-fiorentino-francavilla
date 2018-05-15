@@ -1,9 +1,7 @@
 package it.polimi.se2018.server.model.toolcards;
 
-import it.polimi.se2018.server.model.Die;
-import it.polimi.se2018.server.model.Model;
-import it.polimi.se2018.server.model.ToolCard;
-import it.polimi.se2018.server.model.WindowFrame;
+import it.polimi.se2018.server.controller.PlayerAction;
+import it.polimi.se2018.server.model.*;
 
 public class ToolCard2 extends ToolCard {
 
@@ -12,13 +10,19 @@ public class ToolCard2 extends ToolCard {
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
-        Die die = wf.getDie(pa.getPlaceWFDie()[0]);
+        Die die = wf.getDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
         // move the die
         wf.removeDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
         wf.placeDie(die, pa.getPlaceNewWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
-        //TODO: check only value and neighborhod restrctions
+        Die die = wf.getDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
+        Cell cell = wf.getPCCell(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
+
+        if (cell.placeableShade(die) && wf.checkNeighborhood(pa.getPlaceNewWFDie()[0][0], pa.getPlaceNewWFDie()[0][1])) {
+            return true;
+        }
+        return false;
     }
 }
