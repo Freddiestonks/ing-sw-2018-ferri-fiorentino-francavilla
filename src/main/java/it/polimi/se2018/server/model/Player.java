@@ -27,11 +27,12 @@ public class Player {
         }
     }
 
-    public void spendTokens(int tokens){
+    public void spendTokens(int tokens) throws IllegalArgumentException{
 
         if(this.tokens >= tokens && tokens >= 0){
             this.tokens -= tokens;
         }
+        else throw new IllegalArgumentException();
     }
 
     public int calculateScore(PubObjCard[] pubocs){

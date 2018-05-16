@@ -16,9 +16,17 @@ public class TestShadeCell {
         for (int i = 1; i<7; i++) {
             dice.setValue(i);
             cell = new ShadeCell(i);
-            if(!cell.placeable(dice)){
+            if(!cell.placeableShade(dice)){
                 fail();
             }
         }
+
+        try{
+            cell = new ShadeCell(7);
+            fail();
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+
     }
 }

@@ -15,7 +15,7 @@ public class TestDie {
         if(die1.getValue()<=0 && die1.getValue()>=7){
               fail();
         }
-        
+
         if(die1.getColor()!=Color.YELLOW){
             fail();
         }
