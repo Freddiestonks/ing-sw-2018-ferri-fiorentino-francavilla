@@ -9,7 +9,7 @@ public class ToolCard2 extends ToolCard {
         super();
     }
 
-    public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
+    public void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException {
         Die die = wf.getDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
         // move the die
         wf.removeDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
@@ -19,10 +19,15 @@ public class ToolCard2 extends ToolCard {
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
         Die die = wf.getDie(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
         Cell cell = wf.getPCCell(pa.getPlaceWFDie()[0][0], pa.getPlaceWFDie()[0][1]);
-
-        if (cell.placeableShade(die) && wf.checkNeighborhood(pa.getPlaceNewWFDie()[0][0], pa.getPlaceNewWFDie()[0][1])) {
-            return true;
+        int row = pa.getPlaceNewWFDie()[0][0];
+        int col = pa.getPlaceNewWFDie()[0][1];
+        wf.removeDie(row, col);
+        if(!cell.placeableShade(die)
+           || !wf.crossCheck(die, row, col)
+           || !wf.touchingCheck(row, col)
+           || (wf.getDie(row, col) != null)) {
+            return false;
         }
-        return false;
+        return true;
     }
 }

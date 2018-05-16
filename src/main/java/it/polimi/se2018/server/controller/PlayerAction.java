@@ -37,4 +37,8 @@ public class PlayerAction {
     public int[][] getPlaceNewWFDie() {
         return placeNewWFDie;
     }
+
+    public int[][] getPlaceDPDie() {
+        return placeDPDie;
+    }
 }

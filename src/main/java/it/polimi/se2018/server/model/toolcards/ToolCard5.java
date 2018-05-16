@@ -6,8 +6,6 @@ import it.polimi.se2018.server.model.Model;
 import it.polimi.se2018.server.model.ToolCard;
 import it.polimi.se2018.server.model.WindowFrame;
 
-import java.util.ArrayList;
-
 public class ToolCard5 extends ToolCard {
 
     public ToolCard5() {

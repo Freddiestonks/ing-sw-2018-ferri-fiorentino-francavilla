@@ -78,8 +78,18 @@ public class Model extends Observable {
         return turn;
     }
 
+    public boolean isBackward() {
+        return backward;
+    }
+
     public Die getDraftPoolDie(int pos) {
         return draftPool.get(pos);
+    }
+
+    public void rollDraftPool(){
+        for (Die die: this.draftPool){
+            die.roll();
+        }
     }
 
     public void addDraftPoolDie(Die die) {
@@ -102,6 +112,10 @@ public class Model extends Observable {
 
     public void removeRoundTrackDie(int round, int i) {
         roundTrack.get(round).remove(i);
+    }
+
+    public DiceBag getDiceBag() {
+        return diceBag;
     }
 
     public void calculateScore(){
