@@ -7,13 +7,13 @@ import java.util.Objects;
 
 public class WindowFrame {
     //Attributes
-    private PatternCard pc;
+    private PatternCard pc = null;
     private boolean wcFace; //true for front
     private Die[][] placements = new Die[4][5];
     private boolean empty = true;
     //Methods
-    public WindowFrame(PatternCard pc, boolean wcFace) {
-        this.pc = pc;
+    public WindowFrame(int id,boolean wcFace) throws FileNotFoundException {
+        pc = loadPc(id);
         this.wcFace = wcFace;
         for(int i=0; i<4; i++) {
             for(int j=0; j<5; j++){
@@ -244,6 +244,7 @@ public class WindowFrame {
             //die must be inserted on the edge or in the corners.
             if (row == 0 || row == 3 || col == 0 || col == 4)
                 crossCheck = true;
+                empty = false;
         }
         //controls if row-col position is placeable for the die.
         else {

@@ -8,10 +8,14 @@ public class PubOCColorDet extends PubObjCard {
     private boolean col;
     private boolean diagonals;
     private boolean set;
-    private ArrayList<Integer> check = new ArrayList<Integer>(0);
+    private ArrayList<Integer> check = new ArrayList<>(0);
     //methods
-    public PubOCColorDet(String desc) {
+    public PubOCColorDet(String desc,Boolean row, Boolean column,Boolean diagonal,Boolean sets) {
         super(desc);
+        rows = row;
+        col = column;
+        diagonals = diagonal;
+        set = sets;
     }
 
     private void updateCheck(ArrayList<Integer> localCheck, int row , int col, WindowFrame wf){
@@ -54,15 +58,14 @@ public class PubOCColorDet extends PubObjCard {
             }
         }
         //We need to deconstruct the ArrayList
-        //TODO CHECK CHE QUESTO ELIMINA L ARRAY SE NON LO FA USARE REMOVE ALL O USARE UN FOR
-        check.clear();
+        check.removeAll(check);
         return score;
     }
 
     private int getScoreCol(WindowFrame wf){
         int score = 0;
-        for (int i = 0; i<4; i++){
-            //I added 4 elements initialized to 0 to the arraylist
+        for (int i = 0; i<5; i++){
+            //I added 5 elements initialized to 0 to the arraylist
             check.add(0);
         }
         for (int i = 0; i< 5; i++) {
@@ -77,9 +80,13 @@ public class PubOCColorDet extends PubObjCard {
                 // then we can add 5 points to the score
                 score = score + 5;
             }
+            for (int l = 0; l<5; l++){
+                //I reset the 5 elements to 0 in the arraylist
+                check.set(l,0);
+            }
         }
         //We need to deconstruct the ArrayList
-        check.clear();
+        check.removeAll(check);
         return score;
     }
 
@@ -96,6 +103,7 @@ public class PubOCColorDet extends PubObjCard {
                 }
             }
         }
+
         return score;
     }
 
@@ -113,13 +121,13 @@ public class PubOCColorDet extends PubObjCard {
         //i look for the color that appeared the least(because it is going to be equal to the number of sets of colors)
         int min = check.get(0);
         for (int j=1; j<5;j++){
-            if(check.get(j)<min){
+            if(check.get(j) < min ){
                 min = check.get(j);
             }
             //i update the score it is equal to the number of sets times 4
 
-            check.clear();
         }
+        check.removeAll(check);
         return min*4;
     }
 
@@ -143,5 +151,21 @@ public class PubOCColorDet extends PubObjCard {
             score = score + getScoreSet(wf);
         }
         return score;
+    }
+
+    public void setRows(boolean rows) {
+        this.rows = rows;
+    }
+
+    public void setCol(boolean col) {
+        this.col = col;
+    }
+
+    public void setDiagonals(boolean diagonals) {
+        this.diagonals = diagonals;
+    }
+
+    public void setSet(boolean set) {
+        this.set = set;
     }
 }

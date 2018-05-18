@@ -14,8 +14,14 @@ public class PubOCShadeDet extends PubObjCard {
 
 
     //methods
-    public PubOCShadeDet(String desc) {
+    public PubOCShadeDet(String desc,boolean row,boolean column,boolean light,boolean medium,boolean dark, boolean all) {
         super(desc);
+        rows = row;
+        col = column;
+        shadeLight = light;
+        shadeMedium = medium;
+        shadeDark = dark;
+        allShades = all;
     }
 
     private void updateCheck(ArrayList<Integer> localCheck, int row , int col, WindowFrame wf){
@@ -62,10 +68,8 @@ public class PubOCShadeDet extends PubObjCard {
                 check.set(l, 0);
             }
         }
-        for(int l = 4; l>=0;l--){
-            //We need to deconstruct the ArrayList
-            check.remove(l);
-        }
+        check.removeAll(check);
+
         return  score;
     }
 
@@ -87,11 +91,9 @@ public class PubOCShadeDet extends PubObjCard {
                 // then we can add 4 points to the score
                 score = score + 4;
             }
-            for (int l = 3; l >= 0; l--) {
-                //We need to deconstruct the ArrayList
-                check.remove(l);
-            }
+
         }
+        check.removeAll(check);
         return score;
     }
 
@@ -111,6 +113,7 @@ public class PubOCShadeDet extends PubObjCard {
         if(check.get(1)< min){
             min = check.get(1);
         }
+        check.removeAll(check);
         return min*2;
     }
 
@@ -129,6 +132,7 @@ public class PubOCShadeDet extends PubObjCard {
         if(check.get(3)< min){
             min = check.get(3);
         }
+        check.removeAll(check);
         return min*2;
     }
 
@@ -147,6 +151,7 @@ public class PubOCShadeDet extends PubObjCard {
         if(check.get(5)< min){
             min = check.get(5);
         }
+        check.removeAll(check);
         return min*2;
     }
 
@@ -167,6 +172,7 @@ public class PubOCShadeDet extends PubObjCard {
                 min = check.get(i);
             }
         }
+        check.removeAll(check);
         return min*5;
     }
 
