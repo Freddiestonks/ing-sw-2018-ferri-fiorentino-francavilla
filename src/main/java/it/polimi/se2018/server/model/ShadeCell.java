@@ -13,7 +13,9 @@ public class ShadeCell extends Cell {
             throw new IllegalArgumentException();
         }
     }
-
+    public int getShade(){
+        return shade;
+    }
     @Override
     public boolean placeableShade(Die die) {
         return die.getValue() == shade;

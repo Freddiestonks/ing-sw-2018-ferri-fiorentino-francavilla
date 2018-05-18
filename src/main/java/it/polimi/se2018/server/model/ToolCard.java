@@ -32,4 +32,7 @@ public abstract class ToolCard {
     public void setPendingDie(Die die) {
         pendingDie = die;
     }
+
 }
+
+

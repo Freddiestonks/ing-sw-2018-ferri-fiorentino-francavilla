@@ -1,0 +1,36 @@
+package it.polimi.se2018;
+
+import it.polimi.se2018.server.model.*;
+import org.junit.Test;
+import static org.junit.Assert.fail;
+import java.io.FileNotFoundException;
+import java.util.Objects;
+
+public class TestWindowFrame {
+    @Test
+    public void testLoadPc() throws FileNotFoundException{
+        int id = 0;
+        //I create the first die, it will be the correct one to place in some parts of the PatternCard
+        Die die = new Die(Color.GREEN);
+        //The second die should instead ALWAYS be unsuitable for the tested cells
+        Die die2 = new Die(Color.BLUE);
+        die.setValue(4);
+        die2.setValue(3);
+        PatternCard testPC = null;
+        WindowFrame testWF = new WindowFrame(testPC,true);
+        //We load from the JSON the wanted PatternCard
+        testPC = testWF.loadPc(id);
+        //We test if the first die can fit in a shade Cell and a Color cell with the right values
+        //We test too if the second die cannot fit in the same cells since id does not meet the requirements
+        //Last but not least we test if the name of the cards and the difficulty levels are correct
+        if (!testPC.getFront()[0][0].placeableShade(die)||
+                testPC.getFront()[0][0].placeableShade(die2)||
+                !testPC.getFront()[0][4].placeableColor(die)||
+                testPC.getFront()[0][4].placeableColor(die2)&&
+                (Objects.equals(testPC.getNameF(),"Virtus"))&&
+                (Objects.equals(testPC.getNameB(),"Kaleidoscopic Dream"))&&
+                (testPC.getLevelF() == 5)&&(testPC.getLevelB()==4)){
+            fail();
+        }
+    }
+}

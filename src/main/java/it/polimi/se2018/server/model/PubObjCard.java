@@ -1,10 +1,10 @@
 package it.polimi.se2018.server.model;
 
 public abstract class PubObjCard {
-    String description;
-    int points;
-    boolean used = false;
-    int idRes;
+    private String description;
+    private int points;
+    private boolean used = false;
+    private int idRes;
 
     protected PubObjCard(String desc) {
         description = desc;

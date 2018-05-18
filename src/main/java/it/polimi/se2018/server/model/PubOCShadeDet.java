@@ -6,7 +6,6 @@ public class PubOCShadeDet extends PubObjCard {
     //attributes
     private boolean rows;
     private boolean col;
-    private boolean shade;
     private boolean shadeLight;
     private boolean shadeMedium;
     private boolean shadeDark;
@@ -40,109 +39,162 @@ public class PubOCShadeDet extends PubObjCard {
             localCheck.set(5,localCheck.get(5) + 1);
         }
     }
-    public int calculateScore(WindowFrame wf) {
+
+    private int getScoreRows(WindowFrame wf){
         int score = 0;
-        if (rows){
-            //IF true it will count on how many rows each dice shade is different from the others
-            for (int i = 0; i<6; i++){
-                //I added 6 elements initialized to 0 to the arraylist
-                check.add(0);
+        for (int i = 0; i<6; i++){
+            //I added 6 elements initialized to 0 to the arraylist
+            check.add(0);
+        }
+        for (int i = 0; i< 4; i++){
+            for(int j = 0; j<5; j++){
+                //we run the method to see how many times a certain shade appears on a single row
+                updateCheck(check,i,j,wf);
             }
-            for (int i = 0; i< 4; i++){
-                for(int j = 0; j<5; j++){
-                    //we run the method to see how many times a certain shade appears on a single row
-                    updateCheck(check,i,j,wf);
-                }
-                if(check.get(0) <= 1 && check.get(1) <= 1 && check.get(2) <= 1 &&
-                        check.get(3) <= 1 && check.get(4) <= 1 && check.get(5)<=1
-                        &&(check.get(0) + check.get(1) + check.get(2) + check.get(3) +  check.get(4) + check.get(5)) == 5){
-                    //if in one row each shade came out once then we can add 6 points to the score
-                    score = score + 5;
-                }
-                for(int l = 0; l<6;l++){
-                    //we need to reset the elements of the ArrayList to 0
-                    check.set(l, 0);
-                }
+            if(check.get(0) <= 1 && check.get(1) <= 1 && check.get(2) <= 1 &&
+                    check.get(3) <= 1 && check.get(4) <= 1 && check.get(5)<=1
+                    &&(check.get(0) + check.get(1) + check.get(2) + check.get(3) +  check.get(4) + check.get(5)) == 5){
+                //if in one row each shade came out once then we can add 5 points to the score
+                score = score + 5;
             }
-            for(int l = 4; l>=0;l--){
+            for(int l = 0; l<6;l++){
+                //we need to reset the elements of the ArrayList to 0
+                check.set(l, 0);
+            }
+        }
+        for(int l = 4; l>=0;l--){
+            //We need to deconstruct the ArrayList
+            check.remove(l);
+        }
+        return  score;
+    }
+
+    private int getScoreCol(WindowFrame wf){
+        int score = 0;
+        for (int i = 0; i < 6; i++) {
+            //I added 6 elements initialized to 0 to the arraylist
+            check.add(0);
+        }
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 4; j++) {
+                //we run the method to see how many times a certain shade appears on a single column
+                updateCheck(check, j, i, wf);
+            }
+            if (check.get(0) <= 1 && check.get(1) <= 1 && check.get(2) <= 1 &&
+                    check.get(3) <= 1 && check.get(4) <= 1 && check.get(5) <= 1
+                    && (check.get(0) + check.get(1) + check.get(2) + check.get(3) + check.get(4) + check.get(5)) == 4) {
+                //if in one column each shade came out at most once but none of the spaces are empty
+                // then we can add 4 points to the score
+                score = score + 4;
+            }
+            for (int l = 3; l >= 0; l--) {
                 //We need to deconstruct the ArrayList
                 check.remove(l);
             }
         }
-        if (col) {
-            //IF true it will count on how many columns each dice shade  is different from the others
-            for (int i = 0; i < 6; i++) {
-                //I added 6 elements initialized to 0 to the arraylist
-                check.add(0);
-            }
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 4; j++) {
-                    //we run the method to see how many times a certain shade appears on a single column
-                    updateCheck(check, j, i, wf);
-                }
-                if (check.get(0) <= 1 && check.get(1) <= 1 && check.get(2) <= 1 &&
-                        check.get(3) <= 1 && check.get(4) <= 1 && check.get(5) <= 1
-                        && (check.get(0) + check.get(1) + check.get(2) + check.get(3) + check.get(4) + check.get(5)) == 4) {
-                    //if in one column each shade came out at most once but none of the spaces are empty
-                    // then we can add 5 points to the score
-                    score = score + 4;
-                }
-                for (int l = 3; l >= 0; l--) {
-                    //We need to deconstruct the ArrayList
-                    check.remove(l);
-                }
+        return score;
+    }
 
+    private int getScoreLightShades(WindowFrame wf){
+        for (int i = 0; i < 6; i++) {
+            //I added 6 elements initialized to 0 to the arraylist
+            check.add(0);
+        }
+        for (int i = 0; i<5; i++){
+            for (int l = 0;l<4;l++){
+                //fill check with all of the shades inside the window frame
+                updateCheck(check,l,i,wf);
             }
         }
-        if (shade){
-            for (int i = 0; i < 6; i++) {
-                //I added 6 elements initialized to 0 to the arraylist
-                check.add(0);
-            }
-            for (int i = 0; i<5; i++){
-                for (int l = 0;l<4;l++){
-                    //fill check with all of the shades inside the window frame
-                    updateCheck(check,l,i,wf);
-                }
-            }
-            if(shadeLight){
-                //i look for light shade that least appeared (because it is going to be equal to the number of sets of shades)
+        int min = check.get(0);
+        //I look up which shade appeared the least, that will be equal to the number of sets
+        if(check.get(1)< min){
+            min = check.get(1);
+        }
+        return min*2;
+    }
 
-                int min = check.get(0);
-                if(check.get(1)< min){
-                    min = check.get(1);
-                }
-                score = score + min*2;
+    private int getScoreMediumShades(WindowFrame wf){
+        for (int i = 0; i < 6; i++) {
+            //I added 6 elements initialized to 0 to the arraylist
+            check.add(0);
+        }
+        for (int i = 0; i<5; i++){
+            for (int l = 0;l<4;l++){
+                //fill check with all of the shades inside the window frame
+                updateCheck(check,l,i,wf);
             }
-            if(shadeMedium){
-                //i look for medium shade that least appeared (because it is going to be equal to the number of sets of shades)
+        }
+        int min = check.get(2);
+        if(check.get(3)< min){
+            min = check.get(3);
+        }
+        return min*2;
+    }
 
-                int min = check.get(2);
-                if(check.get(3)< min){
-                    min = check.get(3);
-                }
-                score = score + min*2;
+    private int getScoreDarkShades(WindowFrame wf){
+        for (int i = 0; i < 6; i++) {
+            //I added 6 elements initialized to 0 to the arraylist
+            check.add(0);
+        }
+        for (int i = 0; i<5; i++){
+            for (int l = 0;l<4;l++){
+                //fill check with all of the shades inside the window frame
+                updateCheck(check,l,i,wf);
             }
-            if(shadeDark){
-                //i look for dark shade that least appeared (because it is going to be equal to the number of sets of shades)
+        }
+        int min = check.get(4);
+        if(check.get(5)< min){
+            min = check.get(5);
+        }
+        return min*2;
+    }
 
-                int min = check.get(5);
-                if(check.get(6)< min){
-                    min = check.get(6);
-                }
-                score = score + min*2;
+    private int getScoreAllShades(WindowFrame wf){
+        for (int i = 0; i < 6; i++) {
+            //I added 6 elements initialized to 0 to the arraylist
+            check.add(0);
+        }
+        for (int i = 0; i<5; i++){
+            for (int l = 0;l<4;l++){
+                //fill check with all of the shades inside the window frame
+                updateCheck(check,l,i,wf);
             }
-            if(allShades){
+        }
+        int min = check.get(0);
+        for(int i =  1; i<6; i++){
+            if(check.get(i)<min){
+                min = check.get(i);
+            }
+        }
+        return min*5;
+    }
+
+    public int calculateScore(WindowFrame wf) {
+        int score = 0;
+        if (rows){
+            //IF true it will count on how many rows each dice shade is different from the others
+            score = score + getScoreRows(wf);
+        }
+        if (col) {
+            //IF true it will count on how many columns each dice shade  is different from the others
+            score = score + getScoreCol(wf);
+        }
+        if(shadeLight){
+            //i look for light shade that least appeared (because it is going to be equal to the number of sets of shades)
+             score = score + getScoreLightShades(wf);
+        }
+        if(shadeMedium){
+            //i look for medium shade that least appeared (because it is going to be equal to the number of sets of shades)
+            score = score + getScoreMediumShades(wf);
+        }
+        if(shadeDark){
+            //i look for dark shade that least appeared (because it is going to be equal to the number of sets of shades)
+            score = score + getScoreDarkShades(wf);
+        }
+        if(allShades){
                 //i look for the shade that least appeared (because it is going to be equal to the number of sets of shades)
-
-                int min = check.get(0);
-                for(int i =  1; i<6; i++){
-                    if(check.get(i)<min){
-                        min = check.get(i);
-                    }
-                }
-                score = score + min*5;
-            }
+             score = score + getScoreAllShades(wf);
         }
         return score;
     }
