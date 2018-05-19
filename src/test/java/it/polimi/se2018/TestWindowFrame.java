@@ -1,6 +1,6 @@
 package it.polimi.se2018;
 
-import it.polimi.se2018.server.model.*;
+import it.polimi.se2018.model.*;
 import org.junit.Test;
 import static org.junit.Assert.fail;
 import java.io.FileNotFoundException;
@@ -19,7 +19,7 @@ public class TestWindowFrame {
         PatternCard testPC = null;
         WindowFrame testWF = new WindowFrame(0,true);
         //We load from the JSON the wanted PatternCard
-        testPC = testWF.loadPc(id);
+        testPC = testWF.loadPC(id);
         //We test if the first die can fit in a shade Cell and a Color cell with the right values
         //We test too if the second die cannot fit in the same cells since id does not meet the requirements
         //Last but not least we test if the name of the cards and the difficulty levels are correct

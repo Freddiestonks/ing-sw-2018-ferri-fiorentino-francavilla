@@ -1,7 +1,7 @@
 package it.polimi.se2018;
-import it.polimi.se2018.server.model.Color;
-import it.polimi.se2018.server.model.Die;
-import it.polimi.se2018.server.model.ShadeCell;
+import it.polimi.se2018.model.Color;
+import it.polimi.se2018.model.Die;
+import it.polimi.se2018.model.ShadeCell;
 import org.junit.Test;
 import static org.junit.Assert.fail;
 

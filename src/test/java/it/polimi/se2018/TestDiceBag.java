@@ -1,11 +1,11 @@
 package it.polimi.se2018;
 
-import it.polimi.se2018.server.model.DiceBag;
-import it.polimi.se2018.server.model.Die;
-import it.polimi.se2018.server.model.EmptyDiceBagException;
+import it.polimi.se2018.model.DiceBag;
+import it.polimi.se2018.model.Die;
+import it.polimi.se2018.model.EmptyDiceBagException;
 import org.junit.Test;
 
-import static it.polimi.se2018.server.model.DiceBag.*;
+import static it.polimi.se2018.model.DiceBag.*;
 import static org.junit.Assert.*;
 
 import static org.junit.Assert.fail;

@@ -1,6 +1,6 @@
 package it.polimi.se2018;
 
-import it.polimi.se2018.server.model.*;
+import it.polimi.se2018.model.*;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
