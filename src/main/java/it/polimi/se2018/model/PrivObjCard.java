@@ -13,4 +13,12 @@ public class PrivObjCard {
     public boolean isUsed() {
         return used;
     }
+
+    public void use(){
+        this.used = true;
+    }
+
+    public Color getColor(){
+        return this.color;
+    }
 }
