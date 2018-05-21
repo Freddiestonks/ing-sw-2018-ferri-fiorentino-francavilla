@@ -2,6 +2,16 @@ package it.polimi.se2018.model;
 
 import java.util.ArrayList;
 
+/**
+ * This class consists of only one public method (other than the constructor) used to calculate the score of one Player
+ * according to the one specified onto the active Public Cards.
+ *
+ * @author Federico Ferri
+ * @author Alessio Fiorentino
+ * @author Simone Francavilla
+ *
+ * */
+
 public class PubOCShadeDet extends PubObjCard {
     //attributes
     private boolean rows;
@@ -14,6 +24,18 @@ public class PubOCShadeDet extends PubObjCard {
 
 
     //methods
+    /**
+
+     * This is the constructor method of the class
+     *
+     * @param desc it is simply the description of the public card
+     * @param row triggers on or off the public card that calculates the score of different colors by row
+     * @param column triggers on or off the public card that calculates the score of different colors by column
+     * @param light triggers on or off the public card that calculates how many sets of 1 and 2s are in the WindowFrame
+     * @param medium triggers on or off the public card that calculates how many sets of 3 and 4s are in the WindowFrame
+     * @param dark triggers on or off the public card that calculates how many sets of 5 and 6s are in the WindowFrame
+     * @param all triggers on or off the public card that calculates how many sets of all shades are in the WindowFrame
+     * */
     public PubOCShadeDet(String desc,boolean row,boolean column,boolean light,boolean medium,boolean dark, boolean all) {
         super(desc);
         rows = row;
@@ -175,7 +197,13 @@ public class PubOCShadeDet extends PubObjCard {
         check.removeAll(check);
         return min*5;
     }
-
+    /**
+     * This method is used to calculate the score of a specific player throughout his WindowFrame
+     * inside it there are if statements that can be triggered on or off by the attributes of the class
+     *
+     * @param wf It is used to pass the Player's WireFrame on which the with dice are on
+     * @return score this method returns the score that a player made with the public card
+     * */
     public int calculateScore(WindowFrame wf) {
         int score = 0;
         if (rows){

@@ -5,6 +5,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Objects;
 
+/**
+ * This class consists both of public and private methods it is used to create the WindowFrame that each Player has
+ * it will need to contain a PatternCard which will be randomly selected from a pool found inside the JSON file
+ *
+ * @author Federico Ferri
+ * @author Alessio Fiorentino
+ * @author Simone Francavilla
+ *
+ * */
+
 public class WindowFrame {
     //Attributes
     private PatternCard pc = null;
@@ -12,6 +22,15 @@ public class WindowFrame {
     private Die[][] placements = new Die[4][5];
     private boolean empty = true;
     //Methods
+    /**
+
+     * This is the constructor method of the class
+     *
+     * @param id this sends the id with whom the PatternCard is identified
+     * @param wcFace this parameter is used to select which face of the PatternCard has been chosen
+
+     *
+     * */
     public WindowFrame(int id,boolean wcFace) {
         pc = loadPC(id);
         this.wcFace = wcFace;
@@ -81,7 +100,14 @@ public class WindowFrame {
         }
         return cellF;
     }
+    /**
 
+     * It is used to load the PatternCard into the WireFrame, the PatternCard will be loaded from a JSON file which will
+     * contain all of the necessary parameters to generate a PatternCard
+     *
+     * @param id this sends the id with whom the PatternCard is identified
+     * @return PatternCard returns the PatternCard with that id
+     * */
     public PatternCard loadPC(int id) {
         // loadPC will load a pattern card from file written in JSON where cards are kept in a specific order
         // their position can be used as an "ID"

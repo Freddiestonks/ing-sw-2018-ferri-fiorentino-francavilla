@@ -2,6 +2,16 @@ package it.polimi.se2018.model;
 
 import java.util.ArrayList;
 
+/**
+ * This class consists of only one public method (other than the constructor) used to calculate the score of one Player
+ * according to the one specified onto the active Public Cards.
+ *
+ * @author Federico Ferri
+ * @author Alessio Fiorentino
+ * @author Simone Francavilla
+ *
+ * */
+
 public class PubOCColorDet extends PubObjCard {
     //attributes
     private boolean rows;
@@ -10,6 +20,17 @@ public class PubOCColorDet extends PubObjCard {
     private boolean set;
     private ArrayList<Integer> check = new ArrayList<>(0);
     //methods
+    /**
+
+     * This is the constructor method of the class
+     *
+     * @param desc it is simply the description of the public card
+     * @param row triggers on or off the public card that calculates the score of different colors by row
+     * @param column triggers on or off the public card that calculates the score of different colors by column
+     * @param diagonal triggers on or off the public card that calculates the score of different colors by diagonals
+     * @param sets triggers on or off the public card that calculates the score of number of color sets
+     *
+     * */
     public PubOCColorDet(String desc,Boolean row, Boolean column,Boolean diagonal,Boolean sets) {
         super(desc);
         rows = row;
@@ -18,6 +39,15 @@ public class PubOCColorDet extends PubObjCard {
         set = sets;
     }
 
+    /**
+     * This method is used to "fill" an ArrayList that will count which <b>Die</b> Color appears on a specific <b>Cell/b>
+     *
+     * @param localCheck this parameter is the ArrayList that we need to fill
+     * @param row this parameter is the row in which the cell is in
+     * @param col this parameter is the column in which the cell is in
+     * @param wf here the WindowFrame of the specific Player is sent to the method, in this way we can
+     *           find out how the dice are placed onto the WindowFrame
+     * */
     private void updateCheck(ArrayList<Integer> localCheck, int row , int col, WindowFrame wf){
         //UpdateCheck is used to fill the "Check" vector with how many times each color appears on a line
         if(wf.getDie(row,col).getColor() == Color.BLUE){
@@ -130,7 +160,13 @@ public class PubOCColorDet extends PubObjCard {
         check.removeAll(check);
         return min*4;
     }
-
+    /**
+     * This method is used to calculate the score of a specific player throughout his WindowFrame
+     * inside it there are if statements that can be triggered on or off by the attributes of the class
+     *
+     * @param wf It is used to pass the Player's WireFrame on which the with dice are on
+     * @return score this method returns the score that a player made with the public card
+     * */
     public int calculateScore(WindowFrame wf) {
         //calculateScore is used to calculate the current score of the player
         int score = 0;
@@ -153,19 +189,4 @@ public class PubOCColorDet extends PubObjCard {
         return score;
     }
 
-    public void setRows(boolean rows) {
-        this.rows = rows;
-    }
-
-    public void setCol(boolean col) {
-        this.col = col;
-    }
-
-    public void setDiagonals(boolean diagonals) {
-        this.diagonals = diagonals;
-    }
-
-    public void setSet(boolean set) {
-        this.set = set;
-    }
 }
