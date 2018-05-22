@@ -154,6 +154,16 @@ public class WindowFrame {
         return pc;
     }
 
+
+    /**
+     * This method controls if the positioning principles are respected, so there cannot be
+     * a place in which in the same row or in the same column I've a same color or a same value die.
+     *
+     * @param die The die passed to be positioned.
+     * @param row The row passed to be controlled.
+     * @param col The column passed to be controlled.
+     * @return a boolean value that justifies the correctness of the position inserted, if is it.
+     */
     private boolean orthogonalDieCheck(Die die, int row, int col){
         if(placements[row][col] != null) {
             if((placements[row][col].getColor() == die.getColor())
@@ -164,6 +174,14 @@ public class WindowFrame {
         return true;
     }
 
+    /**
+     * This method controls if there's at least one die near the position in which
+     * I want to insert the die instantiated.
+     *
+     * @param row The row of the wanted positioning place.
+     * @param col The column of the wanted positioning place.
+     * @return a boolean value expresses if there's at least one die near the wanted position.
+     */
     public boolean touchingCheck(int row, int col){
         //a first check of at least one die near the focused place.
         //if there's not any die, the insertion cannot take place.
@@ -264,6 +282,16 @@ public class WindowFrame {
         return touching;
     }
 
+    /**
+     * This method controls the correctness of a die positioning:
+     * if the window-frame is empty;
+     * if the window-frame is not empty, using 'OrthogonalCheck' and 'TouchingCheck';
+     *
+     * @param die The die passed to be positioned.
+     * @param row The row of the wanted positioning place.
+     * @param col The column of the wanted positioning place.
+     * @return
+     */
     public boolean crossCheck(Die die, int row, int col) {
         //is a bool variable that helps to save the right conditions for die insertion.
         boolean crossCheck = false;
@@ -374,6 +402,14 @@ public class WindowFrame {
         return false;
     }
 
+    /**
+     * This method is used to insert the die into the wanted position.
+     *
+     * @param die The die passed to be positioned.
+     * @param row The row of the wanted positioning place.
+     * @param col The column of the wanted positioning place.
+     * @throws InvalidPlaceException
+     */
     public void placeDie(Die die, int row, int col) throws InvalidPlaceException {
         if (placements[row][col] == null) {
             placements[row][col] = die;
@@ -382,6 +418,13 @@ public class WindowFrame {
         }
     }
 
+    /**
+     * This method is used to remove a die in a selected position in the Window-frame.
+     *
+     * @param row The row of the wanted positioning place.
+     * @param col The column of the wanted positioning place.
+     * @return the die that is removed from its original position.
+     */
     public Die removeDie(int row, int col) {
         Die die = placements[row][col];
         placements[row][col] = null;
@@ -392,10 +435,22 @@ public class WindowFrame {
         return wcFace;
     }
 
+    /**
+     * This method is used to check the 'PatternCard' difficulty.
+     *
+     * @return The PatternCard's level.
+     */
     public int cardDifficulty(){
         return (wcFace ? pc.getLevelF() : pc.getLevelB());
     }
 
+    /**
+     * This method is used to show up a die in an inserted position.
+     *
+     * @param row
+     * @param col
+     * @return
+     */
     public Die getDie(int row, int col){
         return placements[row][col];
     }
