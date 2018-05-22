@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class TestWindowFrame {
     @Test
-    public void testLoadPc() throws FileNotFoundException{
+    public void testLoadPc(){
         int id = 0;
         //I create the first die, it will be the correct one to place in some parts of the PatternCard
         Die die = new Die(Color.GREEN);

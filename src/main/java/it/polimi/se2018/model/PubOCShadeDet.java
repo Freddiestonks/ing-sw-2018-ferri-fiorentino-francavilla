@@ -90,7 +90,7 @@ public class PubOCShadeDet extends PubObjCard {
                 check.set(l, 0);
             }
         }
-        check.removeAll(check);
+        check.clear();
 
         return  score;
     }
@@ -115,7 +115,7 @@ public class PubOCShadeDet extends PubObjCard {
             }
 
         }
-        check.removeAll(check);
+        check.clear();
         return score;
     }
 
@@ -135,7 +135,7 @@ public class PubOCShadeDet extends PubObjCard {
         if(check.get(1)< min){
             min = check.get(1);
         }
-        check.removeAll(check);
+        check.clear();
         return min*2;
     }
 
@@ -154,7 +154,7 @@ public class PubOCShadeDet extends PubObjCard {
         if(check.get(3)< min){
             min = check.get(3);
         }
-        check.removeAll(check);
+        check.clear();
         return min*2;
     }
 
@@ -173,7 +173,7 @@ public class PubOCShadeDet extends PubObjCard {
         if(check.get(5)< min){
             min = check.get(5);
         }
-        check.removeAll(check);
+        check.clear();
         return min*2;
     }
 
@@ -194,7 +194,7 @@ public class PubOCShadeDet extends PubObjCard {
                 min = check.get(i);
             }
         }
-        check.removeAll(check);
+        check.clear();
         return min*5;
     }
     /**

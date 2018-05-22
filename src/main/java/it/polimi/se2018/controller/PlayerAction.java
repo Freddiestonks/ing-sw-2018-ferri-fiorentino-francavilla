@@ -1,6 +1,6 @@
 package it.polimi.se2018.controller;
 
-public class PlayerAction {
+public class PlayerAction implements PlayerActionInterface{
     private  String usernameReq;
     private boolean quitReq;
     private boolean pauseReq;

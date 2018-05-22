@@ -40,8 +40,6 @@ public class TestModel {
         modelExample.addPlayer(p3);
 
         for(int i=1; i<=59; i++){
-            System.out.printf("Turn:%2d   Round:",modelExample.getTurn());
-            System.out.println(modelExample.getRound());
 
             if(i==3){
                 if(!(modelExample.getTurn()==3)){

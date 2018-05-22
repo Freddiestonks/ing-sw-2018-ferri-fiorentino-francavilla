@@ -88,7 +88,7 @@ public class PubOCColorDet extends PubObjCard {
             }
         }
         //We need to deconstruct the ArrayList
-        check.removeAll(check);
+        check.clear();
         return score;
     }
 
@@ -116,7 +116,7 @@ public class PubOCColorDet extends PubObjCard {
             }
         }
         //We need to deconstruct the ArrayList
-        check.removeAll(check);
+        check.clear();
         return score;
     }
 
@@ -157,7 +157,7 @@ public class PubOCColorDet extends PubObjCard {
             //i update the score it is equal to the number of sets times 4
 
         }
-        check.removeAll(check);
+        check.clear();
         return min*4;
     }
     /**
