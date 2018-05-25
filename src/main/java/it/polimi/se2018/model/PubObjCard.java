@@ -2,12 +2,14 @@ package it.polimi.se2018.model;
 
 public abstract class PubObjCard {
     private String description;
-    private int points;
+    private String cardName;
+    protected int points;
     private boolean used = false;
-    private int idRes;
 
-    protected PubObjCard(String desc) {
+    protected PubObjCard(String desc,String name) {
         description = desc;
+        cardName = name;
+
     }
 
     public String getDesc() {
@@ -23,4 +25,8 @@ public abstract class PubObjCard {
     }
 
     public abstract int calculateScore(WindowFrame wf);
+
+    public String getCardName() {
+        return cardName;
+    }
 }

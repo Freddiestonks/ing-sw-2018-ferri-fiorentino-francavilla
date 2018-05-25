@@ -15,7 +15,7 @@ public class Player {
     private String username;
     private WindowFrame wf = null;
     private int tokens;
-    private PrivObjCard privateCard;
+    private PrivObjCard privObjCard;
     private int score = 0;
     private boolean state = true;
 
@@ -44,11 +44,11 @@ public class Player {
     /**
      * This method is used to sets the Private card associated to the player.
      *
-     * @param privoc is the Private card passed by caller
+     * @param privOC is the Private card passed by caller
      */
-    public void setPrivOC(PrivObjCard privoc){
-        if(!privoc.isUsed()){
-            this.privateCard = privoc;
+    public void setPrivOC(PrivObjCard privOC){
+        if(!privOC.isUsed()){
+            this.privObjCard = privOC;
         }
     }
 
@@ -66,8 +66,20 @@ public class Player {
         else throw new IllegalArgumentException();
     }
 
-    public int calculateScore(PubObjCard[] pubocs){
-        //TODO: score calculation missing.
+    public int calculateScore(PubObjCard[] pubObjCard){
+        score = pubObjCard[0].calculateScore(wf) + pubObjCard[1].calculateScore(wf) + pubObjCard[2].calculateScore(wf);
+        for (int i = 0; i<5; i++){
+            for (int l = 0;l<4;l++){
+                //fill check with all of the elements inside the window frame
+                if(wf.getDie(l,i).getColor() == privObjCard.getColor()){
+                    score = score + 1;
+                }
+                if(wf.getDie(l,i) == null){
+                    score = score - 1;
+                }
+            }
+        }
+        score = score + tokens;
         return score;
     }
 
@@ -79,4 +91,16 @@ public class Player {
     public void setConnection(boolean newState){
         this.state = newState;
     }
+
+    public int getTokens(){
+        return tokens;
+    }
+    public void setTokens(int newValue){
+        tokens = newValue;
+    }
+
+    public String getUsername() {
+        return username;
+    }
 }
+
