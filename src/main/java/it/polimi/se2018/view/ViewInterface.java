@@ -1,4 +1,6 @@
 package it.polimi.se2018.view;
 
-public interface ViewInterface {
+import java.rmi.Remote;
+
+public interface ViewInterface extends Remote {
 }

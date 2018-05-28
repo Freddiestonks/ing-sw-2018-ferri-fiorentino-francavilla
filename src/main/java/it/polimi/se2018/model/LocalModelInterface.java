@@ -1,4 +1,6 @@
 package it.polimi.se2018.model;
 
-public interface LocalModelInterface {
+import java.rmi.Remote;
+
+public interface LocalModelInterface extends Remote {
 }
