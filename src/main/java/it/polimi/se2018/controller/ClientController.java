@@ -17,6 +17,7 @@ public class ClientController {
     }
 
     private boolean validAction(PlayerAction pa){
+
         return true;
     }
 

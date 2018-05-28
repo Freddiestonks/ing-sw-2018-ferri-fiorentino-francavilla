@@ -84,7 +84,7 @@
       {"type" : "color","color" : "blue","row" : 0,"col" : 0 },
       {"type" : "color","color" : "blue","row" : 1,"col" : 2 },
       {"type" : "color","color" : "yellow","row" : 0,"col" : 4 },
-      {"type" : "color","color" : "green","row" : 4,"col" : 4 }
+      {"type" : "color","color" : "green","row" : 3,"col" : 4 }
     ],
     "cellB" : [
       {"type" : "shade","value" : 4,"row" : 1, "col" : 1},

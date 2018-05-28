@@ -12,6 +12,7 @@ public class ShadeCell extends Cell {
 
     //Methods
 
+
     /**
      * This method is the constructor of the class that instantiate a singe 'Cell' object by passing his color.
      *

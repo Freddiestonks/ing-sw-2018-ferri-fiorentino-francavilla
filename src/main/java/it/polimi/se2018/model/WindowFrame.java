@@ -184,6 +184,10 @@ public class WindowFrame {
     public boolean touchingCheck(int row, int col){
         //a first check of at least one die near the focused place.
         //if there's not any die, the insertion cannot take place.
+        if(empty){
+            return true;
+        }
+
         if(row < 0 || col < 0 || row > 4 || col > 5) {
             throw new IllegalArgumentException();
         }
@@ -299,7 +303,6 @@ public class WindowFrame {
             //die must be inserted on the edge or in the corners.
             if (row == 0 || row == 3 || col == 0 || col == 4)
                 crossCheck = true;
-                empty = false;
         }
         //controls if row-col position is placeable for the die.
         else {
@@ -392,12 +395,13 @@ public class WindowFrame {
         //check all the placement restrictions
         Cell cell = getPCCell(row, col);
         if(cell.placeableShade(die)
-           && cell.placeableColor(die)
-           && crossCheck(die, row, col)
-           && touchingCheck(row, col)
-           && (getDie(row, col) == null)) {
+            && cell.placeableColor(die)
+            && touchingCheck(row, col)
+            && crossCheck(die, row, col)
+            && (getDie(row, col) == null)) {
             return true;
         }
+
         return false;
     }
 
@@ -412,6 +416,9 @@ public class WindowFrame {
     public void placeDie(Die die, int row, int col) throws InvalidPlaceException {
         if (placements[row][col] == null) {
             placements[row][col] = die;
+            if(empty){
+                empty = false;
+            }
         } else {
             throw new InvalidPlaceException();
         }
@@ -428,6 +435,7 @@ public class WindowFrame {
         Die die = placements[row][col];
         placements[row][col] = null;
         return die;
+        //TODO: to implement a control for the whole deleted matrix situation.
     }
 
     public boolean getWCFace(){

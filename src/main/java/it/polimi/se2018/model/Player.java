@@ -102,5 +102,13 @@ public class Player {
     public String getUsername() {
         return username;
     }
+
+    public Die getWindowFramePosition(int row, int col){
+        return this.wf.getDie(row,col);
+    }
+
+    public WindowFrame getWF(){
+        return this.wf;
+    }
 }
 
