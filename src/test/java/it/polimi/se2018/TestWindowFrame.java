@@ -3,7 +3,6 @@ package it.polimi.se2018;
 import it.polimi.se2018.model.*;
 import org.junit.Test;
 import static org.junit.Assert.fail;
-import java.io.FileNotFoundException;
 import java.util.Objects;
 
 public class TestWindowFrame {
@@ -32,5 +31,43 @@ public class TestWindowFrame {
                 (testPC.getLevelF() == 5)&&(testPC.getLevelB()==4)){
             fail();
         }
+    }
+
+    @Test
+    public void testChecking() throws InvalidPlaceException {
+        WindowFrame wf = new WindowFrame(0,false);
+        Die die1 = new Die(Color.YELLOW);
+        Die die2 = new Die(Color.GREEN);
+        Die die3 = new Die(Color.YELLOW);
+        die1.roll();
+        die2.roll();
+        die3.roll();
+
+        try {
+            if ((wf.checkRestrictions(die1,0,0))){
+            }
+            else fail();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        try{
+            if(wf.checkRestrictions(die2,0,1)){
+                fail();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try{
+            if(wf.checkRestrictions(die3,3,4)){
+                fail();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 }

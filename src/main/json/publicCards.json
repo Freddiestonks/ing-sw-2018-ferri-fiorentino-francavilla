@@ -1,0 +1,76 @@
+{
+  "publicCards" : [{
+    "type" : "color",
+    "subtype" : "row",
+    "name" : "Colori Diversi - Riga",
+    "description" : "Righe senza colori ripetuti",
+    "multiplier" : 6
+  },
+    {
+    "type" : "color",
+    "subtype" : "col",
+    "name" : "Colori Diversi - Colonna",
+    "description" : "Colonne senza colori ripetuti",
+    "multiplier" : 5
+  },{
+    "type" : "shade",
+    "subtype" : "row",
+    "name" : "Sfumature Diverse - Riga",
+    "description" : "Righe senza sfumature ripetute",
+    "multiplier" : 5
+  },
+  {
+    "type" : "shade",
+    "subtype" : "col",
+    "name" : "Sfumature Diverse - Colonna",
+    "description" : "Colonne senza sfumature ripetute",
+    "multiplier" : 4
+  },
+  {
+    "type" : "shade",
+    "subtype" : "set",
+    "name" : "Sfumature Chiare",
+    "description" : "Set di 1 & 2 ovunque",
+    "multiplier" : 2,
+    "values" : [true,true,false,false,false,false]
+  },
+  {
+    "type" : "shade",
+    "subtype" : "set",
+    "name" : "Sfumature Medie",
+    "description" : "Set di 3 & 4 ovunque",
+    "multiplier" : 2,
+    "values" : [false,false,true,true,false,false]
+  },
+  {
+    "type" : "shade",
+    "subtype" : "set",
+    "name" : "Sfumature Scure",
+    "description" : "Set di 5 & 6 ovunque",
+    "multiplier" : 2,
+    "values" : [false,false,false,false,true,true]
+  },
+  {
+    "type" : "shade",
+    "subtype" : "set",
+    "name" : "Sfumature Diverse",
+    "description" : "Set di dadi di ogni valore ovunque",
+    "multiplier" : 5,
+    "values" : [true,true,true,true,true,true]
+  },
+   {
+    "type" : "color",
+    "subtype" : "diagonals",
+     "name" : "Diagonali Colorate",
+     "description" : "Numero di dadi dello stesso colore diagonalmente adiacenti",
+    "multiplier" : 1
+   },
+    {
+    "type" : "color",
+    "subtype" : "set",
+    "multiplier" : 4,
+    "name" : "Varietà di colore",
+    "description" : "Set di dadi di ogni colore ovunque",
+    "values" : [true,true,true,true,true]
+    }]
+}

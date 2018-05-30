@@ -1,9 +1,25 @@
 package it.polimi.se2018.model;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import it.polimi.se2018.utils.Observable;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
+//@Singleton
+/**
+ * This class is the core of the Model, it generates all of the needed class for the application to work properly
+ *
+ * @author Federico Ferri
+ * @author Alessio Fiorentino
+ * @author Simone Francavilla
+ *
+ * */
 public class Model extends Observable {
     //Attributes
     final private static Model instance = new Model();
@@ -17,16 +33,35 @@ public class Model extends Observable {
     private DiceBag diceBag;
     private ArrayList<Die> draftPool = new ArrayList<>();
     private ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
-    private PubObjCard[] pubOCs = new PubObjCard[10];
+    private PubObjCard[] pubOCs = new PubObjCard[3];
     private PrivObjCard[] privOCs = new PrivObjCard[5];
     private ToolCard[] toolCards = new ToolCard[12];
     private PatternCard[] patCards = new PatternCard[12];
-    private Player[] leaderboard = new  Player[4];
-
+    private Player[] leaderboard = new Player[4];
+    private final int sizeOfPubocs = 10;
     //Methods
+    /**
+     * This is the constructor method for the model, it will generate the whole roundTrack and all of the Public Cards
+     * */
     private Model() {
         for(int i = 0; i < 10; i++) {
             roundTrack.add(new ArrayList<>());
+        }
+
+        boolean[] usedId = new boolean[sizeOfPubocs];
+
+        for (int i = 0; i < sizeOfPubocs;i++){
+            usedId[i] = false;
+        }
+
+        for(int i = 0; i < 3;i++){
+            Random rand = new Random();
+            int id = rand.nextInt(sizeOfPubocs - 1);
+            while (usedId[id]){
+                id = rand.nextInt(sizeOfPubocs - 1);
+            }
+            usedId[id] = true;
+            pubOCs[i] = loadPC(id);
         }
     }
 
@@ -65,7 +100,7 @@ public class Model extends Observable {
         else if(backward) {
             turn--;
         }
-        else if(!backward) {
+        else{
             turn++;
         }
     }
@@ -117,8 +152,22 @@ public class Model extends Observable {
     public DiceBag getDiceBag() {
         return diceBag;
     }
-
+    /**
+     * This is the method used to calculate the overall score of the game, it will order the players by score in an
+     * attribute called "leaderboard"
+     * */
     public void calculateScore(){
+        leaderboard = players;
+        for (int i = 1; i<numPlayers;i++){
+            for (int j=0; j < i;j++){
+                if(leaderboard[i].calculateScore(pubOCs) > leaderboard[j].calculateScore(pubOCs)){
+                    Player tempPlayer;
+                    tempPlayer = leaderboard[j];
+                    leaderboard[j] = leaderboard [i];
+                    leaderboard[i] = tempPlayer;
+                }
+            }
+        }
     }
 
     public void freeze(){
@@ -126,5 +175,84 @@ public class Model extends Observable {
 
     public void resume(){
     }
+    /**
+     * This method is used to load a Public Card
+     * @param publicId this is the id of the wanted Public Card
+     * */
+    private PubObjCard loadPC(int publicId){
 
+        PubObjCard pubObjCard = null;
+        String path = "src/main/json/publicCards.json";
+        JsonParser jsonParser = new JsonParser();
+
+        try {
+            Object object = jsonParser.parse(new FileReader(path));
+            JsonObject jsonObject = (JsonObject) object;
+            JsonArray publicCards = (JsonArray) jsonObject.get("publicCards");
+            jsonObject = (JsonObject) publicCards.get(publicId);
+            String type = jsonObject.get("type").getAsString();
+            String name = jsonObject.get("name").getAsString();
+            String description = jsonObject.get("description").getAsString();
+            int multiplier = jsonObject.get("multiplier").getAsInt();
+            String subtype = jsonObject.get("subtype").getAsString();
+            if (type.equals("color")) {
+                switch (subtype) {
+                    case "row":
+                        pubObjCard = new PubOCColorDet(description, name, true, false, false, multiplier);
+                        break;
+                    case "col":
+                        pubObjCard = new PubOCColorDet(description, name, false, true, false, multiplier);
+                        break;
+                    case "diagonals":
+                        pubObjCard = new PubOCColorDet(description, name, false, false, true, multiplier);
+                        break;
+                    case "set":
+                        boolean[] colors = new boolean[5];
+                        JsonArray jsonArray = jsonObject.get("values").getAsJsonArray();
+                        for (int i = 0; i < 5; i++) {
+                            colors[i] = jsonArray.get(i).getAsBoolean();
+                        }
+                        pubObjCard = new PubOCColorSet(description, name, colors, multiplier);
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
+            } else if (type.equals("shade")) {
+                switch (subtype) {
+                    case "row":
+                        pubObjCard = new PubOCShadeDet(description, name, true, true, multiplier);
+                        break;
+                    case "col":
+                        pubObjCard = new PubOCShadeDet(description, name, false, true, multiplier);
+                        break;
+                    case "set":
+                        boolean[] shades = new boolean[6];
+                        JsonArray jsonArray = jsonObject.get("values").getAsJsonArray();
+                        for (int i = 0; i < 6; i++) {
+                            shades[i] = jsonArray.get(i).getAsBoolean();
+                        }
+                        pubObjCard = new PubOCShadeSet(description, name, shades, multiplier);
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
+            }
+
+        } catch (FileNotFoundException ignored) {
+        }
+
+        return pubObjCard;
+    }
+
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    public Player[] getLeaderboard() {
+        return leaderboard;
+    }
+
+    public Player[] getPlayers() {
+        return players;
+    }
 }
