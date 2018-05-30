@@ -14,4 +14,16 @@ public class ClientInfo {
         this.view = view;
         this.playerAction = pa;
     }
+
+    public PlayerAction getLocalModel() {
+        return playerAction;
+    }
+
+    public PlayerAction getView() {
+        return playerAction;
+    }
+
+    public PlayerAction getPlayerAction() {
+        return playerAction;
+    }
 }

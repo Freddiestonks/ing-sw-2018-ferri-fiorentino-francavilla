@@ -2,8 +2,10 @@ package it.polimi.se2018;
 
 import it.polimi.se2018.model.*;
 import org.junit.Test;
-import static org.junit.Assert.fail;
+
 import java.util.Objects;
+
+import static org.junit.Assert.fail;
 
 public class TestWindowFrame {
     @Test
@@ -61,7 +63,7 @@ public class TestWindowFrame {
         }
 
         try{
-            if(wf.checkRestrictions(die3,3,4)){
+            if(wf.checkRestrictions(die3,4,3)){
                 fail();
             }
         }catch(Exception e){

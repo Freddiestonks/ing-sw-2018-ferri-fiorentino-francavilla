@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * This class consists both of public and private methods it is used to create the WindowFrame that each Player has
- * it will need to contain a PatternCard which will be randomly selected from a pool found inside the JSON file
+ * it will need to contain a PatternCard which will be randomly getCell from a pool found inside the JSON file
  *
  * @author Federico Ferri
  * @author Alessio Fiorentino
@@ -95,7 +95,7 @@ public class WindowFrame {
                 //this method recognize if it is a color type and it will fill it with the correct color (through the translator method)
                 int cellRow = jIntGetter(jsonCell,"row");
                 int cellCol = jIntGetter(jsonCell,"col");
-                String  cellColor = jStringGetter(jsonCell, "color");
+                String cellColor = jStringGetter(jsonCell, "color");
                 cellF[cellRow][cellCol] = new ColorCell(colorTranslator(cellColor));
             }
             else{
@@ -187,7 +187,6 @@ public class WindowFrame {
         if(empty){
             return true;
         }
-
         if(row < 0 || col < 0 || row > 4 || col > 5) {
             throw new IllegalArgumentException();
         }
@@ -425,7 +424,7 @@ public class WindowFrame {
     }
 
     /**
-     * This method is used to remove a die in a selected position in the Window-frame.
+     * This method is used to remove a die in a getCell position in the Window-frame.
      *
      * @param row The row of the wanted positioning place.
      * @param col The column of the wanted positioning place.
@@ -463,6 +462,6 @@ public class WindowFrame {
     }
 
     public Cell getPCCell(int row, int col){
-        return pc.selected(wcFace, row, col);
+        return pc.getCell(wcFace, row, col);
     }
 }

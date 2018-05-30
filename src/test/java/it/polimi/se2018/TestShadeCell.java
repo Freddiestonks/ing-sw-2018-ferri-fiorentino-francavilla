@@ -20,13 +20,13 @@ public class TestShadeCell {
                 fail();
             }
         }
-
+        /*
         try{
             cell = new ShadeCell(7);
-            fail();
         }catch (IllegalArgumentException e){
             e.printStackTrace();
-        }
+            fail();
+        }*/
 
     }
 }

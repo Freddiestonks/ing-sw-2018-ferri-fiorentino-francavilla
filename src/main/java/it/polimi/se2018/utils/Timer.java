@@ -1,7 +1,7 @@
 package it.polimi.se2018.utils;
 
 public class Timer extends Thread {
-    private boolean timeout = true;
+    private boolean timeout = false;
     private int time;
 
     public Timer() {
@@ -27,6 +27,7 @@ public class Timer extends Thread {
         }
         synchronized (this) {
             timeout = true;
+            notifyAll();
         }
     }
 

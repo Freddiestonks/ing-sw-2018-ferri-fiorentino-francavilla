@@ -7,8 +7,8 @@ import it.polimi.se2018.utils.Observable;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 //@Singleton
@@ -22,10 +22,11 @@ import java.util.Random;
  * */
 public class Model extends Observable {
     //Attributes
-    final private static Model instance = new Model();
+    private static final Model instance = new Model();
+    private ArrayList<LocalModelInterface> localModels = new ArrayList<>();
     private int idMatch;
     private boolean started;
-    private Player[] players = new Player[4];
+    private ArrayList<Player> players = new ArrayList<>();
     private int round = 1;
     private int turn = 1;
     private boolean backward = false;
@@ -37,8 +38,8 @@ public class Model extends Observable {
     private PrivObjCard[] privOCs = new PrivObjCard[5];
     private ToolCard[] toolCards = new ToolCard[12];
     private PatternCard[] patCards = new PatternCard[12];
-    private Player[] leaderboard = new Player[4];
-    private final int sizeOfPubocs = 10;
+    //private ArrayList<Player> leaderboard = new ArrayList<>();
+    private final int numPubOCs = 10;
     //Methods
     /**
      * This is the constructor method for the model, it will generate the whole roundTrack and all of the Public Cards
@@ -48,17 +49,17 @@ public class Model extends Observable {
             roundTrack.add(new ArrayList<>());
         }
 
-        boolean[] usedId = new boolean[sizeOfPubocs];
+        boolean[] usedId = new boolean[numPubOCs];
 
-        for (int i = 0; i < sizeOfPubocs;i++){
+        for (int i = 0; i < numPubOCs; i++){
             usedId[i] = false;
         }
 
         for(int i = 0; i < 3;i++){
             Random rand = new Random();
-            int id = rand.nextInt(sizeOfPubocs - 1);
+            int id = rand.nextInt(numPubOCs - 1);
             while (usedId[id]){
-                id = rand.nextInt(sizeOfPubocs - 1);
+                id = rand.nextInt(numPubOCs - 1);
             }
             usedId[id] = true;
             pubOCs[i] = loadPC(id);
@@ -69,21 +70,22 @@ public class Model extends Observable {
         return instance;
     }
 
-    public void addPlayer(Player player) throws MaxNumPlayersException{
+    public void addPlayer(String username) throws MaxNumPlayersException{
         if(numPlayers >= 4) {
             throw new MaxNumPlayersException();
         }
-        players[numPlayers++] = player;
+        players.add(new Player(username));
+        numPlayers++;
     }
 
-    public void removePlayer(Player player){
+    public void removePlayer(int i) {
         // method setConnection used to update the player's status (offline)
-        player.setConnection(false);
+        players.get(i).setConnection(false);
     }
 
-    public void reinsertPlayer(Player player){
+    public void reinsertPlayer(int i){
         // method setConnection used to update the player's status (online)
-        player.setConnection(true);
+        players.get(i).setConnection(true);
     }
 
     public void updateTurn() throws InvalidTurnException{
@@ -100,7 +102,7 @@ public class Model extends Observable {
         else if(backward) {
             turn--;
         }
-        else{
+        else {
             turn++;
         }
     }
@@ -157,6 +159,7 @@ public class Model extends Observable {
      * attribute called "leaderboard"
      * */
     public void calculateScore(){
+        /*
         leaderboard = players;
         for (int i = 1; i<numPlayers;i++){
             for (int j=0; j < i;j++){
@@ -167,14 +170,13 @@ public class Model extends Observable {
                     leaderboard[i] = tempPlayer;
                 }
             }
-        }
+        }*/
     }
 
-    public void freeze(){
+    public ToolCard getToolCard(int id){
+        return this.toolCards[id - 1];
     }
 
-    public void resume(){
-    }
     /**
      * This method is used to load a Public Card
      * @param publicId this is the id of the wanted Public Card
@@ -248,11 +250,38 @@ public class Model extends Observable {
         return numPlayers;
     }
 
-    public Player[] getLeaderboard() {
+    /*public Player[] getLeaderboard() {
         return leaderboard;
+    }*/
+
+    public Player getPlayer(int i) {
+        return players.get(i);
     }
 
-    public Player[] getPlayers() {
-        return players;
+    public void addClient(LocalModelInterface localModel) {
+        localModels.add(localModel);
+    }
+
+    public void removeClient(int i) {
+        localModels.remove(i);
+        players.remove(i);
+        numPlayers--;
+    }
+
+    public void reset() {
+        localModels.clear();
+        players.clear();
+        numPlayers = 0;
+    }
+
+    public boolean checkConnection(int i) {
+        boolean check = true;
+        try {
+            localModels.get(i).checkConnection();
+        } catch (IOException e) {
+            check = false;
+        } finally {
+            return check;
+        }
     }
 }

@@ -17,7 +17,7 @@ public class Player {
     private int tokens;
     private PrivObjCard privObjCard;
     private int score = 0;
-    private boolean state = true;
+    private boolean connected = true;
 
     //Methods
 
@@ -32,7 +32,7 @@ public class Player {
 
     /**
      * This is the method that instantiate the Window-frame attribute bringing the one passed by caller, and
-     * that sets the 'tokens' attribute representing the difficulty of the selected 'Pattern-Card' of the 'Window-Frame'.
+     * that sets the 'tokens' attribute representing the difficulty of the getCell 'Pattern-Card' of the 'Window-Frame'.
      *
      * @param wf If the 'Window-Frame' object passed to be associated to the player.
      */
@@ -84,12 +84,16 @@ public class Player {
     }
 
     /**
-     * This method is used to set the connection between Server and Player by the state that is passed by caller
+     * This method is used to set the connection between Server and Player by the connected that is passed by caller
      *
-     * @param newState the boolean value that represents which will be te the next state connection for the player.
+     * @param connected the boolean value that represents which will be te the next connected connection for the player.
      */
-    public void setConnection(boolean newState){
-        this.state = newState;
+    public void setConnection(boolean connected){
+        this.connected = connected;
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     public int getTokens(){

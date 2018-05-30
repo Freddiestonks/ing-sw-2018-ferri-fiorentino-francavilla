@@ -2,9 +2,9 @@ package it.polimi.se2018.controller;
 import java.security.InvalidParameterException;
 
 public class PlayerAction implements PlayerActionInterface{
+    private boolean updated;
     private String usernameReq;
     private boolean quitReq;
-    private boolean pauseReq;
     private boolean switchConnReq;
     private int[] posDPDie = new int[2];
     private int[] posRTDie = new int[2];
@@ -12,22 +12,33 @@ public class PlayerAction implements PlayerActionInterface{
     private int[][] placeWFDie = new int[2][2];
     private int[][] placeNewWFDie = new int[2][2];
     private int idToolCard;
-    //TODO add socket attribute
+    //TODO: arraylist of array
 
-    public void  PlayerAction(String username){
+    public void PlayerAction(String username){
         this.usernameReq = username;
         this.quitReq = false;
-        this.pauseReq = false;
         this.switchConnReq = false;
     }
 
     // Setter methods
-    public void setQuitReq(boolean quitReq) {
-        this.quitReq = quitReq;
+    public void setUpdated(boolean updated) {
+        this.updated = updated;
     }
 
-    public void setPauseReq(boolean pauseReq) {
-        this.pauseReq = pauseReq;
+    public boolean getUpdated() {
+        return updated;
+    }
+
+    public void setUsernameReq(String usernameReq) {
+        this.usernameReq = usernameReq;
+    }
+
+    public String getUsernameReq() {
+        return usernameReq;
+    }
+
+    public void setQuitReq(boolean quitReq) {
+        this.quitReq = quitReq;
     }
 
     public void setSwitchConnReq(boolean switchConnReq) {
@@ -84,10 +95,6 @@ public class PlayerAction implements PlayerActionInterface{
         return quitReq;
     }
 
-    public boolean isPauseReq() {
-        return pauseReq;
-    }
-
     public boolean isSwitchConnReq() {
         return switchConnReq;
     }
@@ -114,5 +121,10 @@ public class PlayerAction implements PlayerActionInterface{
 
     public int[][] getPlaceDPDie() {
         return placeDPDie;
+    }
+
+    @Override
+    public void checkConnection() {
+
     }
 }

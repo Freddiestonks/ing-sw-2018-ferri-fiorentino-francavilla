@@ -2,8 +2,8 @@ package it.polimi.se2018.model;
 
 public class PatternCard {
     //Attributes
-    private Cell[][] front = new Cell[4][5];
-    private Cell[][] back = new Cell[4][5];
+    private Cell[][] front;
+    private Cell[][] back;
     private int levelF;
     private int levelB;
     private String nameF;
@@ -19,7 +19,7 @@ public class PatternCard {
         back = backCell;
     }
 
-    public Cell selected(boolean wcFace, int row, int col){
+    public Cell getCell(boolean wcFace, int row, int col){
         if(wcFace) {
             return front[row][col];
         }

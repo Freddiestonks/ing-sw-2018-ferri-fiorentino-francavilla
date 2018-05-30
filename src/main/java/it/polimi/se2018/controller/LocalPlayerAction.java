@@ -16,4 +16,9 @@ public class LocalPlayerAction implements PlayerActionInterface {
     public LocalPlayerAction(){
 
     }
+
+    @Override
+    public void checkConnection() {
+
+    }
 }

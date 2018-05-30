@@ -65,6 +65,10 @@ public class ClientGatherer extends Thread implements ClientGathererInterface {
         return preLobby.iterator();
     }
 
+    public synchronized void remove(ClientInfo clientInfo) {
+        preLobby.remove(clientInfo);
+    }
+
     @Override
     public void run() {
         Socket socket = null;
@@ -77,6 +81,7 @@ public class ClientGatherer extends Thread implements ClientGathererInterface {
             PlayerAction pa = new PlayerAction();
             SocketReceiver socketReceiver = new SocketReceiver(socket);
             socketReceiver.setPlayerAction(pa);
+            socketReceiver.start();
             SocketLocalModel localModel = new SocketLocalModel(socket);
             SocketView view = new SocketView(socket);
             synchronized (this) {
