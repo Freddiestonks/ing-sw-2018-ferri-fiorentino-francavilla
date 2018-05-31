@@ -1,4 +1,4 @@
-package it.polimi.se2018;
+package it.polimi.se2018.model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

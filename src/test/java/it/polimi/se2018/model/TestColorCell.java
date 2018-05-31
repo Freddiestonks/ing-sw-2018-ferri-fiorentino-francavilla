@@ -1,4 +1,4 @@
-package it.polimi.se2018;
+package it.polimi.se2018.model;
 import it.polimi.se2018.model.Color;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.ColorCell;

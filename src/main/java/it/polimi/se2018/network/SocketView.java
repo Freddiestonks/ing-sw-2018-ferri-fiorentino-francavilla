@@ -17,4 +17,24 @@ public class SocketView implements ViewInterface {
             throw new IOException();
         }
     }
+
+    @Override
+    public void updatePlayerFrames() {
+
+    }
+
+    @Override
+    public void updateDF() {
+
+    }
+
+    @Override
+    public void updateRT() {
+
+    }
+
+    @Override
+    public void updateRoundIndicatror() {
+
+    }
 }
