@@ -68,4 +68,8 @@ public class Die {
             throw new IllegalArgumentException();
         }
     }
+    @Override
+    public String toString(){
+        return value + " " + color.toString().substring(0,1);
+    }
 }

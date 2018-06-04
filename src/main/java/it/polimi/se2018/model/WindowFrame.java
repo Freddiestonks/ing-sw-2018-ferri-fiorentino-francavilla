@@ -77,10 +77,10 @@ public class WindowFrame {
     }
     /**
      * This method is used to fill a Cell object with the elements found on the JSON file
-     * @param cellF this is the matrix of cells that need to be filled
+     * @param cellArray this is the matrix of cells that need to be filled
      * @param cells this is the array in the JSON file containing all of the cells that need to be updated
      * */
-    private Cell[][] jCellFiller(Cell[][] cellF, JsonArray cells){
+    private Cell[][] jCellFiller(Cell[][] cellArray, JsonArray cells){
         //this method is used to generate a ShadeCell or a ColorCell on the correct space with the correct value/color
         for(int j= 0; j <cells.size();j++){
             JsonObject jsonCell = (JsonObject)cells.get(j);
@@ -89,20 +89,20 @@ public class WindowFrame {
                 int cellRow = jIntGetter(jsonCell,"row");
                 int cellCol = jIntGetter(jsonCell,"col");
                 int cellShade = jIntGetter(jsonCell, "value");
-                cellF[cellRow][cellCol] = new ShadeCell(cellShade);
+                cellArray[cellRow][cellCol] = new ShadeCell(cellShade);
             }
             else if (Objects.equals(jStringGetter(jsonCell, "type"), "color")){
                 //this method recognize if it is a color type and it will fill it with the correct color (through the translator method)
                 int cellRow = jIntGetter(jsonCell,"row");
                 int cellCol = jIntGetter(jsonCell,"col");
                 String cellColor = jStringGetter(jsonCell, "color");
-                cellF[cellRow][cellCol] = new ColorCell(colorTranslator(cellColor));
+                cellArray[cellRow][cellCol] = new ColorCell(colorTranslator(cellColor));
             }
             else{
                 throw new IllegalArgumentException();
             }
         }
-        return cellF;
+        return cellArray;
     }
     /**
      * This method is used to load a PatternCard from the JSON file with a specific id
@@ -131,6 +131,12 @@ public class WindowFrame {
             //create first a matrix of "normal cells"
             Cell[][] cellF = new Cell[4][5];
             Cell[][] cellB = new Cell[4][5];
+            for (int i = 0; i<4;i++){
+                for (int j = 0;j<5;j++){
+                    cellF[i][j] = new Cell();
+                    cellB[i][j] = new Cell();
+                }
+            }
             //get the information about the "special" cells and load them in a different JSON array
             JsonArray cells = (JsonArray)jsonObject.get("cellF");
             //use the method jCellFiller to fill the top cells
@@ -464,4 +470,9 @@ public class WindowFrame {
     public Cell getPCCell(int row, int col){
         return pc.getCell(wcFace, row, col);
     }
+
+    public Die[][] getPlacements() {
+        return placements;
+    }
 }
+

@@ -22,6 +22,7 @@ public class App {
             String input = user_input.next().toLowerCase();
             switch (input) {
                 case "cli":
+                    //TODO NO VIEW MA CONTROLLER
                     CLIView cliView = new CLIView();
                     cliView.main();
                     correct = true;

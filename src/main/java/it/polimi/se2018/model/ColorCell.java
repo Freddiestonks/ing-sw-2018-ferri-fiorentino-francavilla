@@ -34,4 +34,9 @@ public class ColorCell extends Cell{
     public boolean placeableColor(Die die){
         return (die.getColor() == color);
     }
+
+    @Override
+    public String toString(){
+        return " " + color.toString().substring(0,1) + " ";
+    }
 }

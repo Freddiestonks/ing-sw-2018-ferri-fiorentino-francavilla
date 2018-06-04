@@ -21,4 +21,9 @@ public class PrivObjCard {
     public Color getColor(){
         return this.color;
     }
+    @Override
+    public String toString(){
+        return color.toString().substring(0,1).toUpperCase();
+    }
+
 }

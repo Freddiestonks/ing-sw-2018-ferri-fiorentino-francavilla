@@ -63,7 +63,7 @@ public class TestWindowFrame {
         }
 
         try{
-            if(wf.checkRestrictions(die3,4,3)){
+            if(wf.checkRestrictions(die3,3,3)){
                 fail();
             }
         }catch(Exception e){

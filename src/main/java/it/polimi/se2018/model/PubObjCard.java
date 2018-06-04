@@ -6,7 +6,7 @@ public abstract class PubObjCard {
     protected int points;
     private boolean used = false;
 
-    protected PubObjCard(String desc,String name) {
+    protected PubObjCard(String desc, String name) {
         description = desc;
         cardName = name;
 
@@ -28,5 +28,9 @@ public abstract class PubObjCard {
 
     public String getCardName() {
         return cardName;
+    }
+
+    public int getPoints() {
+        return points;
     }
 }

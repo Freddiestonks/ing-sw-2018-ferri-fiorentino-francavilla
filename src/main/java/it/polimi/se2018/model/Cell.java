@@ -10,4 +10,9 @@ public class Cell {
     public boolean placeableColor(Die die) {
         return true;
     }
+    @Override
+    public String toString(){
+        return " - ";
+    }
+
 }

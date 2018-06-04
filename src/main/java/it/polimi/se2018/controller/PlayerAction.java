@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 public class PlayerAction implements PlayerActionInterface{
     private boolean updated;
     private String usernameReq;
+    private String connectionType;
     private boolean quitReq;
     private boolean switchConnReq;
     private int[] posDPDie = new int[2];
@@ -126,5 +127,8 @@ public class PlayerAction implements PlayerActionInterface{
     @Override
     public void checkConnection() {
 
+    }
+    public void setConnection(String type){
+        connectionType = type;
     }
 }

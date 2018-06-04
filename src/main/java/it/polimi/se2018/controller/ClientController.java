@@ -9,11 +9,9 @@ public class ClientController {
     private LocalModel model;
     private View view;
     private PlayerActionInterface playeraction;
-    private SocketReceiver socketReceiver;
 
     //Methods
     public ClientController(LocalModel model, View view){
-
     }
 
     private boolean validAction(PlayerAction pa){

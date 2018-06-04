@@ -44,7 +44,7 @@ public class Model extends Observable {
     /**
      * This is the constructor method for the model, it will generate the whole roundTrack and all of the Public Cards
      * */
-    private Model() {
+    Model() {
         for(int i = 0; i < 10; i++) {
             roundTrack.add(new ArrayList<>());
         }
@@ -283,5 +283,11 @@ public class Model extends Observable {
         } finally {
             return check;
         }
+    }
+    public ArrayList<Die> getDraftPool() {
+        return draftPool;
+    }
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 }
