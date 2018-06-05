@@ -31,7 +31,7 @@ public class Model extends Observable {
     private int turn = 1;
     private boolean backward = false;
     private int numPlayers = 0;
-    private DiceBag diceBag;
+    private DiceBag diceBag = DiceBag.instance();
     private ArrayList<Die> draftPool = new ArrayList<>();
     private ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
     private PubObjCard[] pubOCs = new PubObjCard[3];
@@ -271,6 +271,7 @@ public class Model extends Observable {
     public void reset() {
         localModels.clear();
         players.clear();
+        diceBag.reset();
         numPlayers = 0;
     }
 

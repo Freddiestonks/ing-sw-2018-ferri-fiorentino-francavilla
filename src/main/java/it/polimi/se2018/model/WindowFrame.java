@@ -15,12 +15,12 @@ import java.util.Objects;
  *
  * */
 
-public class WindowFrame {
+public class WindowFrame implements Cloneable{
     //Attributes
     private PatternCard pc = null;
     private boolean wcFace; //true for front
     private Die[][] placements = new Die[4][5];
-    private boolean empty = true;
+    private int numDice = 0;
     //Methods
     /**
      * This is the constructor method of the class
@@ -190,7 +190,7 @@ public class WindowFrame {
     public boolean touchingCheck(int row, int col){
         //a first check of at least one die near the focused place.
         //if there's not any die, the insertion cannot take place.
-        if(empty){
+        if(numDice == 0){
             return true;
         }
         if(row < 0 || col < 0 || row > 4 || col > 5) {
@@ -242,7 +242,7 @@ public class WindowFrame {
                         }
                         break;
                     default:
-                        if (placements[row][col + 1] != null ||
+                        if (placements[row][col - 1] != null ||
                                 placements[row - 1][col] != null ||
                                 placements[row + 1][col] != null ||
                                 placements[row + 1][col - 1] != null ||
@@ -304,7 +304,7 @@ public class WindowFrame {
         //is a bool variable that helps to save the right conditions for die insertion.
         boolean crossCheck = false;
         //controls the empty case
-        if(empty){
+        if(numDice == 0){
             //die must be inserted on the edge or in the corners.
             if (row == 0 || row == 3 || col == 0 || col == 4)
                 crossCheck = true;
@@ -418,12 +418,10 @@ public class WindowFrame {
      * @param col The column of the wanted positioning place.
      * @throws InvalidPlaceException
      */
-    public void placeDie(Die die, int row, int col) throws InvalidPlaceException {
+    public void placeDie(Die die, int row, int col) {
         if (placements[row][col] == null) {
             placements[row][col] = die;
-            if(empty){
-                empty = false;
-            }
+            numDice++;
         } else {
             throw new InvalidPlaceException();
         }
@@ -439,6 +437,7 @@ public class WindowFrame {
     public Die removeDie(int row, int col) {
         Die die = placements[row][col];
         placements[row][col] = null;
+        numDice--;
         return die;
         //TODO: to implement a control for the whole deleted matrix situation.
     }
@@ -474,5 +473,6 @@ public class WindowFrame {
     public Die[][] getPlacements() {
         return placements;
     }
+
 }
 

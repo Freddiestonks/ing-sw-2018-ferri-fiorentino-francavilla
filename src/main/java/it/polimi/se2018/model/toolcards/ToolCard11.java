@@ -9,7 +9,7 @@ public class ToolCard11 extends ToolCard {
         super();
     }
 
-    public void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException, EmptyDiceBagException {
+    public void performAction(Model model, WindowFrame wf, PlayerAction pa){
         Die die;
         if(!pendingAction) {
             die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
@@ -34,7 +34,7 @@ public class ToolCard11 extends ToolCard {
             Die die = getPendingDie();
             //TODO: die.clone()
             die.setValue(pa.getNewDieValue());
-            return wf.checkRestrictions(die, pa.getPlaceDPDie()[0][1], pa.getPlaceDPDie()[0][1]);
+            return wf.checkRestrictions(die, pa.getPlaceDPDie()[0][0], pa.getPlaceDPDie()[0][1]);
         }
     }
 }

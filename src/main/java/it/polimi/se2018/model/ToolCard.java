@@ -23,7 +23,7 @@ public abstract class ToolCard {
 
     public abstract void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException, EmptyDiceBagException;
 
-    public abstract boolean validAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException;
+    public abstract boolean validAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException, CloneNotSupportedException;
 
     public Die getPendingDie() {
         return pendingDie;

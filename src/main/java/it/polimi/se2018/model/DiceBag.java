@@ -17,13 +17,13 @@ public class DiceBag {
             content[i] = 18;
         }
         // get all the dice colors
-        availableColors = new ArrayList<Color>(Arrays.asList(Color.values()));
+        availableColors = new ArrayList<>(Arrays.asList(Color.values()));
     }
     public static DiceBag instance(){
         return instance;
     }
 
-    public Die extract() throws EmptyDiceBagException{
+    public Die extract() {
         if(availableColors.isEmpty()) {
             throw new EmptyDiceBagException();
         }
@@ -45,5 +45,14 @@ public class DiceBag {
     public void replace(Die die){
         // increase the dice number of that color
         content[die.getColor().ordinal()]++;
+    }
+
+    public void reset(){
+        // there are 18 dice for each color
+        for(int i = 0; i < 5; i++) {
+            content[i] = 18;
+        }
+        // get all the dice colors
+        availableColors = new ArrayList<>(Arrays.asList(Color.values()));
     }
 }

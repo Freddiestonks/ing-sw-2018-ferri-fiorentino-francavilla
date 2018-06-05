@@ -12,7 +12,7 @@ import java.util.Random;
  */
 
 
-public class Die {
+public class Die implements Cloneable {
     //Attributes
     private int value;
     private Color color;
@@ -72,4 +72,5 @@ public class Die {
     public String toString(){
         return value + " " + color.toString().substring(0,1);
     }
+
 }

@@ -1,5 +1,4 @@
 package it.polimi.se2018.controller;
-import java.security.InvalidParameterException;
 
 public class PlayerAction implements PlayerActionInterface{
     private boolean updated;
@@ -12,11 +11,11 @@ public class PlayerAction implements PlayerActionInterface{
     private int[][] placeDPDie = new int[2][2];
     private int[][] placeWFDie = new int[2][2];
     private int[][] placeNewWFDie = new int[2][2];
+    private int newDieValue;
     private int idToolCard;
     //TODO: arraylist of array
 
-    public void PlayerAction(String username){
-        this.usernameReq = username;
+    public PlayerAction(){
         this.quitReq = false;
         this.switchConnReq = false;
     }
@@ -78,18 +77,16 @@ public class PlayerAction implements PlayerActionInterface{
     }
 
     public void setIdToolCard(int idToolCard) {
-        if(idToolCard>=0 && idToolCard<=12) {
-            this.idToolCard = idToolCard;
-        }
-        else {
-            throw new InvalidParameterException();
-        }
+        this.idToolCard = idToolCard;
+    }
+
+    public void setNewDieValue(int newDieValue) {
+        this.newDieValue = newDieValue;
     }
 
     // Getter methods
     public int getNewDieValue() {
-        //TODO: to implement the method.
-        return 0;
+        return this.newDieValue;
     }
 
     public boolean isQuitReq() {
