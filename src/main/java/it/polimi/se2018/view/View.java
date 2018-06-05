@@ -9,13 +9,14 @@ import java.util.ArrayList;
 public abstract class View implements ViewInterface{
 
     public View(){}
-
-
     @Override
-    public void updateRT() {
-
+    public void updateWaitingRoom(boolean starting) {
     }
-
+    @Override
+    public void welcomeScreen(){}
+    @Override
+    public void updateRT(ArrayList<ArrayList<Die>> roundTrack,int round) {
+    }
     @Override
     public void checkConnection() throws IOException {
     }
@@ -41,7 +42,13 @@ public abstract class View implements ViewInterface{
     @Override
     public void updatePlayerWF(Player player){}
     @Override
-    public void updateMainScreen(Player player,Player[] opponents,int round,boolean backward){}
+    public void updateMainScreen(MainScreenInfo mainScreenInfo){}
+    @Override
+    public void updateConnectionRequest(boolean success){}
+    @Override
+    public void endGame(Player[] leaderboard,Player player,int[] score){}
+    @Override
+    public void updateToolCards(ToolCard[] toolCard){}
     private void layoutFormatter(String[] string,int numCards) {}
     private void windowFrameGenerator(WindowFrame[] wf){}
 }

@@ -1,11 +1,14 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.view.CLIView;
+import it.polimi.se2018.view.MainScreenInfo;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
 public class TestCLIView {
+    CLIView cliView = new CLIView();
+    Model model = Model.instance();
     @Test
     public void testUpdateDP(){
         ArrayList<Die> die = new ArrayList<>();
@@ -21,26 +24,42 @@ public class TestCLIView {
     @Test
     public void testUpdatePubOCs(){
         PubObjCard[] pubObjCards = new PubObjCard[3];
-        pubObjCards[0] = new PubOCShadeDet("descrizione di test","nome",false,false,2);
-        pubObjCards[1] = new PubOCShadeDet("descrizione di test","nome",false,false,2);
-        pubObjCards[2] = new PubOCShadeDet("descrizione di test","nome",false,false,2);
-        CLIView cliView = new CLIView();
+        pubObjCards = model.getPubOCs();
         cliView.updatePubOCs(pubObjCards);
     }
     @Test
     public void testUpdatePrivOCs(){
         PrivObjCard privObjCard = new PrivObjCard(Color.BLUE);
-        CLIView cliView = new CLIView();
         cliView.updatePrivOCs(privObjCard);
     }
     @Test
+    public void testRT(){
+        ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
+        Die die = new Die(Color.BLUE);
+        ArrayList<Die> dice = new ArrayList<>();
+        dice.add(die);
+        dice.add(die);
+        dice.add(die);
+        roundTrack.add(dice);
+        roundTrack.add(dice);
+        roundTrack.add(dice);
+        roundTrack.add(dice);
+        cliView.updateRT(roundTrack,4);
+
+    }
+    @Test
     public void testMainScreen(){
+        MainScreenInfo mainScreenInfo = new MainScreenInfo();
         Player player = new Player("me");
         WindowFrame wf = new WindowFrame(0,true);
         Player[] opponents = new Player[3];
-        CLIView cliView = new CLIView();
-        int round = 0;
-        boolean backward = false;
+        ArrayList<Die> dp = new ArrayList<>();
+        dp.add(new Die(Color.BLUE));
+        dp.add(new Die(Color.PURPLE));
+        dp.add(new Die(Color.RED));
+        dp.add(new Die(Color.YELLOW));
+        dp.add(new Die(Color.GREEN));
+        int round = 4;
         player.setWinFrame(wf);
         opponents[0] = new Player("Well I guess I should test a long username");
         opponents[1] = new Player("Opp 2");
@@ -48,7 +67,25 @@ public class TestCLIView {
         opponents[0].setWinFrame(wf);
         opponents[1].setWinFrame(wf);
         opponents[2].setWinFrame(wf);
-        cliView.updateMainScreen(player,opponents,round,backward);
+        ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
+        Die die = new Die(Color.BLUE);
+        ArrayList<Die> dice = new ArrayList<>();
+        dice.add(die);
+        dice.add(die);
+        dice.add(die);
+        roundTrack.add(dice);
+        roundTrack.add(dice);
+        roundTrack.add(dice);
+        roundTrack.add(dice);
+        die.setValue(4);
+        player.getWF().placeDie(die,0,0);
+        mainScreenInfo.setPlayer(player);
+        mainScreenInfo.setBackward(false);
+        mainScreenInfo.setDraftPool(dp);
+        mainScreenInfo.setRound(round);
+        mainScreenInfo.setOpponents(opponents);
+        mainScreenInfo.setRoundTrack(roundTrack);
+        cliView.updateMainScreen(mainScreenInfo);
 
     }
 }

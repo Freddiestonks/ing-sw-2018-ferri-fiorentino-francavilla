@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
+import static java.lang.System.in;
 import static java.lang.System.out;
 /**
  * @author Federico Ferri,Alessio Fiorentino,Simone Francavilla
@@ -21,44 +22,14 @@ public class CLIView extends View{
     private String  type = null;
     private boolean correct = false;
     private static CLIView cliView =new CLIView();
-    private static final int cardWidth = 25;
+    private static final int cardWidth = 26;
     private static final int privOCSize = 1;
     private static final int rowSize = 4;
     private static final int colSize = 5;
-    private static final String publicObjString = "Obiettivo Pubblico";
+    private static final String publicObjString = "Public Objective";
 
 
     public CLIView() {
-    }
-
-
-    private void welcomeMSG() throws InterruptedException {
-        correct = false;
-        out.println("\n desideri giocare in RMI o Socket?\n");
-        type = user_input.next().toLowerCase();
-        PlayerAction playerAction = new PlayerAction();
-        playerAction.setConnection(type);
-        while (!correct){
-            out.println("Benvenuto in Sagrada \n Perfavore inserisci il IP\n");
-            IP = user_input.next();
-            out.println(IP + "\nOra inserisci la porta\n");
-            port = user_input.next();
-            out.println("Server: " + IP + "\nPorta: " + port + "\nè corretto? (y/n)");
-            if(Objects.equals(user_input.next(), "y")){
-                correct = true;
-            }
-        }
-        if(type.equalsIgnoreCase("socket")){
-            out.println("Provo a connettermi in socket\n");
-            play("socket");
-
-        }
-
-    }
-
-    public void main() throws InterruptedException {
-        cliView.welcomeMSG();
-
     }
     public void play(String type){
         //TODO SEND CONNECTION TYPE
@@ -66,13 +37,47 @@ public class CLIView extends View{
         PlayerAction playerAction = new PlayerAction();
         //clientGatherer.run();
         playerAction.setSwitchConnReq(true);
-        out.println("Inserisci il tuo username:\n");
+        out.println("Insert your username:\n");
         playerAction.setUsernameReq(user_input.next());
-        //TODO crate a waiting room
-
 
     }
     //TODO REWIEW ABOVE METHODS
+    @Override
+    public void updateWaitingRoom(boolean starting){
+        if(starting){
+            out.println("The game is about to start,Good Luck");
+        }
+        else{
+            out.println("Please wait while some other players join in");
+        }
+    }
+    @Override
+    public void welcomeScreen(){
+        correct = false;
+        out.println("\n would you like to play on RMI or Socket?\n");
+        type = user_input.next().toLowerCase();
+        PlayerAction playerAction = new PlayerAction();
+        playerAction.setConnection(type);
+        while (!correct){
+            out.println("\n Ok now kindly insert the server's IP address\n");
+            IP = user_input.next();
+            out.println(IP + "\nPlease insert the port now\n");
+            port = user_input.next();
+            out.println("Server: " + IP + "\nPort: " + port + "\nis it correct? (y/n)");
+            if(Objects.equals(user_input.next(), "y")){
+                correct = true;
+            }
+        }
+        if(type.equalsIgnoreCase("socket")){
+            out.println("I will now try to establish a socket connection\n");
+            play("socket");
+        }
+        if(type.equalsIgnoreCase("rmi")){
+            out.println("I will now try to establish an RMI connection\n");
+            play("rmi");
+        }
+
+    }
     @Override
     public void updateDP(ArrayList<Die> draftPool) {
         out.println("DraftPool:");
@@ -82,19 +87,19 @@ public class CLIView extends View{
     }
     @Override
     public void updateTokens(int tokens){
-        out.println("Hai attualmente " + tokens + " punti favore");
+        out.println("You currently have " + tokens + " tokens");
     }
     @Override
     public void updateRound(int round){
-        out.println("Round: " + round);
+        out.println("Round: " + (round+1));
     }
     @Override
     public void updateOrder(boolean backward){
         if (backward == true){
-            out.println("Sei attualmente nel giro di andata");
+            out.println("You are in the first turn of this round");
         }
         else {
-            out.println("Sei attualmente nel giro di ritorno");
+            out.println("You are in the second turn of the round");
         }
     }
     @Override
@@ -113,11 +118,11 @@ public class CLIView extends View{
             out.print("        ");
         }
         out.println();
-        string[0] = "Obiettivo Privato";
+        string[0] = "Private Objective";
         layoutFormatter(string,privOCSize);
-        string[0] = "Sfumature " + privObjCard;
+        string[0] = "Shades " + privObjCard.getColor().toString().toLowerCase();
         layoutFormatter(string,privOCSize);
-        string[0] = "Somma del valore su tutti i dadi " + privObjCard;
+        string[0] = "You score as many points as the values of the shades on all of the " + privObjCard + " dice";
         layoutFormatter(string,privOCSize);
 
     }
@@ -145,7 +150,7 @@ public class CLIView extends View{
         }
         layoutFormatter(pOCs,pubOCSize);
         for(int i=0;i<pubOCSize;i++) {
-            pOCs[i] = "Punti: " + pubObjCards[i].getPoints();
+            pOCs[i] = "Points: " + pubObjCards[i].getPoints();
         }
         layoutFormatter(pOCs,pubOCSize);
 
@@ -179,17 +184,93 @@ public class CLIView extends View{
         windowFrameGenerator(wf);
     }
     @Override
-    public void updateMainScreen(Player player,Player[] opponents,int round,boolean backward){
+    public void updateRT(ArrayList<ArrayList<Die>> roundTrack, int round) {
+        int big = 0;
+        for (int i=0;i<round;i++){
+            if(roundTrack.get(i).size() > big){
+                big = roundTrack.get(i).size();
+            }
+        }
+        out.println("Roundtrack:\n");
+        for (int i=0;i<big;i++){
+            for (int j =0;j<round;j++){
+                out.print((j+1) + ": " + roundTrack.get(j).get(i) + " | ");
+            }
+            out.println();
+        }
+        out.println();
+    }
+    @Override
+    public void updateMainScreen(MainScreenInfo mainScreenInfo){
+        Player player = mainScreenInfo.getPlayer();
+        Player[] opponents = mainScreenInfo.getOpponents();
+        int round = mainScreenInfo.getRound();
+        boolean backward = mainScreenInfo.isBackward();
+        ArrayList<Die> draftPool = mainScreenInfo.getDraftPool();
+        ArrayList<ArrayList<Die>> roundTrack = mainScreenInfo.getRoundTrack();
         updateInfos(player.getTokens(),round,backward);
         out.println();
+        updateDP(draftPool);
+        out.println();
+        updateRT(roundTrack,round);
         updateOpponentsWF(opponents);
         updatePlayerWF(player);
     }
+    @Override
+    public void updateConnectionRequest(boolean success){
+        if(success){
+            out.println("Congratulations you are now connected");
+        }
+        else{
+            out.println("Sorry, there was a problem connecting to the server, please check IP and port");
+        }
+    }
+    @Override
+    public void endGame(Player[] leaderboard,Player player,int[] score){
+        out.println("Match is over here is the Leaderboard:\n");
+        for(int i = 0; i<leaderboard.length;i++){
+            out.println("#"+i+" - " + leaderboard[i].getUsername() + "Points: " + score[i]+ "\n\n");
+        }
+        if(Objects.equals(player.getUsername(), leaderboard[0].getUsername())){
+            out.println("Congratulations you won, good Job!");
+        }
+        else if(Objects.equals(player.getUsername(), leaderboard[1].getUsername())){
+            out.println("You came out second");
+        }
+        else if(Objects.equals(player.getUsername(), leaderboard[2].getUsername())){
+            out.println("You came out third");
+        }
+        else{
+            out.println("You came out fourth");
+        }
+    }
+    //TODO TEST AFTER TOOLCARDS ARE DONE
+    @Override
+    public void updateToolCards(ToolCard[] toolCard){
+        String[] names = new String[toolCard.length];
+        String[] description = new String[toolCard.length];
+        for (int i = 0; i < toolCard.length; i++) {
+            for (int z = 0; z < cardWidth+4; z++) {
+                out.print("-");
+            }
+            out.print("        ");
+        }
+        out.println();
+        for(int i = 0;i<toolCard.length;i++){
+           names[i] = toolCard[i].getName();
+           description[i] = toolCard[i].getDescription();
+        }
+
+        layoutFormatter(names,toolCard.length);
+        layoutFormatter(description,toolCard.length);
+
+    }
+
     private void layoutFormatter(String[] string,int numCards) {
         int size[] = new int[numCards];
         int big = 0;
         for (int i = 0; i < numCards; i++) {
-            size[i] = string[i].length() / cardWidth + 1;
+            size[i] = (string[i].length()-1) / cardWidth + 1;
         }
 
         for (int i = 0; i < numCards; i++) {
@@ -231,6 +312,7 @@ public class CLIView extends View{
         }
         out.println();
     }
+
     private void windowFrameGenerator(WindowFrame[] wf){
        for(int i = 0;i<rowSize;i++){
           for(int j=0;j<wf.length;j++){
@@ -247,7 +329,9 @@ public class CLIView extends View{
        }
        out.println();
     }
-    //TODO FINISH LOADING SCREEN, FIRST PAGE AND OTHER SCREENS,CHECK METHODS ABOVE
+
+
+    //TODO FINISH OTHER SCREENS,CHECK METHODS ABOVE
 }
 
 
