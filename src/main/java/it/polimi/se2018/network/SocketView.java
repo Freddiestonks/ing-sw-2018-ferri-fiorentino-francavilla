@@ -1,9 +1,7 @@
 package it.polimi.se2018.network;
 
-import it.polimi.se2018.model.Die;
-import it.polimi.se2018.model.Player;
-import it.polimi.se2018.model.PrivObjCard;
-import it.polimi.se2018.model.PubObjCard;
+import it.polimi.se2018.model.*;
+import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.ViewInterface;
 
 import java.io.IOException;
@@ -22,18 +20,19 @@ public class SocketView implements ViewInterface {
             throw new IOException();
         }
     }
-
+    @Override
+    public void updateWaitingRoom(boolean starting){}
+    @Override
+    public void welcomeScreen(){}
     @Override
     public void updateDP(ArrayList<Die> draftPool) {
 
     }
 
     @Override
-    public void updateRT() {
+    public void updateRT(ArrayList<ArrayList<Die>> roundTrack, int round) {
 
     }
-
-
 
     @Override
     public void updateTokens(int tokens) {
@@ -76,7 +75,14 @@ public class SocketView implements ViewInterface {
     }
 
     @Override
-    public void updateMainScreen(Player player, Player[] opponents, int round, boolean backward) {
+    public void updateMainScreen(MainScreenInfo mainScreenInfo) {
 
     }
+    @Override
+    public void updateConnectionRequest(boolean success) {
+    }
+    @Override
+    public void endGame(Player[] leaderboard,Player player,int score[]){}
+    @Override
+    public void updateToolCards(ToolCard[] toolCard){};
 }

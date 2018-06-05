@@ -49,6 +49,6 @@ public class ShadeCell extends Cell {
     }
     @Override
     public String toString(){
-        return " " + shade + " ";
+        return "-" + shade + "-";
     }
 }

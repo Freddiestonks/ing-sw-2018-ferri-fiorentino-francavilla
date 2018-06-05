@@ -17,21 +17,21 @@ public class App {
     public static void main( String[] args ) throws InterruptedException {
         Scanner user_input = new Scanner(System.in);
         boolean correct = false;
-        out.println("Benvenuto in Sagrada\ndesideri giocare da CLI o da GUI");
+        out.println("Welcome to Sagrada\nHow would you like to play?  (CLI/GUI)");
         while (!correct){
             String input = user_input.next().toLowerCase();
             switch (input) {
                 case "cli":
                     //TODO NO VIEW MA CONTROLLER
                     CLIView cliView = new CLIView();
-                    cliView.main();
+                    cliView.welcomeScreen();
                     correct = true;
                     break;
                 case "gui":
                     correct = true;
                     break;
                 default:
-                    out.println("Inserisci un parametro valido(GUI o CLI)");
+                    out.println("Please insert a valid command (GUI or CLI)");
                     break;
             }
         }

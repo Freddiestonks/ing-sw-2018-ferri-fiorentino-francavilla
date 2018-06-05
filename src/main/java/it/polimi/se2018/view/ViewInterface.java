@@ -8,18 +8,25 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public interface ViewInterface extends Remote {
+    void welcomeScreen();
+    void updateWaitingRoom(boolean starting);
     void checkConnection() throws IOException,RemoteException;
     //TODO aggiornare ogni singolo componente della view
     void updateDP(ArrayList<Die> draftPool);
-    void updateRT();
+    void updateRT(ArrayList<ArrayList<Die>> roundTrack,int round);
     void updateTokens(int tokens);
-    public void updateRound(int round);
-    public void updateOrder(boolean backward);
-    public void updateInfos(int tokens,int round,boolean backward);
-    public void updatePrivOCs(PrivObjCard privObjCard);
-    public void updatePubOCs(PubObjCard pubObjCards[]);
-    public void updateOpponentsWF(Player[] opponents);
-    public void updatePlayerWF(Player player);
-    public void updateMainScreen(Player player,Player[] opponents,int round,boolean backward);
+    void updateRound(int round);
+    void updateOrder(boolean backward);
+    void updateInfos(int tokens,int round,boolean backward);
+    void updatePrivOCs(PrivObjCard privObjCard);
+    void updatePubOCs(PubObjCard pubObjCards[]);
+    void updateOpponentsWF(Player[] opponents);
+    void updatePlayerWF(Player player);
+    void updateMainScreen(MainScreenInfo mainScreenInfo);
+    void updateConnectionRequest(boolean success);
+    void endGame(Player[] leaderboard,Player player,int[] score);
+    void updateToolCards(ToolCard[] toolCard);
+
+
 
 }

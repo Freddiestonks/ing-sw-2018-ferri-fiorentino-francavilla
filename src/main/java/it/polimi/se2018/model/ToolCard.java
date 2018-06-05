@@ -4,6 +4,7 @@ import it.polimi.se2018.controller.PlayerAction;
 
 public abstract class ToolCard {
     //Attributes
+    private String name;
     private String description;
     private int price;
     private int tokens;
@@ -33,6 +34,13 @@ public abstract class ToolCard {
         pendingDie = die;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
 
 

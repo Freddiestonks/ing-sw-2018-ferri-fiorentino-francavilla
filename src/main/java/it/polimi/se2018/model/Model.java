@@ -159,6 +159,7 @@ public class Model extends Observable {
      * attribute called "leaderboard"
      * */
     public void calculateScore(){
+        //TODO finish this
         /*
         leaderboard = players;
         for (int i = 1; i<numPlayers;i++){
@@ -284,10 +285,16 @@ public class Model extends Observable {
             return check;
         }
     }
+
+    public PubObjCard[] getPubOCs() {
+        return pubOCs;
+    }
+
     public ArrayList<Die> getDraftPool() {
         return draftPool;
     }
     public ArrayList<Player> getPlayers() {
         return players;
     }
+
 }

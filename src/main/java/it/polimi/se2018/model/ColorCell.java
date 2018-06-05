@@ -37,6 +37,6 @@ public class ColorCell extends Cell{
 
     @Override
     public String toString(){
-        return " " + color.toString().substring(0,1) + " ";
+        return "-" + color.toString().substring(0,1) + "-";
     }
 }
