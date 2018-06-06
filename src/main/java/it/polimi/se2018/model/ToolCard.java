@@ -14,17 +14,15 @@ public abstract class ToolCard {
     private Die pendingDie;
     //Methods
 
-    //TODO: clone WindowFrame
-    //TODO: update turn when necessary
     //TODO: make a player skip the second turn with TC 8
     //TODO: manage model update
     //TODO: ? pending state/die in model class
 
     public void putTokens(){}
 
-    public abstract void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException, EmptyDiceBagException;
+    public abstract void performAction(Model model, WindowFrame wf, PlayerAction pa);
 
-    public abstract boolean validAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException, CloneNotSupportedException;
+    public abstract boolean validAction(Model model, WindowFrame wf, PlayerAction pa);
 
     public Die getPendingDie() {
         return pendingDie;

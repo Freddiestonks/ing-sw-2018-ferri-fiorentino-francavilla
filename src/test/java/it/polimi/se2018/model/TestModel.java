@@ -1,6 +1,5 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.model.*;
 import org.junit.After;
 import org.junit.Test;
 
@@ -11,10 +10,10 @@ public class TestModel {
     public void TestAddingPlayers() throws MaxNumPlayersException {
         //tests the maximum number of players is respected.
         Model modelExample = Model.instance();
-        modelExample.addPlayer("Alessio");
-        modelExample.addPlayer("Sfidante");
-        modelExample.addPlayer("Tizio");
-        modelExample.addPlayer("Caio");
+        modelExample.addPlayer("Alessio", null);
+        modelExample.addPlayer("Sfidante", null);
+        modelExample.addPlayer("Tizio", null);
+        modelExample.addPlayer("Caio", null);
     }
     @After
     public void reset1() {
@@ -25,9 +24,9 @@ public class TestModel {
     public void TestUpdatingTurn() throws InvalidTurnException, MaxNumPlayersException {
         //tests if the end of the match is respected and if the order of some casual turn are respected too.
         Model modelExample = Model.instance();
-        modelExample.addPlayer("Alessio");
-        modelExample.addPlayer("Sfidante");
-        modelExample.addPlayer("Tizio");
+        modelExample.addPlayer("Alessio", null);
+        modelExample.addPlayer("Sfidante", null);
+        modelExample.addPlayer("Tizio", null);
 
         for(int i=1; i<=59; i++){
 
@@ -57,9 +56,9 @@ public class TestModel {
     @Test
     public void testCalculateScore() throws MaxNumPlayersException, InvalidPlaceException {
         Model modelTest = Model.instance();
-        modelTest.addPlayer("Niña");
-        modelTest.addPlayer("Pinta");
-        modelTest.addPlayer("Santa Maria");
+        modelTest.addPlayer("Niña", null);
+        modelTest.addPlayer("Pinta", null);
+        modelTest.addPlayer("Santa Maria", null);
         Player p1 = modelTest.getPlayer(0);
         Player p2 = modelTest.getPlayer(1);
         Player p3 = modelTest.getPlayer(2);

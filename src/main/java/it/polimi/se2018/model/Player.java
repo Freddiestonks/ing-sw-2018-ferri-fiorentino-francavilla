@@ -72,10 +72,10 @@ public class Player {
             for (int l = 0;l<4;l++){
                 //fill check with all of the elements inside the window frame
                 if(wf.getDie(l,i).getColor() == privObjCard.getColor()){
-                    score = score + 1;
+                    score++;
                 }
                 if(wf.getDie(l,i) == null){
-                    score = score - 1;
+                    score--;
                 }
             }
         }
@@ -88,7 +88,7 @@ public class Player {
      *
      * @param connected the boolean value that represents which will be te the next connected connection for the player.
      */
-    public void setConnection(boolean connected){
+    public void setConnected(boolean connected){
         this.connected = connected;
     }
 
@@ -107,7 +107,7 @@ public class Player {
         return username;
     }
 
-    public Die getWindowFramePosition(int row, int col){
+    public Die getWFPosition(int row, int col){
         return this.wf.getDie(row,col);
     }
 

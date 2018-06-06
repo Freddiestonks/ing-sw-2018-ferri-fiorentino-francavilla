@@ -44,7 +44,7 @@ public class Model extends Observable {
     /**
      * This is the constructor method for the model, it will generate the whole roundTrack and all of the Public Cards
      * */
-    Model() {
+    private Model() {
         for(int i = 0; i < 10; i++) {
             roundTrack.add(new ArrayList<>());
         }
@@ -70,22 +70,24 @@ public class Model extends Observable {
         return instance;
     }
 
-    public void addPlayer(String username) throws MaxNumPlayersException{
+    public void addPlayer(String username, LocalModelInterface localModel) throws MaxNumPlayersException{
         if(numPlayers >= 4) {
             throw new MaxNumPlayersException();
         }
         players.add(new Player(username));
+        localModels.add(localModel);
         numPlayers++;
     }
 
     public void removePlayer(int i) {
         // method setConnection used to update the player's status (offline)
-        players.get(i).setConnection(false);
+        players.get(i).setConnected(false);
     }
 
-    public void reinsertPlayer(int i){
-        // method setConnection used to update the player's status (online)
-        players.get(i).setConnection(true);
+    public void reinsertPlayer(int i, LocalModelInterface localModel){
+        // method setConnected used to update the player's status (online)
+        localModels.set(i, localModel);
+        players.get(i).setConnected(true);
     }
 
     public void updateTurn() throws InvalidTurnException{
@@ -273,7 +275,16 @@ public class Model extends Observable {
         localModels.clear();
         players.clear();
         diceBag.reset();
+        draftPool.clear();
+        roundTrack.clear();
+        for(int i = 0; i < 10; i++) {
+            roundTrack.add(new ArrayList<>());
+        }
+        round = 1;
+        turn = 1;
+        backward = false;
         numPlayers = 0;
+        //TODO: reset other game elements
     }
 
     public boolean checkConnection(int i) {
@@ -294,6 +305,7 @@ public class Model extends Observable {
     public ArrayList<Die> getDraftPool() {
         return draftPool;
     }
+
     public ArrayList<Player> getPlayers() {
         return players;
     }

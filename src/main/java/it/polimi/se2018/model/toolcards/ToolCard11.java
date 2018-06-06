@@ -12,7 +12,7 @@ public class ToolCard11 extends ToolCard {
     public void performAction(Model model, WindowFrame wf, PlayerAction pa){
         Die die;
         if(!pendingAction) {
-            die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
+            die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
             model.getDiceBag().replace(die);
             die = model.getDiceBag().extract();
             setPendingDie(die);
@@ -20,9 +20,10 @@ public class ToolCard11 extends ToolCard {
         }
         else {
             die = getPendingDie();
-            die.setValue(pa.getNewDieValue());
-            wf.placeDie(die, pa.getPlaceDPDie()[0][0], pa.getPlaceDPDie()[0][1]);
+            die.setValue(pa.getNewDieValue().get(0));
+            wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
             pendingAction = false;
+            model.updateTurn();
         }
     }
 
@@ -31,10 +32,9 @@ public class ToolCard11 extends ToolCard {
             return true;
         }
         else {
-            Die die = getPendingDie();
-            //TODO: die.clone()
-            die.setValue(pa.getNewDieValue());
-            return wf.checkRestrictions(die, pa.getPlaceDPDie()[0][0], pa.getPlaceDPDie()[0][1]);
+            Die die = new Die(getPendingDie());
+            die.setValue(pa.getNewDieValue().get(0));
+            return wf.checkRestrictions(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
         }
     }
 }

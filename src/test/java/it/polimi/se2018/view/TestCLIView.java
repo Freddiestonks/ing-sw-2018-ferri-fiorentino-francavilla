@@ -1,7 +1,6 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.view;
 
-import it.polimi.se2018.view.CLIView;
-import it.polimi.se2018.view.MainScreenInfo;
+import it.polimi.se2018.model.*;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -12,7 +12,7 @@ import java.util.Random;
  */
 
 
-public class Die implements Cloneable {
+public class Die {
     //Attributes
     private int value;
     private Color color;
@@ -25,6 +25,12 @@ public class Die implements Cloneable {
     public Die(Color color) {
         this.roll();
         this.color = color;
+    }
+
+    public Die(Die die) {
+        // create a copy of the selected die
+        this.value = die.value;
+        this.color = die.color;
     }
 
     //Methods
@@ -68,6 +74,7 @@ public class Die implements Cloneable {
             throw new IllegalArgumentException();
         }
     }
+
     @Override
     public String toString(){
         return value + " " + color.toString().substring(0,1);

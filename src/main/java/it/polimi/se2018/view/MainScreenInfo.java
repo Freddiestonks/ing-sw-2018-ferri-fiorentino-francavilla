@@ -6,12 +6,12 @@ import it.polimi.se2018.model.Player;
 import java.util.ArrayList;
 
 public class MainScreenInfo {
-    private it.polimi.se2018.model.Player player;
+    private Player player;
     private Player[] opponents;
     private int round;
     private boolean backward;
     private ArrayList<Die> draftPool;
-    private ArrayList<java.util.ArrayList<Die>> roundTrack;
+    private ArrayList<ArrayList<Die>> roundTrack;
 
     public MainScreenInfo(){}
 

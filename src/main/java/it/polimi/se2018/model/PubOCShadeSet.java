@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class PubOCShadeSet extends PubObjCard {
     //attributes
     private ArrayList<Integer> check = new ArrayList<>(0);
-    private boolean[] activeShades = new boolean[6];
+    private boolean[] activeShades;
 
     //methods
     /**
@@ -39,7 +39,7 @@ public class PubOCShadeSet extends PubObjCard {
      * */
     public int calculateScore(WindowFrame wf) {
         for (int i = 0; i<6; i++){
-            //I added 6 elements initialized to 0 to the ArrayList ( as many elements as the colors)
+            //add 6 elements initialized to 0 to the ArrayList ( as many elements as the colors)
             check.add(0);
         }
         for (int i = 0; i<5; i++){
@@ -48,13 +48,13 @@ public class PubOCShadeSet extends PubObjCard {
                 updateCheck(l,i,wf);
             }
         }
-        //i look for the shade that appeared the least(because it is going to be equal to the number of sets of colors)
+        //look for the shade that appeared the least(because it is going to be equal to the number of sets of colors)
         int min = 21;
         for (int j=0; j<6;j++){
             if(check.get(j) < min && activeShades[j]){
                 min = check.get(j);
             }
-            //i update the score it is equal to the number of sets times 4
+            //update the score it is equal to the number of sets times 4
         }
 
         check.clear();

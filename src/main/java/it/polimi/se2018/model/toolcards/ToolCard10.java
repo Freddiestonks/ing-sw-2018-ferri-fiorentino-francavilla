@@ -8,14 +8,16 @@ public class ToolCard10 extends ToolCard {
     public ToolCard10() {}
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa){
-        Die die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
+        Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
         die.setValue(7 - die.getValue());
-        wf.placeDie(die, pa.getPlaceDPDie()[0][0], pa.getPlaceDPDie()[0][1]);
+        wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
+        model.updateTurn();
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
-        Die die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
+        // create a copy of the die
+        Die die = new Die(model.getDraftPoolDie(pa.getPosDPDie().get(0)));
         die.setValue(7 - die.getValue());
-        return wf.checkRestrictions(die, pa.getPlaceDPDie()[0][0], pa.getPlaceDPDie()[0][1]);
+        return wf.checkRestrictions(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
     }
 }

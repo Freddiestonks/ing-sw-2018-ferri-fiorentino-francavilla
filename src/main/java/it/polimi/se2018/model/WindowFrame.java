@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  * */
 
-public class WindowFrame implements Cloneable{
+public class WindowFrame {
     //Attributes
     private PatternCard pc = null;
     private boolean wcFace; //true for front
@@ -36,14 +36,23 @@ public class WindowFrame implements Cloneable{
                 placements[i][j] = null;
             }
         }
+    }
 
+    public WindowFrame(WindowFrame wf) {
+        // create a copy of the selected WindowFrame
+        this.pc = wf.pc;
+        this.wcFace = wf.wcFace;
+        this.numDice = wf.numDice;
+        this.placements = new Die[4][];
+        for(int i = 0; i < 4; i++) {
+            this.placements[i] = wf.placements[i].clone();
+        }
     }
 
     /**
      * This method is used to translate a string to a "Color"
      * @param string this is the input string and it will be translated into a "Color"
      * */
-
     private Color colorTranslator(String string) {
         //This method is used to translate the "Colors" in the JSON file from english to a Color, ignore
         //all blank spaces and change letters to uppercase so that the process of adding cards

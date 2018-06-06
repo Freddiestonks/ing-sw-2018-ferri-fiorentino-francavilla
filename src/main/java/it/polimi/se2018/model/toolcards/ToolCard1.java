@@ -10,17 +10,18 @@ public class ToolCard1 extends ToolCard {
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
-        Die die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
-        die.setValue(pa.getNewDieValue());
-        wf.placeDie(die, pa.getPlaceDPDie()[0][0], pa.getPlaceDPDie()[0][1]);
+        Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
+        die.setValue(pa.getNewDieValue().get(0));
+        wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
+        model.updateTurn();
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
-        Die die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
-        int row = pa.getPlaceWFDie()[0][0];
-        int col = pa.getPlaceWFDie()[0][1];
-        if((die.getValue() != pa.getNewDieValue() - 1)
-           && (die.getValue() != pa.getNewDieValue() + 1)) {
+        Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
+        int row = pa.getPlaceWFDie().get(0)[0];
+        int col = pa.getPlaceWFDie().get(0)[1];
+        if((die.getValue() != pa.getNewDieValue().get(0) - 1)
+           && (die.getValue() != pa.getNewDieValue().get(0) + 1)) {
             return false;
         }
         return wf.checkRestrictions(die, row, col);

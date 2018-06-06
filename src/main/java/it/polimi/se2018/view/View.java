@@ -3,7 +3,6 @@ package it.polimi.se2018.view;
 import it.polimi.se2018.model.*;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public abstract class View implements ViewInterface{
@@ -32,7 +31,7 @@ public abstract class View implements ViewInterface{
     @Override
     public void updateOrder(boolean backward){}
     @Override
-    public void updateInfos(int tokens,int round,boolean backward){}
+    public void updateInfo(int tokens, int round, boolean backward){}
     @Override
     public void updatePrivOCs(PrivObjCard privObjCard){}
     @Override

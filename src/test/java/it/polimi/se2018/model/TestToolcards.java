@@ -14,9 +14,11 @@ public class TestToolcards {
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
-        pa.setPosDraftPoolDie(0,2);
-        pa.setNewDieValue(2);
-        pa.setPlaceWFDie(0,0,1,2);
+        pa.addPosDPDie(0);
+        pa.addPosDPDie(2);
+        pa.addNewDieValue(2);
+        pa.addPlaceWFDie(0, 0);
+        pa.addPlaceDPDie(1, 2);
         Die d1 = new Die(Color.YELLOW);
         d1.setValue(2);
         d1.setValue(3);
@@ -26,7 +28,7 @@ public class TestToolcards {
         else fail();
     }
     @After
-    public void reset1(){
+    public void reset1() {
         Model.instance().reset();
     }
 
@@ -36,8 +38,10 @@ public class TestToolcards {
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
-        pa.setPlaceWFDie(0,0,1,1);
-        pa.setPlaceNewWFDie(1,2,3,3);
+        pa.addPlaceWFDie(0,0);
+        pa.addPlaceWFDie(1, 1);
+        pa.addPlaceNewWFDie(1,2);
+        pa.addPlaceNewWFDie(3,3);
         Die d1 = new Die(Color.YELLOW);
         Die d2 = new Die(Color.RED);
         d1.setValue(2);
@@ -50,7 +54,7 @@ public class TestToolcards {
         else fail();
     }
     @After
-    public void reset2(){
+    public void reset2() {
         Model.instance().reset();
     }
 
@@ -60,8 +64,10 @@ public class TestToolcards {
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
-        pa.setPlaceWFDie(0,0,1,1);
-        pa.setPlaceNewWFDie(2,4,2,2);
+        pa.addPlaceWFDie(0,0);
+        pa.addPlaceWFDie(1,1);
+        pa.addPlaceNewWFDie(2,4);
+        pa.addPlaceNewWFDie(2,2);
         Die d1 = new Die(Color.YELLOW);
         d1.setValue(5);
         wf.placeDie(d1,0,0);
@@ -71,7 +77,7 @@ public class TestToolcards {
         else fail();
     }
     @After
-    public void reset3(){
+    public void reset3() {
         Model.instance().reset();
     }
 
@@ -81,8 +87,10 @@ public class TestToolcards {
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
-        pa.setPlaceWFDie(0,0,0,1);
-        pa.setPlaceNewWFDie(2,4,3,4);
+        pa.addPlaceWFDie(0,0);
+        pa.addPlaceWFDie(0,1);
+        pa.addPlaceNewWFDie(2,4);
+        pa.addPlaceNewWFDie(3,4);
         Die d1 = new Die(Color.YELLOW);
         Die d2 = new Die(Color.RED);
         d1.setValue(2);
@@ -95,7 +103,7 @@ public class TestToolcards {
         else fail();
     }
     @After
-    public void reset4(){
+    public void reset4() {
         Model.instance().reset();
     }
 
@@ -105,8 +113,9 @@ public class TestToolcards {
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
-        pa.setPosDraftPoolDie(0,1);
-        pa.setPosRoundTrackDie(0,0);
+        pa.addPosDPDie(0);
+        pa.addPosDPDie(1);
+        pa.addPosRTDie(0,0);
         model.addDraftPoolDie(new Die(Color.GREEN));
         model.addRoundTrackDie(new Die(Color.GREEN),0);
         if(t5.validAction(model,wf,pa)){
@@ -115,7 +124,7 @@ public class TestToolcards {
         else fail();
     }
     @After
-    public void reset5(){
+    public void reset5() {
         Model.instance().reset();
     }
 
@@ -131,15 +140,17 @@ public class TestToolcards {
         d2.setValue(3);
         model.addDraftPoolDie(d2);
         wf.placeDie(d1,0,0);
-        pa.setPosDraftPoolDie(0,1);
-        pa.setPlaceDraftPoolDie(0,1,0,1);
+        pa.addPosDPDie(0);
+        pa.addPosDPDie(1);
+        pa.addPlaceDPDie(0,1);
+        pa.addPlaceDPDie(0,1);
         if(t6.validAction(model,wf,pa)){
             t6.performAction(model,wf,pa);
         }
         else fail();
     }
     @After
-    public void reset6(){
+    public void reset6() {
         Model.instance().reset();
     }
 
@@ -148,7 +159,7 @@ public class TestToolcards {
         ToolCard7 t7 = new ToolCard7();
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
-        model.addPlayer("Carlo");
+        model.addPlayer("Carlo", null);
         if(model.getTurn()==1 && model.getRound()==1)
             model.updateTurn();
         PlayerAction pa = new PlayerAction();
@@ -158,19 +169,20 @@ public class TestToolcards {
         else fail();
     }
     @After
-    public void reset7(){
+    public void reset7() {
         Model.instance().reset();
     }
 
-    //TODO: waiting for the clone implementation.
-    /*@Test
-    public void TestT8() throws CloneNotSupportedException {
+    @Test
+    public void TestT8() {
         ToolCard8 t8 = new ToolCard8();
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
-        pa.setPosDraftPoolDie(0,1);
-        pa.setPlaceDraftPoolDie(0,0,0,1);
+        pa.addPosDPDie(0);
+        pa.addPosDPDie(1);
+        pa.addPlaceDPDie(0,0);
+        pa.addPlaceDPDie(0,1);
         Die d1 = new Die(Color.YELLOW);
         Die d2 = new Die(Color.RED);
         d1.setValue(2);
@@ -185,7 +197,7 @@ public class TestToolcards {
     @After
     public void reset8(){
         Model.instance().reset();
-    }*/
+    }
 
     @Test
     public void TestT9(){
@@ -193,8 +205,10 @@ public class TestToolcards {
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
-        pa.setPlaceDraftPoolDie(0,1,3,0);
-        pa.setPosDraftPoolDie(0,1);
+        pa.addPlaceDPDie(0,1);
+        pa.addPlaceDPDie(3,0);
+        pa.addPosDPDie(0);
+        pa.addPosDPDie(1);
         model.addDraftPoolDie(new Die(Color.RED));
         Die d1 = new Die(Color.YELLOW);
         d1.setValue(2);
@@ -205,7 +219,7 @@ public class TestToolcards {
         else fail();
     }
     @After
-    public void reset9(){
+    public void reset9() {
         Model.instance().reset();
     }
 
@@ -219,15 +233,19 @@ public class TestToolcards {
         d2.setValue(3);
         Die d1 = new Die(Color.YELLOW);
         d1.setValue(2);
+        model.addDraftPoolDie(d1);
         model.addDraftPoolDie(d2);
-        pa.setPlaceDraftPoolDie(0,1,1,1);
+        pa.addPosDPDie(0);
+        pa.addPosDPDie(1);
+        pa.addPlaceDPDie(0,1);
+        pa.addPlaceDPDie(1,1);
         if(t10.validAction(model,wf,pa)){
             t10.performAction(model,wf,pa);
         }
         else fail();
     }
     @After
-    public void reset10(){
+    public void reset10() {
         Model.instance().reset();
     }
 
@@ -239,15 +257,17 @@ public class TestToolcards {
         PlayerAction pa = new PlayerAction();
         Die d2 = model.getDiceBag().extract();
         model.addDraftPoolDie(d2);
-        pa.setPosDraftPoolDie(0,1);
-        pa.setPlaceDraftPoolDie(0,1,0,1);
+        pa.addPosDPDie(0);
+        pa.addPosDPDie(1);
+        pa.addPlaceDPDie(0,1);
+        pa.addPlaceDPDie(0,1);
         if(t11.validAction(model,wf,pa)){
             t11.performAction(model,wf,pa);
         }
         else fail();
     }
     @After
-    public void reset11(){
+    public void reset11() {
         Model.instance().reset();
     }
 
@@ -263,8 +283,11 @@ public class TestToolcards {
         d2.setValue(5);
         d3.setValue(3);
         d1.setValue(1);
-        pa.setPlaceWFDie(0,0,2,1);
-        pa.setPlaceNewWFDie(2,4,3,3);
+        pa.addPlaceWFDie(0,0);
+        pa.addPlaceWFDie(2,1);
+        pa.addPlaceNewWFDie(2,4);
+        pa.addPlaceNewWFDie(3,3);
+        pa.addPosRTDie(0, 0);
         wf.placeDie(d1,0,0);
         wf.placeDie(d2,3,4);
         wf.placeDie(d3,2,1);
@@ -275,7 +298,7 @@ public class TestToolcards {
         else fail();
     }
     @After
-    public void reset12(){
+    public void reset12() {
         Model.instance().reset();
     }
 }

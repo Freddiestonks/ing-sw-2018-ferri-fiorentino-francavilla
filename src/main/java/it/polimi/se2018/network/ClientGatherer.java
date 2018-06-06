@@ -2,9 +2,10 @@ package it.polimi.se2018.network;
 
 import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.controller.PlayerActionInterface;
+import it.polimi.se2018.controller.ServerController;
 import it.polimi.se2018.model.LocalModelInterface;
-import it.polimi.se2018.utils.Timer;
 import it.polimi.se2018.view.ViewInterface;
+import it.polimi.se2018.utils.Timer;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -34,39 +35,33 @@ public class ClientGatherer extends Thread implements ClientGathererInterface {
         }
         try {
             LocateRegistry.createRegistry(RMI_PORT);
-            Naming.rebind("//localhost/Server", this);
             UnicastRemoteObject.exportObject(this, 0);
+            Naming.rebind("//localhost:" + "/Server", this);
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        start();
     }
 
-    public synchronized PlayerActionInterface connectRMI(LocalModelInterface localModel, ViewInterface view) {
-        PlayerAction pa = new PlayerAction();
+    public PlayerActionInterface connectRMI(LocalModelInterface localModel, ViewInterface view) {
         PlayerActionInterface paInterface = null;
-        try {
-            paInterface = (PlayerActionInterface) UnicastRemoteObject.exportObject(pa, 0);
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        synchronized (ServerController.lock) {
+            PlayerAction pa = new PlayerAction();
+            try {
+                paInterface = (PlayerActionInterface) UnicastRemoteObject.exportObject(pa, 0);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            preLobby.add(new ClientInfo(localModel, view, pa));
+            //socketReceivers.add(null);
         }
-        preLobby.add(new ClientInfo(localModel, view, pa));
-        notifyAll();
-        //socketReceivers.add(null);
         return paInterface;
-    }
-
-    public boolean isEmpty() {
-        return preLobby.isEmpty();
     }
 
     public Iterator<ClientInfo> getIterator() {
         return preLobby.iterator();
-    }
-
-    public synchronized void remove(ClientInfo clientInfo) {
-        preLobby.remove(clientInfo);
     }
 
     @Override
@@ -84,11 +79,15 @@ public class ClientGatherer extends Thread implements ClientGathererInterface {
             socketReceiver.start();
             SocketLocalModel localModel = new SocketLocalModel(socket);
             SocketView view = new SocketView(socket);
-            synchronized (this) {
+            synchronized (ServerController.lock) {
                 preLobby.add(new ClientInfo(localModel, view, pa));
-                notifyAll();
             }
-            //TODO: remove unused socket receiver
+            Iterator<SocketReceiver> iterator = socketReceivers.iterator();
+            while(iterator.hasNext()) {
+                if(iterator.next().isInterrupted()) {
+                    iterator.remove();
+                }
+            }
             socketReceivers.add(socketReceiver);
         }
     }

@@ -17,7 +17,7 @@ public interface ViewInterface extends Remote {
     void updateTokens(int tokens);
     void updateRound(int round);
     void updateOrder(boolean backward);
-    void updateInfos(int tokens,int round,boolean backward);
+    void updateInfo(int tokens, int round, boolean backward);
     void updatePrivOCs(PrivObjCard privObjCard);
     void updatePubOCs(PubObjCard pubObjCards[]);
     void updateOpponentsWF(Player[] opponents);

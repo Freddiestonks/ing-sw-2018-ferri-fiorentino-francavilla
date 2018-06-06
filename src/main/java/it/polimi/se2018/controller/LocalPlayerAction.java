@@ -1,6 +1,6 @@
 package it.polimi.se2018.controller;
 
-public class LocalPlayerAction implements PlayerActionInterface {
+public class LocalPlayerAction {
     private String usernameReq;
     private boolean quitReq;
     private boolean pauseReq;
@@ -17,7 +17,6 @@ public class LocalPlayerAction implements PlayerActionInterface {
 
     }
 
-    @Override
     public void checkConnection() {
 
     }

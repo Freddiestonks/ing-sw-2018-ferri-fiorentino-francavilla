@@ -10,14 +10,15 @@ public class ToolCard9 extends ToolCard {
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException {
-        Die die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
-        wf.placeDie(die, pa.getPlaceDPDie()[0][0], pa.getPlaceDPDie()[0][1]);
+        Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
+        wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
+        model.updateTurn();
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
-        Die die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
-        int row = pa.getPlaceDPDie()[0][0];
-        int col = pa.getPlaceDPDie()[1][0];
+        Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
+        int row = pa.getPlaceDPDie().get(0)[0];
+        int col = pa.getPlaceDPDie().get(1)[0];
         Cell cell = wf.getPCCell(row, col);
         if(!cell.placeableShade(die)
            || !cell.placeableColor(die)

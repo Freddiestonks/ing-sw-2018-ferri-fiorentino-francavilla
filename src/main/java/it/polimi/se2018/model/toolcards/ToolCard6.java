@@ -11,15 +11,16 @@ public class ToolCard6 extends ToolCard {
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException {
         if(!pendingAction) {
-            Die die = model.getDraftPoolDie(pa.getPosDPDie()[0]);
+            Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
             die.roll();
             setPendingDie(die);
             pendingAction = true;
         }
         else {
             Die die = getPendingDie();
-            wf.placeDie(die, pa.getPlaceDPDie()[0][0], pa.getPlaceDPDie()[0][1]);
+            wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
             pendingAction = false;
+            model.updateTurn();
         }
     }
 
@@ -29,7 +30,7 @@ public class ToolCard6 extends ToolCard {
         }
         else {
             Die die = getPendingDie();
-            return wf.checkRestrictions(die, pa.getPlaceDPDie()[0][0], pa.getPlaceDPDie()[0][1]);
+            return wf.checkRestrictions(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
         }
     }
 }

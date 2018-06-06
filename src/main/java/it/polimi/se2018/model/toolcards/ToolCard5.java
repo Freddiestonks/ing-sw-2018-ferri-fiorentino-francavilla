@@ -13,12 +13,12 @@ public class ToolCard5 extends ToolCard {
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
-        Die dpDie = model.getDraftPoolDie(pa.getPosDPDie()[0]);
-        model.removeDraftPoolDie(pa.getPosDPDie()[0]);
-        Die rtDie = model.getRoundTrackDie(pa.getPosRTDie()[0], pa.getPosRTDie()[1]);
-        model.removeRoundTrackDie(pa.getPosRTDie()[0], pa.getPosRTDie()[1]);
+        Die dpDie = model.getDraftPoolDie(pa.getPosDPDie().get(0));
+        model.removeDraftPoolDie(pa.getPosDPDie().get(0));
+        Die rtDie = model.getRoundTrackDie(pa.getPosRTDie().get(0)[0], pa.getPosRTDie().get(0)[1]);
+        model.removeRoundTrackDie(pa.getPosRTDie().get(0)[0], pa.getPosRTDie().get(0)[1]);
         model.addDraftPoolDie(rtDie);
-        model.addRoundTrackDie(dpDie, pa.getPosRTDie()[0]);
+        model.addRoundTrackDie(dpDie, pa.getPosRTDie().get(0)[0]);
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {

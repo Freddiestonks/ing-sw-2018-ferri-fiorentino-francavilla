@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static java.lang.System.in;
 import static java.lang.System.out;
 /**
  * @author Federico Ferri,Alessio Fiorentino,Simone Francavilla
@@ -19,9 +18,8 @@ public class CLIView extends View{
     private Scanner user_input = new Scanner(System.in);
     private String IP;
     private String port;
-    private String  type = null;
+    private String type = null;
     private boolean correct = false;
-    private static CLIView cliView =new CLIView();
     private static final int cardWidth = 26;
     private static final int privOCSize = 1;
     private static final int rowSize = 4;
@@ -36,7 +34,6 @@ public class CLIView extends View{
         //Thread clientGatherer = new ClientGatherer();
         PlayerAction playerAction = new PlayerAction();
         //clientGatherer.run();
-        playerAction.setSwitchConnReq(true);
         out.println("Insert your username:\n");
         playerAction.setUsernameReq(user_input.next());
 
@@ -103,7 +100,7 @@ public class CLIView extends View{
         }
     }
     @Override
-    public void updateInfos(int tokens,int round,boolean backward){
+    public void updateInfo(int tokens, int round, boolean backward){
         updateTokens(tokens);
         updateRound(round);
         updateOrder(backward);
@@ -208,7 +205,7 @@ public class CLIView extends View{
         boolean backward = mainScreenInfo.isBackward();
         ArrayList<Die> draftPool = mainScreenInfo.getDraftPool();
         ArrayList<ArrayList<Die>> roundTrack = mainScreenInfo.getRoundTrack();
-        updateInfos(player.getTokens(),round,backward);
+        updateInfo(player.getTokens(),round,backward);
         out.println();
         updateDP(draftPool);
         out.println();

@@ -54,12 +54,12 @@ public class PubOCShadeDet extends PubObjCard {
     private int getScoreRows(WindowFrame wf){
         int score = 0;
         for (int i = 0; i<6; i++){
-            //I added 6 elements initialized to 0 to the ArrayList
+            //added 6 elements initialized to 0 to the ArrayList
             check.add(0);
         }
         for (int i = 0; i< 4; i++){
             for(int j = 0; j<5; j++){
-                //we run the method to see how many times a certain shade appears on a single row
+                //run the method to see how many times a certain shade appears on a single row
                 updateCheck(i,j,wf);
             }
             if(check.get(0) <= 1 && check.get(1) <= 1 && check.get(2) <= 1 &&
@@ -69,7 +69,7 @@ public class PubOCShadeDet extends PubObjCard {
                 score = score + 5;
             }
             for(int l = 0; l<6;l++){
-                //we need to reset the elements of the ArrayList to 0
+                //reset the elements of the ArrayList to 0
                 check.set(l, 0);
             }
         }
@@ -85,12 +85,12 @@ public class PubOCShadeDet extends PubObjCard {
     private int getScoreCol(WindowFrame wf){
         int score = 0;
         for (int i = 0; i < 6; i++) {
-            //I added 6 elements initialized to 0 to the arraylist
+            //add 6 elements initialized to 0 to the arraylist
             check.add(0);
         }
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
-                //we run the method to see how many times a certain shade appears on a single column
+                //run the method to see how many times a certain shade appears on a single column
                 updateCheck(j, i, wf);
             }
             if (check.get(0) <= 1 && check.get(1) <= 1 && check.get(2) <= 1 &&

@@ -15,12 +15,12 @@ public class ClientInfo {
         this.playerAction = pa;
     }
 
-    public PlayerAction getLocalModel() {
-        return playerAction;
+    public LocalModelInterface getLocalModel() {
+        return localModel;
     }
 
-    public PlayerAction getView() {
-        return playerAction;
+    public ViewInterface getView() {
+        return view;
     }
 
     public PlayerAction getPlayerAction() {

@@ -50,7 +50,7 @@ public class SocketView implements ViewInterface {
     }
 
     @Override
-    public void updateInfos(int tokens, int round, boolean backward) {
+    public void updateInfo(int tokens, int round, boolean backward) {
 
     }
 
