@@ -38,7 +38,7 @@ public class ServerController {
         return false;
     }
 
-    private void listenPlayerActions() throws InterruptedException {
+    private void listenPlayerActions() throws InterruptedException, CloneNotSupportedException {
         Iterator<PlayerAction> iterator;
         while(!lobbyGathering) {
             synchronized (lock) {
@@ -151,7 +151,7 @@ public class ServerController {
         return true;
     }
 
-    private boolean validAction(PlayerAction pa) throws InvalidPlaceException {
+    private boolean validAction(PlayerAction pa) throws InvalidPlaceException, CloneNotSupportedException {
 
         //checking of match interruption
         if ((pa.isQuitReq()

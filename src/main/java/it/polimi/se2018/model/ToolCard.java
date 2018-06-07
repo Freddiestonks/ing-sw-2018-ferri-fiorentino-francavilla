@@ -39,6 +39,10 @@ public abstract class ToolCard {
     public String getName() {
         return name;
     }
+
+    public int getIdRes() {
+        return idRes;
+    }
 }
 
 

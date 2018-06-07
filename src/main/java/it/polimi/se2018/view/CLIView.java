@@ -243,26 +243,32 @@ public class CLIView extends View{
     }
     //TODO TEST AFTER TOOLCARDS ARE DONE
     @Override
-    public void updateToolCards(ToolCard[] toolCard){
-        String[] names = new String[toolCard.length];
-        String[] description = new String[toolCard.length];
-        for (int i = 0; i < toolCard.length; i++) {
+    public void updateToolCards(ArrayList<ToolCard> toolCard){
+        String[] names = new String[toolCard.size()];
+        String[] description = new String[toolCard.size()];
+        for (int i = 0; i < toolCard.size(); i++) {
             for (int z = 0; z < cardWidth+4; z++) {
                 out.print("-");
             }
             out.print("        ");
         }
         out.println();
-        for(int i = 0;i<toolCard.length;i++){
-           names[i] = toolCard[i].getName();
-           description[i] = toolCard[i].getDescription();
+        for(int i = 0;i<toolCard.size();i++){
+           names[i] = toolCard.get(i).getName();
+           description[i] = toolCard.get(i).getDescription();
         }
 
-        layoutFormatter(names,toolCard.length);
-        layoutFormatter(description,toolCard.length);
+        layoutFormatter(names,toolCard.size());
+        layoutFormatter(description,toolCard.size());
 
     }
-
+    @Override
+    public String input(){
+        return user_input.next().toLowerCase();
+    }
+    @Override
+    public void errorMessage(String string){
+    }
     private void layoutFormatter(String[] string,int numCards) {
         int size[] = new int[numCards];
         int big = 0;

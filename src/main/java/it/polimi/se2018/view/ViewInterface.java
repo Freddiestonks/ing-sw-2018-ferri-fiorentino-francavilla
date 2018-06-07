@@ -25,7 +25,9 @@ public interface ViewInterface extends Remote {
     void updateMainScreen(MainScreenInfo mainScreenInfo);
     void updateConnectionRequest(boolean success);
     void endGame(Player[] leaderboard,Player player,int[] score);
-    void updateToolCards(ToolCard[] toolCard);
+    void updateToolCards(ArrayList<ToolCard> toolCard);
+    void errorMessage(String string);
+    String input();
 
 
 

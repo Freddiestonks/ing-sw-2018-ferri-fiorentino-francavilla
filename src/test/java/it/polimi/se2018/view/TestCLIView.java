@@ -35,7 +35,7 @@ public class TestCLIView {
     public void testRT(){
         ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
         Die die = new Die(Color.BLUE);
-        ArrayList<Die> dice = new ArrayList<>();
+        ArrayList< Die> dice = new ArrayList<>();
         dice.add(die);
         dice.add(die);
         dice.add(die);

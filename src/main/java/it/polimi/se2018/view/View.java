@@ -9,25 +9,20 @@ public abstract class View implements ViewInterface{
 
     public View(){}
     @Override
-    public void updateWaitingRoom(boolean starting) {
-    }
+    public void updateWaitingRoom(boolean starting) {}
     @Override
     public void welcomeScreen(){}
     @Override
-    public void updateRT(ArrayList<ArrayList<Die>> roundTrack,int round) {
-    }
+    public void updateRT(ArrayList<ArrayList<Die>> roundTrack,int round) {}
     @Override
     public void checkConnection() throws IOException {
     }
     @Override
-    public void updateDP(ArrayList<Die> draftPool) {
-    }
+    public void updateDP(ArrayList<Die> draftPool) {}
     @Override
-    public void updateTokens(int tokens){
-    }
+    public void updateTokens(int tokens){}
     @Override
-    public void updateRound(int round){
-    }
+    public void updateRound(int round){}
     @Override
     public void updateOrder(boolean backward){}
     @Override
@@ -47,7 +42,12 @@ public abstract class View implements ViewInterface{
     @Override
     public void endGame(Player[] leaderboard,Player player,int[] score){}
     @Override
-    public void updateToolCards(ToolCard[] toolCard){}
-    private void layoutFormatter(String[] string,int numCards) {}
-    private void windowFrameGenerator(WindowFrame[] wf){}
+    public void updateToolCards(ArrayList<ToolCard> toolCard){}
+    @Override
+    public void errorMessage(String string){}
+    @Override
+    public String input(){
+        return null;
+    };
+
 }
