@@ -10,7 +10,7 @@ public class PlayerAction implements PlayerActionInterface{
     private ArrayList<Integer> posDPDie = new ArrayList<>();
     private ArrayList<int[]> posRTDie = new ArrayList<>();
     private ArrayList<int[]> placeDPDie = new ArrayList<>();
-    private ArrayList<int[]> placeWFDie = new ArrayList<>();
+    private ArrayList<int[]> placeWFDie = new ArrayList<>(); //Take from window frame
     private ArrayList<int[]> placeNewWFDie = new ArrayList<>();
     private int idToolCard = 0;
 

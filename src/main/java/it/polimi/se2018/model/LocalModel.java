@@ -11,4 +11,5 @@ public class LocalModel implements LocalModelInterface {
     public ArrayList<ToolCard> getToolCards() {
         return toolCards;
     }
+
 }

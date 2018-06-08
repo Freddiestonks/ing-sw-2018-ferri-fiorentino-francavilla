@@ -62,4 +62,12 @@ public class MainScreenInfo {
     public void setRoundTrack(ArrayList<ArrayList<Die>> roundTrack) {
         this.roundTrack = roundTrack;
     }
+
+    public String[] getDraftPoolAsString(){
+        String[] string = new String[draftPool.size()];
+        for (int i =0;i<draftPool.size();i++){
+            string[i] = draftPool.get(i).toString();
+        }
+        return string;
+    }
 }

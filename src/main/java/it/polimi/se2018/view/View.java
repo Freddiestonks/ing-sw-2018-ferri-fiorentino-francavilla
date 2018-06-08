@@ -44,10 +44,13 @@ public abstract class View implements ViewInterface{
     @Override
     public void updateToolCards(ArrayList<ToolCard> toolCard){}
     @Override
-    public void errorMessage(String string){}
+    public void invalidMoveError(){}
     @Override
     public String input(){
         return null;
-    };
+    }
+    @Override
+    public void selectionMaker(String[] string){}
 
-}
+
+    }

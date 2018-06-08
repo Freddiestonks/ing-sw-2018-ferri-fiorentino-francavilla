@@ -14,7 +14,7 @@ import static java.lang.System.out;
 public class App {
 
 
-    public static void main( String[] args ) throws InterruptedException {
+    public static void main( String[] args ){
         Scanner user_input = new Scanner(System.in);
         boolean correct = false;
         out.println("Welcome to Sagrada\nHow would you like to play?  (CLI/GUI)");
@@ -25,6 +25,7 @@ public class App {
                     //TODO NO VIEW MA CONTROLLER
                     CLIView cliView = new CLIView();
                     cliView.welcomeScreen();
+
                     correct = true;
                     break;
                 case "gui":

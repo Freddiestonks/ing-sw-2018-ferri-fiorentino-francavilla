@@ -14,17 +14,16 @@ import static java.lang.System.out;
  * */
 public class CLIView extends View{
 
-    private ArrayList<Die> draftPool = new ArrayList<>();
     private Scanner user_input = new Scanner(System.in);
     private String IP;
     private String port;
     private String type = null;
-    private boolean correct = false;
-    private static final int cardWidth = 26;
-    private static final int privOCSize = 1;
-    private static final int rowSize = 4;
-    private static final int colSize = 5;
-    private static final String publicObjString = "Public Objective";
+    private static final int CARD_WIDTH = 26;
+    private static final int PRIV_OC_SIZE = 1;
+    private static final int ROW_SIZE = 4;
+    private static final int COL_SIZE = 5;
+    private static final String PUBLIC_OBJ_STRING = "Public Objective";
+    private static final String SPACE = "        ";
 
 
     public CLIView() {
@@ -50,7 +49,7 @@ public class CLIView extends View{
     }
     @Override
     public void welcomeScreen(){
-        correct = false;
+        boolean correct = false;
         out.println("\n would you like to play on RMI or Socket?\n");
         type = user_input.next().toLowerCase();
         PlayerAction playerAction = new PlayerAction();
@@ -92,7 +91,7 @@ public class CLIView extends View{
     }
     @Override
     public void updateOrder(boolean backward){
-        if (backward == true){
+        if (backward){
             out.println("You are in the first turn of this round");
         }
         else {
@@ -107,27 +106,27 @@ public class CLIView extends View{
     }
     @Override
     public void updatePrivOCs(PrivObjCard privObjCard){
-        String[] string = new String[privOCSize];
-        for (int i = 0; i < privOCSize; i++) {
-            for (int z = 0; z < cardWidth+4; z++) {
+        String[] string = new String[PRIV_OC_SIZE];
+        for (int i = 0; i < PRIV_OC_SIZE; i++) {
+            for (int z = 0; z < CARD_WIDTH +4; z++) {
                 out.print("-");
             }
-            out.print("        ");
+            out.print(SPACE);
         }
         out.println();
         string[0] = "Private Objective";
-        layoutFormatter(string,privOCSize);
+        layoutFormatter(string, PRIV_OC_SIZE);
         string[0] = "Shades " + privObjCard.getColor().toString().toLowerCase();
-        layoutFormatter(string,privOCSize);
+        layoutFormatter(string, PRIV_OC_SIZE);
         string[0] = "You score as many points as the values of the shades on all of the " + privObjCard + " dice";
-        layoutFormatter(string,privOCSize);
+        layoutFormatter(string, PRIV_OC_SIZE);
 
     }
     @Override
-    public void updatePubOCs(PubObjCard pubObjCards[]){
+    public void updatePubOCs(PubObjCard[] pubObjCards){
         int pubOCSize = pubObjCards.length;
         for (int i = 0; i < pubOCSize; i++) {
-            for (int z = 0; z < cardWidth+4; z++) {
+            for (int z = 0; z < CARD_WIDTH +4; z++) {
                 out.print("-");
             }
             out.print("        ");
@@ -135,7 +134,7 @@ public class CLIView extends View{
         out.println();
         String[] pOCs = new String[pubOCSize];
         for(int i=0;i<pubOCSize;i++) {
-            pOCs[i] = publicObjString;
+            pOCs[i] = PUBLIC_OBJ_STRING;
         }
         layoutFormatter(pOCs,pubOCSize);
         for(int i=0;i<pubOCSize;i++) {
@@ -247,7 +246,7 @@ public class CLIView extends View{
         String[] names = new String[toolCard.size()];
         String[] description = new String[toolCard.size()];
         for (int i = 0; i < toolCard.size(); i++) {
-            for (int z = 0; z < cardWidth+4; z++) {
+            for (int z = 0; z < CARD_WIDTH +4; z++) {
                 out.print("-");
             }
             out.print("        ");
@@ -267,13 +266,23 @@ public class CLIView extends View{
         return user_input.next().toLowerCase();
     }
     @Override
-    public void errorMessage(String string){
+    public void invalidMoveError(){
+        out.println("ERROR: Invalid Move");
     }
+    @Override
+    public void selectionMaker(String[] string){
+        out.println("Please select an option:");
+        for(int i=0; i<string.length;i++){
+            out.print(i + ": ");
+            out.println(string[i]);
+        }
+    }
+
     private void layoutFormatter(String[] string,int numCards) {
-        int size[] = new int[numCards];
+        int[] size = new int[numCards];
         int big = 0;
         for (int i = 0; i < numCards; i++) {
-            size[i] = (string[i].length()-1) / cardWidth + 1;
+            size[i] = (string[i].length()-1) / CARD_WIDTH + 1;
         }
 
         for (int i = 0; i < numCards; i++) {
@@ -281,26 +290,26 @@ public class CLIView extends View{
                 big = size[i];
             }
         }
-        big = big%cardWidth;
+        big = big% CARD_WIDTH;
         for(int i = 0;i<big;i++){
             for(int j = 0;j<numCards;j++){
                 int spaceSize = 0;
-                if (string[j].length() % cardWidth != 0) {
-                    spaceSize = cardWidth - string[j].length() % cardWidth;
+                if (string[j].length() % CARD_WIDTH != 0) {
+                    spaceSize = CARD_WIDTH - string[j].length() % CARD_WIDTH;
                 }
                 out.print("- ");
-                if(i == string[j].length()/cardWidth){
-                    out.print(string[j].substring(i * cardWidth, i * cardWidth + string[j].length()%(cardWidth)));
+                if(i == string[j].length()/ CARD_WIDTH){
+                    out.print(string[j].substring(i * CARD_WIDTH, i * CARD_WIDTH + string[j].length()%(CARD_WIDTH)));
                     for (int z = 0; z < spaceSize; z++) {
                         out.print(" ");
                     }
                 }
-                else if(i > string[j].length()/cardWidth){
-                        for (int z = 0; z < cardWidth; z++) {
+                else if(i > string[j].length()/ CARD_WIDTH){
+                        for (int z = 0; z < CARD_WIDTH; z++) {
                         out.print(" ");
                     }                }
                 else {
-                    out.print(string[j].substring(i * cardWidth, i * cardWidth + cardWidth));
+                    out.print(string[j].substring(i * CARD_WIDTH, i * CARD_WIDTH + CARD_WIDTH));
                 }
                 out.print(" -        ");
             }
@@ -308,7 +317,7 @@ public class CLIView extends View{
 
         }
         for (int i = 0; i < numCards; i++) {
-            for (int z = 0; z < cardWidth+4; z++) {
+            for (int z = 0; z < CARD_WIDTH +4; z++) {
                 out.print("-");
             }
             out.print("        ");
@@ -317,9 +326,9 @@ public class CLIView extends View{
     }
 
     private void windowFrameGenerator(WindowFrame[] wf){
-       for(int i = 0;i<rowSize;i++){
+       for(int i = 0; i< ROW_SIZE; i++){
           for(int j=0;j<wf.length;j++){
-              for(int k=0;k<colSize;k++){
+              for(int k = 0; k< COL_SIZE; k++){
                   Die die = wf[j].getPlacements()[i][k];
                   if(wf[j].getPlacements()[i][k] != null){
                       out.print("|" + die + "|");}

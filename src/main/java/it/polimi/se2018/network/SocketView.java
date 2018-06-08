@@ -26,12 +26,9 @@ public class SocketView implements ViewInterface {
     public void welcomeScreen(){}
     @Override
     public void updateDP(ArrayList<Die> draftPool) {
-
     }
-
     @Override
     public void updateRT(ArrayList<ArrayList<Die>> roundTrack, int round) {
-
     }
 
     @Override
@@ -86,10 +83,15 @@ public class SocketView implements ViewInterface {
     @Override
     public void updateToolCards(ArrayList<ToolCard> toolCard){}
     @Override
-    public void errorMessage(String string){};
+    public void invalidMoveError(){}
+
+    @Override
+    public void selectionMaker(String[] string) {
+
+    }
     @Override
     public String input(){
         return null;
-    };
+    }
 
 }

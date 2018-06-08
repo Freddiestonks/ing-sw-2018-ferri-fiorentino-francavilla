@@ -19,14 +19,15 @@ public interface ViewInterface extends Remote {
     void updateOrder(boolean backward);
     void updateInfo(int tokens, int round, boolean backward);
     void updatePrivOCs(PrivObjCard privObjCard);
-    void updatePubOCs(PubObjCard pubObjCards[]);
+    void updatePubOCs(PubObjCard[] pubObjCards);
     void updateOpponentsWF(Player[] opponents);
     void updatePlayerWF(Player player);
     void updateMainScreen(MainScreenInfo mainScreenInfo);
     void updateConnectionRequest(boolean success);
     void endGame(Player[] leaderboard,Player player,int[] score);
     void updateToolCards(ArrayList<ToolCard> toolCard);
-    void errorMessage(String string);
+    void invalidMoveError();
+    void selectionMaker(String[] string);
     String input();
 
 
