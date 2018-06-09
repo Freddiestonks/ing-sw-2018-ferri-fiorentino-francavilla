@@ -87,4 +87,8 @@ public class TestCLIView {
         cliView.updateMainScreen(mainScreenInfo);
 
     }
+    @Test
+    public void testHelp(){
+        cliView.help();
+    }
 }

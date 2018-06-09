@@ -5,7 +5,6 @@ import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.View;
 import it.polimi.se2018.model.LocalModel;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class ClientController {
@@ -15,200 +14,132 @@ public class ClientController {
     private PlayerActionInterface playerActionInterface;
     private PlayerAction playerAction = new PlayerAction();
     private MainScreenInfo mainScreenInfo;
+    private static final String PLACE = "place";
+    private static final String WINDOW_FRAME = "windowframe";
+    private static final String ROUNDTRACK = "roundtrack";
+    private static final String DRAFTPOOL = "draftpool";
+    private static final String SELECT = "select";
+    private static final String TOOL_CARD = "toolcard";
+    private static final String NEW_VALUE = "newvalue";
+    private static final String HELP = "help";
+    private static final String SEPARATOR = ", ?";
+    private static final String PLACEMENT ="placement";
+    private static final String MAINSCREENINFO = "board";
     //Methods
     public ClientController(LocalModel model, View view){
     }
     private void parser(){
-        //TODO ask if mainWindow is necessary
-        String string = view.input();
-        if(Objects.equals(string, "toolcard")){
-            toolCardParser();
+        //TODO add methods to show
+        String[] string = view.input().split(SEPARATOR);
+        if(string[0].equalsIgnoreCase(TOOL_CARD)){
+            toolCardParser(string);
         }
-        else if(string.equals("place")){
-            view.updateDP(mainScreenInfo.getDraftPool());
-            placementParser();
+        else if(string[0].equalsIgnoreCase(PLACEMENT)){
+            placementParser(string);
         }
-        else{
-            view.invalidMoveError();
-            parser();
+        else if(string[0].equalsIgnoreCase(HELP)){
+            view.help();
         }
-    }
-    private void placementParser(){
-        String read = view.input();
-        if(read.equalsIgnoreCase("exit")){
+
+        else if(string[0].equalsIgnoreCase(MAINSCREENINFO)){
             view.updateMainScreen(mainScreenInfo);
-            parser();
-        }
-        int dpDie = Integer.parseInt(read);
-        if(dpDie>=0&&dpDie<mainScreenInfo.getDraftPool().size()){
-            //TODO Select form draftpool
-            //TODO Place in WF
-
         }
         else{
             view.invalidMoveError();
-            placementParser();
+            parser();
+        }
+    }
+    private void placementParser(String[] read){
+
+        for(int i = 1;i<read.length;i++) {
+            if(read[i].equalsIgnoreCase(SELECT)){
+                if(read[i+1].equalsIgnoreCase(DRAFTPOOL)){
+                    int element = Integer.parseInt(read[i+2]);
+                    playerAction.addPosDPDie(element);
+                }
+            }
+            else if(read[i].equalsIgnoreCase(PLACE)){
+                if(read[i+1].equalsIgnoreCase(DRAFTPOOL)){
+                    int row = Integer.parseInt(read[i+2]);
+                    int col = Integer.parseInt(read[i+3]);
+                    playerAction.addPlaceDPDie(row,col);
+                }
+            }
+            else {
+                view.invalidMoveError();
+                parser();
+            }
         }
 
     }
-    private void toolCardParser(){
-        String string = view.input();
-        PlayerAction pa = new PlayerAction();
-        view.updateToolCards(model.getToolCards());
+    private void toolCardParser(String[] string){
 
-        switch (string) {
+        switch (string[1]) {
             case "1": {
                 ToolCard toolCard = model.getToolCards().get(0);
-                pa.setIdToolCard(toolCard.getIdRes());
-                performToolCard(toolCard);
+                performToolCard(toolCard,string);
                 break;
             }
             case "2": {
                 ToolCard toolCard = model.getToolCards().get(1);
-                pa.setIdToolCard(toolCard.getIdRes());
-                performToolCard(toolCard);
+                performToolCard(toolCard,string);
                 break;
             }
             case "3": {
                 ToolCard toolCard = model.getToolCards().get(2);
-                pa.setIdToolCard(toolCard.getIdRes());
-                performToolCard(toolCard);
+                performToolCard(toolCard,string);
                 break;
             }
-            case "exit":
-                updateMainScreen();
-                view.updateMainScreen(mainScreenInfo);
-                parser();
+            case "all":{
+                view.updateToolCards(model.getToolCards());
                 break;
+
+            }
             default:
                 view.invalidMoveError();
-                toolCardParser();
+                parser();
                 break;
         }
     }
-    private void performToolCard(ToolCard toolCard) {
-        view.updateMainScreen(mainScreenInfo);
-        String read = view.input();
-        if(read.equalsIgnoreCase("newdievalue")){
-            boolean correct = false;
-            while (!correct) {
-                read = view.input();
-                if (read.equalsIgnoreCase("exit")) {
-                    correct = true;
-                    performToolCard(toolCard);
-                }
-                else {
-                    int value = Integer.parseInt(read);
-                        correct =true;
-                        playerAction.addNewDieValue(value);
-                }
-            }
-        }
-        else if(read.equalsIgnoreCase("posdpdie")){
-            boolean correct = false;
-            while (!correct) {
-                read = view.input();
-                if (read.equalsIgnoreCase("exit")) {
-                    correct = true;
-                    performToolCard(toolCard);
-                }
-                else {
-                    int value = Integer.parseInt(read);
-                        correct=true;
-                        playerAction.addPosDPDie(value);
+    private void performToolCard(ToolCard toolCard,String[] read) {
+        playerAction.setIdToolCard(toolCard.getIdRes());
+        for(int i = 0;i<read.length;i++) {
+            if (read[i].equalsIgnoreCase(NEW_VALUE)) {
 
+                int value = Integer.parseInt(read[i+1]);
+                playerAction.addNewDieValue(value);
+            }
+            else if(read[i].equalsIgnoreCase(SELECT)){
+                if(read[i+1].equalsIgnoreCase(DRAFTPOOL)){
+                    int element = Integer.parseInt(read[i+2]);
+                    playerAction.addPosDPDie(element);
+                    }
+                else if(read[i+1].equalsIgnoreCase(ROUNDTRACK)){
+                    int round = Integer.parseInt(read[i+2]);
+                    int row = Integer.parseInt(read[i+3]);
+                    playerAction.addPosRTDie(round,row);
+                }
+                else if(read[i+1].equalsIgnoreCase(WINDOW_FRAME)){
+                    int row = Integer.parseInt(read[i+2]);
+                    int col = Integer.parseInt(read[i+3]);
+                    playerAction.addPlaceWFDie(row,col);
                 }
             }
-        }
-        else if(read.equalsIgnoreCase("posrtdie")){
-            boolean correct = false;
-            while (!correct) {
-                read = view.input();
-                if (read.equalsIgnoreCase("exit")) {
-                    correct = true;
-                    performToolCard(toolCard);
+            else if(read[i].equalsIgnoreCase(PLACE)) {
+                if(read[i+1].equalsIgnoreCase(DRAFTPOOL)){
+                    int row = Integer.parseInt(read[i+2]);
+                    int col = Integer.parseInt(read[i+3]);
+                    playerAction.addPlaceDPDie(row,col);
                 }
-                else {
-                    int round = Integer.parseInt(read);
-                    read = view.input();
-                    if (read.equalsIgnoreCase("exit")) {
-                       correct = true;
-                            performToolCard(toolCard);
-                    }
-                    else {
-                        int die = Integer.parseInt(read);
-                        playerAction.addPosRTDie(round,die);
-                    }
+                else if(read[i+1].equalsIgnoreCase(WINDOW_FRAME)){
+                    int row = Integer.parseInt(read[i+2]);
+                    int col = Integer.parseInt(read[i+3]);
+                    playerAction.addPlaceWFDie(row,col);
                 }
             }
-        }
-        else if(read.equalsIgnoreCase("placedpdie")){
-            boolean correct = false;
-            while (!correct) {
-                read = view.input();
-                if (read.equalsIgnoreCase("exit")) {
-                    correct = true;
-                    performToolCard(toolCard);
-                }
-                else {
-                    int row = Integer.parseInt(read);
-                        read = view.input();
-                        if (read.equalsIgnoreCase("exit")) {
-                            correct = true;
-                            performToolCard(toolCard);
-                        }
-                        else {
-                            int col = Integer.parseInt(read);
-                            playerAction.addPlaceDPDie(row,col);
-                        }
-
-                }
-            }
-        }
-        else if(read.equalsIgnoreCase("placewfdie")){ //TODO RENAME THIS
-            boolean correct = false;
-            while (!correct) {
-                read = view.input();
-                if (read.equalsIgnoreCase("exit")) {
-                    correct = true;
-                    performToolCard(toolCard);
-                }
-                else {
-                    int row = Integer.parseInt(read);
-                    read = view.input();
-                    if (read.equalsIgnoreCase("exit")) {
-                        correct = true;
-                        performToolCard(toolCard);
-                    }
-                    else {
-                        int col = Integer.parseInt(read);
-                        playerAction.addPlaceWFDie(row,col);
-                    }
-
-                }
-            }
-        }
-        else if(read.equalsIgnoreCase("placenewwfdie")){
-            boolean correct = false;
-            while (!correct) {
-                read = view.input();
-                if (read.equalsIgnoreCase("exit")) {
-                    correct = true;
-                    performToolCard(toolCard);
-                }
-                else {
-                    int row = Integer.parseInt(read);
-                    read = view.input();
-                    if (read.equalsIgnoreCase("exit")) {
-                        correct = true;
-                        performToolCard(toolCard);
-                    }
-                    else {
-                        int col = Integer.parseInt(read);
-                        playerAction.addPlaceNewWFDie(row,col);
-                    }
-
-                }
+            else {
+                view.invalidMoveError();
+                parser();
             }
         }
     }

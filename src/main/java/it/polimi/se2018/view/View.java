@@ -49,6 +49,7 @@ public abstract class View implements ViewInterface{
     public String input(){
         return null;
     }
+    public void help(){}
     @Override
     public void selectionMaker(String[] string){}
 

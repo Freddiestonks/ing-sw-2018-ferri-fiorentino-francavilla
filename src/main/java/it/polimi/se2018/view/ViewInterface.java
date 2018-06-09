@@ -28,6 +28,7 @@ public interface ViewInterface extends Remote {
     void updateToolCards(ArrayList<ToolCard> toolCard);
     void invalidMoveError();
     void selectionMaker(String[] string);
+    void help();
     String input();
 
 

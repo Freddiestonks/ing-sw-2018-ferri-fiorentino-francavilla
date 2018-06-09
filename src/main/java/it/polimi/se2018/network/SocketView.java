@@ -90,6 +90,8 @@ public class SocketView implements ViewInterface {
 
     }
     @Override
+    public void help(){}
+    @Override
     public String input(){
         return null;
     }

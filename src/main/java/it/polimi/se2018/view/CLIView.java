@@ -14,8 +14,8 @@ import static java.lang.System.out;
  * */
 public class CLIView extends View{
 
-    private Scanner user_input = new Scanner(System.in);
-    private String IP;
+    private Scanner userInput = new Scanner(System.in);
+    private String ip;
     private String port;
     private String type = null;
     private static final int CARD_WIDTH = 26;
@@ -34,7 +34,7 @@ public class CLIView extends View{
         PlayerAction playerAction = new PlayerAction();
         //clientGatherer.run();
         out.println("Insert your username:\n");
-        playerAction.setUsernameReq(user_input.next());
+        playerAction.setUsernameReq(userInput.next());
 
     }
     //TODO REWIEW ABOVE METHODS
@@ -51,16 +51,16 @@ public class CLIView extends View{
     public void welcomeScreen(){
         boolean correct = false;
         out.println("\n would you like to play on RMI or Socket?\n");
-        type = user_input.next().toLowerCase();
+        type = userInput.next().toLowerCase();
         PlayerAction playerAction = new PlayerAction();
         playerAction.setConnection(type);
         while (!correct){
-            out.println("\n Ok now kindly insert the server's IP address\n");
-            IP = user_input.next();
-            out.println(IP + "\nPlease insert the port now\n");
-            port = user_input.next();
-            out.println("Server: " + IP + "\nPort: " + port + "\nis it correct? (y/n)");
-            if(Objects.equals(user_input.next(), "y")){
+            out.println("\n Ok now kindly insert the server's ip address\n");
+            ip = userInput.next();
+            out.println(ip + "\nPlease insert the port now\n");
+            port = userInput.next();
+            out.println("Server: " + ip + "\nPort: " + port + "\nis it correct? (y/n)");
+            if(Objects.equals(userInput.next(), "y")){
                 correct = true;
             }
         }
@@ -129,7 +129,7 @@ public class CLIView extends View{
             for (int z = 0; z < CARD_WIDTH +4; z++) {
                 out.print("-");
             }
-            out.print("        ");
+            out.print(SPACE);
         }
         out.println();
         String[] pOCs = new String[pubOCSize];
@@ -218,7 +218,7 @@ public class CLIView extends View{
             out.println("Congratulations you are now connected");
         }
         else{
-            out.println("Sorry, there was a problem connecting to the server, please check IP and port");
+            out.println("Sorry, there was a problem connecting to the server, please check ip and port");
         }
     }
     @Override
@@ -263,7 +263,7 @@ public class CLIView extends View{
     }
     @Override
     public String input(){
-        return user_input.next().toLowerCase();
+        return userInput.nextLine().toLowerCase();
     }
     @Override
     public void invalidMoveError(){
@@ -276,6 +276,28 @@ public class CLIView extends View{
             out.print(i + ": ");
             out.println(string[i]);
         }
+    }
+    //TODO implement on higher classes
+    @Override
+    public void help(){
+        out.println("All of the commands need to be on the same line separated by a comma(,), all the lines should either start with toolcard");
+        out.println("or with placement, if toolcard is chosen you should only select one toolcard at a time when making selections/placements\n");
+        out.println("Here are the possible commands you can use:\n");
+        out.println("   board = show the main board");
+        out.println("   toolcard");
+        out.println("       [element] = select Tool Card #[element]");
+        out.println("           select = make a selection");
+        out.println("               draftpool [element] = select from draftpool element #[element]");
+        out.println("               roundtrack [round][element] = select from roundtrack the die on the [element] position that was on round #[round]");
+        out.println("               windowframe [row][col] = select from windowframe die on cell[row][col]");
+        out.println("           place = make a placement");
+        out.println("               draftpool [row][col] = place die selected from draftpool on cell[row][col]");
+        out.println("               windowframe [row][col] = move die selected from windowframe die on cell[row][col]");
+        out.println("       all = show all Tool Cards\n");
+        out.println("   placement");
+        out.println("       select [element] = select from draftpool element #[element] ");
+        out.println("       place [row][col] = place die selected from draftpool on the cell[row][col] of the window frame");
+
     }
 
     private void layoutFormatter(String[] string,int numCards) {
@@ -341,7 +363,6 @@ public class CLIView extends View{
        }
        out.println();
     }
-
 
     //TODO FINISH OTHER SCREENS,CHECK METHODS ABOVE
 }
