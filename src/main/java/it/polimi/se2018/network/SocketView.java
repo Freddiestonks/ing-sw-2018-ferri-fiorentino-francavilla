@@ -79,9 +79,13 @@ public class SocketView implements ViewInterface {
     public void updateConnectionRequest(boolean success) {
     }
     @Override
-    public void endGame(Player[] leaderboard,Player player,int score[]){}
+    public void endGame(Player[] leaderboard,Player player,int[] score){}
+
     @Override
-    public void updateToolCards(ArrayList<ToolCard> toolCard){}
+    public void updateToolCards(ToolCard[] toolCard) {
+
+    }
+
     @Override
     public void invalidMoveError(){}
 

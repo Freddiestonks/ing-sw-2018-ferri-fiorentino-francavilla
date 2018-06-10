@@ -125,17 +125,18 @@ public class ServerController {
     }
 
     private void checkConnections() {
-        for(int i = 0; i < model.getNumPlayers(); i++) {
+        int i = 0;
+        while(i < model.getNumPlayers()) {
             if(!model.checkConnection(i) || !view.checkConnection(i)) {
                 //take into account that the player has quitted
                 if(lobbyGathering) {
                     model.removeClient(i);
                     view.removeClient(i);
                     playerActions.remove(i);
-                    i--;
                 }
                 else {
                     model.removePlayer(i);
+                    i++;
                 }
             }
         }

@@ -1,56 +1,31 @@
 package it.polimi.se2018.network;
 
+import com.google.gson.Gson;
+import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.controller.PlayerActionInterface;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+
 public class SocketPlayerAction implements PlayerActionInterface {
-    public void SocketPlayerAction(){
+    private Socket socket;
+    private Gson gson = new Gson();
+
+    public SocketPlayerAction(Socket socket) {
+        this.socket = socket;
     }
 
-    public void update() {
-
+    public void setPlayerAction(PlayerAction pa) throws IOException {
+        OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
+        String json = gson.toJson(pa);
+        writer.write("PLAYERACTION:" + json + "\n");
+        writer.flush();
     }
 
-    public void setUsernameReq(String usernameReq) {
-
-    }
-
-    public void setQuitReq(boolean quitReq) {
-
-    }
-
-    public void addPosDPDie(int pos) {
-
-    }
-
-    public void addPosRTDie(int round, int die) {
-
-    }
-
-    public void addPlaceDPDie(int row, int col) {
-
-    }
-
-    public void addPlaceWFDie(int row, int col) {
-
-    }
-
-    public void addPlaceNewWFDie(int row, int col) {
-
-    }
-
-    public void addNewDieValue(int value) {
-
-    }
-
-    public void setIdToolCard(int idToolCard) {
-
-    }
-
-    public void checkConnection() {
-
-    }
-
-    public void setConnection(String type){
-
+    public void checkConnection() throws IOException {
+        if(socket.isClosed()) {
+            throw new IOException();
+        }
     }
 }

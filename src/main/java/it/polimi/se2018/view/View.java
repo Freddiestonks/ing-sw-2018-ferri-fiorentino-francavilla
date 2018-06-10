@@ -42,7 +42,7 @@ public abstract class View implements ViewInterface{
     @Override
     public void endGame(Player[] leaderboard,Player player,int[] score){}
     @Override
-    public void updateToolCards(ArrayList<ToolCard> toolCard){}
+    public void updateToolCards(ToolCard[] toolCards){}
     @Override
     public void invalidMoveError(){}
     @Override

@@ -55,7 +55,6 @@ public class ClientGatherer extends Thread implements ClientGathererInterface {
                 e.printStackTrace();
             }
             preLobby.add(new ClientInfo(localModel, view, pa));
-            //socketReceivers.add(null);
         }
         return paInterface;
     }

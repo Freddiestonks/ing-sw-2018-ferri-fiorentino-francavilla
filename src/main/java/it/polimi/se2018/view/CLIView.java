@@ -30,9 +30,8 @@ public class CLIView extends View{
     }
     public void play(String type){
         //TODO SEND CONNECTION TYPE
-        //Thread clientGatherer = new ClientGatherer();
+        //NetworkHandler networkHandler = new NetworkHandler();
         PlayerAction playerAction = new PlayerAction();
-        //clientGatherer.run();
         out.println("Insert your username:\n");
         playerAction.setUsernameReq(userInput.next());
 
@@ -53,7 +52,7 @@ public class CLIView extends View{
         out.println("\n would you like to play on RMI or Socket?\n");
         type = userInput.next().toLowerCase();
         PlayerAction playerAction = new PlayerAction();
-        playerAction.setConnection(type);
+        playerAction.setConnectionType(type);
         while (!correct){
             out.println("\n Ok now kindly insert the server's ip address\n");
             ip = userInput.next();
@@ -242,23 +241,23 @@ public class CLIView extends View{
     }
     //TODO TEST AFTER TOOLCARDS ARE DONE
     @Override
-    public void updateToolCards(ArrayList<ToolCard> toolCard){
-        String[] names = new String[toolCard.size()];
-        String[] description = new String[toolCard.size()];
-        for (int i = 0; i < toolCard.size(); i++) {
+    public void updateToolCards(ToolCard[] toolCards){
+        String[] names = new String[toolCards.length];
+        String[] description = new String[toolCards.length];
+        for (int i = 0; i < toolCards.length; i++) {
             for (int z = 0; z < CARD_WIDTH +4; z++) {
                 out.print("-");
             }
             out.print("        ");
         }
         out.println();
-        for(int i = 0;i<toolCard.size();i++){
-           names[i] = toolCard.get(i).getName();
-           description[i] = toolCard.get(i).getDescription();
+        for(int i = 0;i<toolCards.length;i++){
+           names[i] = toolCards[i].getName();
+           description[i] = toolCards[i].getDescription();
         }
 
-        layoutFormatter(names,toolCard.size());
-        layoutFormatter(description,toolCard.size());
+        layoutFormatter(names,toolCards.length);
+        layoutFormatter(description,toolCards.length);
 
     }
     @Override

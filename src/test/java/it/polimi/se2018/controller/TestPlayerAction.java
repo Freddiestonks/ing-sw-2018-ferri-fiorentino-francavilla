@@ -20,7 +20,6 @@ public class TestPlayerAction {
         pa.addPosDPDie(2);
         pa.addPosDPDie(17);
         pa.addPosRTDie(5,8);
-        pa.update();
         pa.setUsernameReq("Tiziello");
 
         if(!(pa.getIdToolCard()==3))
@@ -59,8 +58,6 @@ public class TestPlayerAction {
             fail();
         if(!(pa.getPosRTDie().get(0)[1]==8))
             fail();
-        if(!pa.isUpdated())
-            fail();
         if(pa.isQuitReq())
             fail();
         if(!(pa.getUsernameReq().equals("Tiziello")))
@@ -70,5 +67,11 @@ public class TestPlayerAction {
 
         if(!(pa.isQuitReq()))
             fail();
+
+        PlayerAction pa2 = new PlayerAction();
+        pa2.setPlayerAction(pa);
+        if(!pa2.isUpdated()) {
+            fail();
+        }
     }
 }

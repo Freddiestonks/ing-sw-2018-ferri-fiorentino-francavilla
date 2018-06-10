@@ -5,8 +5,6 @@ import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.View;
 import it.polimi.se2018.model.LocalModel;
 
-import java.util.Objects;
-
 public class ClientController {
     //attributes
     private LocalModel model;
@@ -16,15 +14,15 @@ public class ClientController {
     private MainScreenInfo mainScreenInfo;
     private static final String PLACE = "place";
     private static final String WINDOW_FRAME = "windowframe";
-    private static final String ROUNDTRACK = "roundtrack";
-    private static final String DRAFTPOOL = "draftpool";
+    private static final String ROUND_TRACK = "roundtrack";
+    private static final String DRAFT_POOL = "draftpool";
     private static final String SELECT = "select";
     private static final String TOOL_CARD = "toolcard";
     private static final String NEW_VALUE = "newvalue";
     private static final String HELP = "help";
     private static final String SEPARATOR = ", ?";
     private static final String PLACEMENT ="placement";
-    private static final String MAINSCREENINFO = "board";
+    private static final String MAIN_SCREEN_INFO = "board";
     //Methods
     public ClientController(LocalModel model, View view){
     }
@@ -41,7 +39,7 @@ public class ClientController {
             view.help();
         }
 
-        else if(string[0].equalsIgnoreCase(MAINSCREENINFO)){
+        else if(string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)){
             view.updateMainScreen(mainScreenInfo);
         }
         else{
@@ -53,13 +51,13 @@ public class ClientController {
 
         for(int i = 1;i<read.length;i++) {
             if(read[i].equalsIgnoreCase(SELECT)){
-                if(read[i+1].equalsIgnoreCase(DRAFTPOOL)){
+                if(read[i+1].equalsIgnoreCase(DRAFT_POOL)){
                     int element = Integer.parseInt(read[i+2]);
                     playerAction.addPosDPDie(element);
                 }
             }
             else if(read[i].equalsIgnoreCase(PLACE)){
-                if(read[i+1].equalsIgnoreCase(DRAFTPOOL)){
+                if(read[i+1].equalsIgnoreCase(DRAFT_POOL)){
                     int row = Integer.parseInt(read[i+2]);
                     int col = Integer.parseInt(read[i+3]);
                     playerAction.addPlaceDPDie(row,col);
@@ -76,17 +74,17 @@ public class ClientController {
 
         switch (string[1]) {
             case "1": {
-                ToolCard toolCard = model.getToolCards().get(0);
+                ToolCard toolCard = model.getToolCards()[0];
                 performToolCard(toolCard,string);
                 break;
             }
             case "2": {
-                ToolCard toolCard = model.getToolCards().get(1);
+                ToolCard toolCard = model.getToolCards()[1];
                 performToolCard(toolCard,string);
                 break;
             }
             case "3": {
-                ToolCard toolCard = model.getToolCards().get(2);
+                ToolCard toolCard = model.getToolCards()[2];
                 performToolCard(toolCard,string);
                 break;
             }
@@ -110,11 +108,11 @@ public class ClientController {
                 playerAction.addNewDieValue(value);
             }
             else if(read[i].equalsIgnoreCase(SELECT)){
-                if(read[i+1].equalsIgnoreCase(DRAFTPOOL)){
+                if(read[i+1].equalsIgnoreCase(DRAFT_POOL)){
                     int element = Integer.parseInt(read[i+2]);
                     playerAction.addPosDPDie(element);
                     }
-                else if(read[i+1].equalsIgnoreCase(ROUNDTRACK)){
+                else if(read[i+1].equalsIgnoreCase(ROUND_TRACK)){
                     int round = Integer.parseInt(read[i+2]);
                     int row = Integer.parseInt(read[i+3]);
                     playerAction.addPosRTDie(round,row);
@@ -126,7 +124,7 @@ public class ClientController {
                 }
             }
             else if(read[i].equalsIgnoreCase(PLACE)) {
-                if(read[i+1].equalsIgnoreCase(DRAFTPOOL)){
+                if(read[i+1].equalsIgnoreCase(DRAFT_POOL)){
                     int row = Integer.parseInt(read[i+2]);
                     int col = Integer.parseInt(read[i+3]);
                     playerAction.addPlaceDPDie(row,col);

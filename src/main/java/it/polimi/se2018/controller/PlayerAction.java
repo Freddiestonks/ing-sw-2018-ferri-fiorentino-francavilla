@@ -1,7 +1,8 @@
 package it.polimi.se2018.controller;
 import java.util.ArrayList;
 
-public class PlayerAction implements PlayerActionInterface{
+public class PlayerAction implements PlayerActionInterface {
+    private Object lock = new Object();
     private boolean updated = false;
     private String usernameReq;
     private String connectionType;
@@ -14,15 +15,44 @@ public class PlayerAction implements PlayerActionInterface{
     private ArrayList<int[]> placeNewWFDie = new ArrayList<>();
     private int idToolCard = 0;
 
-    public void PlayerAction(){
+    public void PlayerAction() {
     }
 
-    public void update() {
-        this.updated = true;
+    public void PlayerAction(Object lock) {
+        this.lock = lock;
+    }
+
+    private ArrayList<int[]> copy(ArrayList<int[]> arrayList) {
+        ArrayList<int[]> newArrayList = new ArrayList<>();
+        for(int[] array : arrayList) {
+            newArrayList.add(array.clone());
+        }
+        return newArrayList;
+    }
+
+    public void setPlayerAction(PlayerAction pa) {
+        synchronized (lock) {
+            if(!updated) {
+                this.usernameReq = pa.usernameReq;
+                this.connectionType = pa.connectionType;
+                this.quitReq = pa.quitReq;
+                this.newDieValue = pa.getNewDieValue();
+                this.posDPDie = pa.getPosDPDie();
+                this.posRTDie = pa.getPosRTDie();
+                this.placeDPDie = pa.getPlaceDPDie();
+                this.placeWFDie = pa.getPlaceWFDie();
+                this.placeNewWFDie = pa.getPlaceNewWFDie();
+                this.idToolCard = pa.idToolCard;
+                this.updated = true;
+                lock.notifyAll();
+            }
+        }
     }
 
     public boolean isUpdated() {
-        return updated;
+        synchronized (lock) {
+            return updated;
+        }
     }
 
     public void setUsernameReq(String usernameReq) {
@@ -31,6 +61,14 @@ public class PlayerAction implements PlayerActionInterface{
 
     public String getUsernameReq() {
         return usernameReq;
+    }
+
+    public void setConnectionType(String connectionType) {
+        this.connectionType = connectionType;
+    }
+
+    public String getConnectionType() {
+        return connectionType;
     }
 
     public void setQuitReq(boolean quitReq) {
@@ -54,7 +92,7 @@ public class PlayerAction implements PlayerActionInterface{
     }
 
     public ArrayList<int[]> getPosRTDie() {
-        return posRTDie;
+        return copy(posRTDie);
     }
 
     public void addPlaceDPDie(int row, int col) {
@@ -62,7 +100,7 @@ public class PlayerAction implements PlayerActionInterface{
     }
 
     public ArrayList<int[]> getPlaceDPDie() {
-        return new ArrayList<>(placeDPDie);
+        return copy(placeDPDie);
     }
 
     public void addPlaceWFDie(int row, int col) {
@@ -70,7 +108,7 @@ public class PlayerAction implements PlayerActionInterface{
     }
 
     public ArrayList<int[]> getPlaceWFDie() {
-        return new ArrayList<>(placeWFDie);
+        return copy(placeWFDie);
     }
 
     public void addPlaceNewWFDie(int row, int col) {
@@ -78,7 +116,7 @@ public class PlayerAction implements PlayerActionInterface{
     }
 
     public ArrayList<int[]> getPlaceNewWFDie() {
-        return new ArrayList<>(placeNewWFDie);
+        return copy(placeNewWFDie);
     }
 
     public void addNewDieValue(int value) {
@@ -99,9 +137,6 @@ public class PlayerAction implements PlayerActionInterface{
 
     public void checkConnection() {
 
-    }
-    public void setConnection(String type){
-        connectionType = type;
     }
 
     public void clear() {
