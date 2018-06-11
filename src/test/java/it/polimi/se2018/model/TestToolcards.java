@@ -5,12 +5,13 @@ import it.polimi.se2018.model.toolcards.*;
 import org.junit.After;
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class TestToolcards {
     @Test
     public void TestT1(){
-        ToolCard1 t1 = new ToolCard1();
+        ToolCard1 t1 = new ToolCard1("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -34,7 +35,7 @@ public class TestToolcards {
 
     @Test
     public void TestT2(){
-        ToolCard2 t2 = new ToolCard2();
+        ToolCard2 t2 = new ToolCard2("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -60,7 +61,7 @@ public class TestToolcards {
 
     @Test
     public void TestT3(){
-        ToolCard3 t3 = new ToolCard3();
+        ToolCard3 t3 = new ToolCard3("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -83,7 +84,7 @@ public class TestToolcards {
 
     @Test
     public void TestT4(){
-        ToolCard4 t4 = new ToolCard4();
+        ToolCard4 t4 = new ToolCard4("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -109,7 +110,7 @@ public class TestToolcards {
 
     @Test
     public void TestT5(){
-        ToolCard5 t5 = new ToolCard5();
+        ToolCard5 t5 = new ToolCard5("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -130,7 +131,7 @@ public class TestToolcards {
 
     @Test
     public void TestT6(){
-        ToolCard6 t6 = new ToolCard6();
+        ToolCard6 t6 = new ToolCard6("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -156,7 +157,7 @@ public class TestToolcards {
 
     @Test
     public void TestT7(){
-        ToolCard7 t7 = new ToolCard7();
+        ToolCard7 t7 = new ToolCard7("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         model.addPlayer("Carlo", null);
@@ -175,7 +176,7 @@ public class TestToolcards {
 
     @Test
     public void TestT8() {
-        ToolCard8 t8 = new ToolCard8();
+        ToolCard8 t8 = new ToolCard8("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -201,7 +202,7 @@ public class TestToolcards {
 
     @Test
     public void TestT9(){
-        ToolCard9 t9 = new ToolCard9();
+        ToolCard9 t9 = new ToolCard9("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -225,7 +226,7 @@ public class TestToolcards {
 
     @Test
     public void TestT10() {
-        ToolCard10 t10 = new ToolCard10();
+        ToolCard10 t10 = new ToolCard10("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -251,7 +252,7 @@ public class TestToolcards {
 
     @Test
     public void TestT11(){
-        ToolCard11 t11 = new ToolCard11();
+        ToolCard11 t11 = new ToolCard11("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -273,7 +274,7 @@ public class TestToolcards {
 
     @Test
     public void TestT12(){
-        ToolCard12 t12 = new ToolCard12();
+        ToolCard12 t12 = new ToolCard12("caso","casos",2,3);
         WindowFrame wf = new WindowFrame(1,true);
         Model model = Model.instance();
         PlayerAction pa = new PlayerAction();
@@ -299,6 +300,37 @@ public class TestToolcards {
     }
     @After
     public void reset12() {
+        Model.instance().reset();
+    }
+
+    @Test
+    public void TestGeneric(){
+        ToolCard generic = new ToolCard("nuovo", "effetto nuovo", 5, 2) {
+            @Override
+            public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
+            }
+
+            @Override
+            public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
+                return false;
+            }
+        };
+
+        if(!(generic.getDescription() == "effetto nuovo")){
+            fail();
+        }
+
+        if(!(generic.getName() == "nuovo")){
+            fail();
+        }
+
+        generic.putTokens();
+
+        Die d1;
+        d1 = generic.getPendingDie();
+    }
+    @After
+    public void reset13() {
         Model.instance().reset();
     }
 }

@@ -5,8 +5,8 @@ import it.polimi.se2018.model.*;
 
 public class ToolCard9 extends ToolCard {
 
-    public ToolCard9() {
-        super();
+    public ToolCard9(String username, String description, int price,int tokens) {
+        super( username,  description,  price, tokens);
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException {

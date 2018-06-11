@@ -38,7 +38,7 @@ public class ServerController {
         return false;
     }
 
-    private void listenPlayerActions() throws InterruptedException, CloneNotSupportedException {
+    private void listenPlayerActions() throws InterruptedException {
         Iterator<PlayerAction> iterator;
         while(!lobbyGathering) {
             synchronized (lock) {
@@ -77,7 +77,6 @@ public class ServerController {
                         lobbyTimer = new Timer(lobbyTimeout, lock);
                     }
                 }
-
                 // read prelobby clients
                 Iterator<ClientInfo> iterator = clientGatherer.getIterator();
                 while(iterator.hasNext()) {
@@ -266,7 +265,6 @@ public class ServerController {
             else return false;
     }
 
-    /* TODO: reset the playerAction instance. */
     private void performAction(PlayerAction pa){
         if(pa.getIdToolCard() == 0) {
             // regular turn without choosing a tool card
@@ -276,7 +274,5 @@ public class ServerController {
             WindowFrame windowFrame = model.getPlayer(playerActions.indexOf(pa)).getWF();
             toolCard.performAction(model, windowFrame, pa);
         }
-
-        //pa.clear();
     }
 }

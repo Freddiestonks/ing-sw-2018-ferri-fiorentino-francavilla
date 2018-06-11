@@ -5,7 +5,9 @@ import it.polimi.se2018.model.*;
 
 public class ToolCard10 extends ToolCard {
 
-    public ToolCard10() {}
+    public ToolCard10(String username, String description, int price,int tokens) {
+        super( username,  description,  price, tokens);
+    }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa){
         Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));

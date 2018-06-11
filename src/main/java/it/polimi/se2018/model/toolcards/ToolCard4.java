@@ -5,11 +5,11 @@ import it.polimi.se2018.model.*;
 
 public class ToolCard4 extends ToolCard {
 
-    public ToolCard4() {
-        super();
+    public ToolCard4(String username, String description, int price,int tokens) {
+        super(username,description,price,tokens);
     }
 
-    public void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException {
+    public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
         Die die1 = wf.getDie(pa.getPlaceWFDie().get(0)[0], pa.getPlaceWFDie().get(0)[1]);
         Die die2 = wf.getDie(pa.getPlaceWFDie().get(1)[0], pa.getPlaceWFDie().get(1)[1]);
         // move the first die

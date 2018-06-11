@@ -8,15 +8,25 @@ public abstract class ToolCard {
     private String description;
     private int price;
     private int tokens;
-    private Color color;
-    protected boolean pendingAction = false;
     private int idRes;
+    ////TODO: to be verified effective use of this attributes.
+    /*private Color color;*/
+
+
+    protected boolean pendingAction = false;
     private Die pendingDie;
     //Methods
 
     //TODO: make a player skip the second turn with TC 8
     //TODO: manage model update
     //TODO: ? pending state/die in model class
+
+    public ToolCard(String username, String description, int price,int tokens){
+        this.name = username;
+        this.description = description;
+        this.price = price;
+        this.tokens = tokens;
+    }
 
     public void putTokens(){}
 
