@@ -1,5 +1,14 @@
 package it.polimi.se2018.model;
 
+/**
+ * It's a class that represents the board inserted into the WindowFrame.
+ * A single Pattern-Card has two different faces and conventionally are named 'front' and 'back' sides.
+ *
+ * @author Federico Ferri
+ * @author Alessio Fiorentino
+ * @author Simone Francavilla
+ *
+ */
 public class PatternCard {
     //Attributes
     private Cell[][] front;
@@ -10,6 +19,17 @@ public class PatternCard {
     private String nameB;
 
     //Methods
+
+    /**
+     * Constructor
+     *
+     * @param levelFront It represents the level of one board's face, in this case is the 'front'.
+     * @param levelBack It represents the level of one board's face, in this case is the 'back'.
+     * @param nameFront It represent one board's face name (front).
+     * @param nameBack It represent one board's face name (back).
+     * @param frontCell Is the given matrix with witch the proper cells representing the specific map (front).
+     * @param backCell Is the given matrix with witch the proper cells representing the specific map (back).
+     */
     public PatternCard(int levelFront,int levelBack,String nameFront,String nameBack,Cell[][] frontCell,Cell[][] backCell){
         levelF = levelFront;
         levelB = levelBack;
@@ -19,6 +39,14 @@ public class PatternCard {
         back = backCell;
     }
 
+    /**
+     * This method is used to return a specific cell from PatternCard afterward is selected the face.
+     *
+     * @param wcFace A boolean representing the face; conventionally is true for the front side.
+     * @param row It's the row value of the board.
+     * @param col It's the column value of the board.
+     * @return A cell instance.
+     */
     public Cell getCell(boolean wcFace, int row, int col){
         if(wcFace) {
             return front[row][col];
@@ -30,27 +58,59 @@ public class PatternCard {
     }
 
 
+    /**
+     * This method is used to return the level of the front side of PatternCard.
+     *
+     * @return an integer value representing the level.
+     */
     public int getLevelF() {
         return levelF;
     }
 
+    /**
+     * This method is used to return the level of the back side of PatternCard.
+     *
+     * @return an integer value representing the level.
+     */
     public int getLevelB() {
         return levelB;
     }
 
+    /**
+     * This method return the name of the front-side card.
+     *
+     * @return a string reference to the name front-side's name.
+     */
     public String getNameF() {
         return nameF;
     }
 
+    /**
+     * This method return the name of the back-side card.
+     *
+     * @return a string reference to the name back-side's name.
+     */
     public String getNameB() {
         return nameB;
     }
 
+    /**
+     * This method return the reference to the whole back-side of the PatterCard.
+     *
+     * @return a cell matrix representing the back-side PatterCard.
+     */
     public Cell[][] getBack() {
         return back;
     }
 
+    /**
+     * This method return the reference to the whole front-side of the PatterCard.
+     *
+     * @return a cell matrix representing the front-side PatterCard.
+     */
     public Cell[][] getFront() {
         return front;
     }
 }
+
+

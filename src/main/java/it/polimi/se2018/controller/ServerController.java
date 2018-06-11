@@ -152,63 +152,122 @@ public class ServerController {
         return true;
     }
 
-    private boolean validAction(PlayerAction pa) throws InvalidPlaceException, CloneNotSupportedException {
+    private boolean rangeCheck(int[] array){
+        if(array.length == 2){
+            return array[0] >= 0 && array[0] <= 3 && array[1] >= 0 && array[1] <= 4;
+        }
+        else return false;
+    }
 
-        //checking of match interruption
-        if ((pa.isQuitReq()
-                && (pa.getNewDieValue().get(0) >= 1 && pa.getNewDieValue().get(0) <= 6)
-                && (pa.getIdToolCard() >= 1 && pa.getIdToolCard() <= 12))) {
-            if (!((!pa.isQuitReq())
-                    && !pa.isQuitReq())) {
+    private boolean nullCheck(PlayerAction pa, int[] array){
+        if(array.length == 2){
+            return model.getPlayer(playerActions.indexOf(pa)).getWFPosition(array[0], array[1]) == null;
+        }
+        else return false;
+    }
+
+    private boolean validAction(PlayerAction pa) {
+
+        if (!(pa.getIdToolCard()>=0 && pa.getIdToolCard()<=12)){
+            return false;
+        }
+
+        if(!pa.getNewDieValue().isEmpty()){
+            if(!(pa.getNewDieValue().get(0) >= 1 && pa.getNewDieValue().get(0) <= 6)){
                 return false;
             }
         }
         else return false;
 
+
         //Checking for the position in the Draft Pool
-        if (pa.getPosDPDie().get(0) >= 0 && model.getDraftPoolDie(pa.getPosDPDie().get(0)) != null) {
+        for(int value : pa.getPosDPDie()){
+            if(!(value >= 0 && model.getDraftPoolDie(value) != null)){
+                return false;
+            }
+        }
+
+        /*if (pa.getPosDPDie().get(0) >= 0 && model.getDraftPoolDie(pa.getPosDPDie().get(0)) != null) {
             if (pa.getPosDPDie().get(1) >= 0 && model.getDraftPoolDie(pa.getPosDPDie().get(1)) == null) {
                 return false;
             }
         }
-        else return false;
+        else return false;*/
 
-        if (pa.getPosRTDie().get(0)[0] >= 0 && pa.getPosRTDie().get(1)[0] >= 0
-                && model.getRoundTrackDie(pa.getPosRTDie().get(0)[0], pa.getPosRTDie().get(0)[1]) == null) {
-            return false;
+        if(!pa.getPosRTDie().isEmpty()) {
+            if (pa.getPosRTDie().get(0)[0] >= 0 && pa.getPosRTDie().get(0)[0] < model.getRound()
+                    && pa.getPosRTDie().get(0)[1] >= 0 && pa.getPosRTDie().get(0)[1] < model.getRTDieRound(pa.getPosRTDie().get(0)[0])) {
+                if (model.getRoundTrackDie(pa.getPosRTDie().get(0)[0], pa.getPosRTDie().get(0)[1]) != null) {
+                    return false;
+                }
+            } else return false;
         }
+
 
         //It verifies if the places in the WF are empty.
-        if (pa.getPlaceDPDie().get(0)[0] >= 0 && pa.getPlaceDPDie().get(0)[0] <= 3 && pa.getPlaceDPDie().get(1)[1] >= 0 && pa.getPlaceDPDie().get(0)[1] <= 4
-                && model.getPlayer(playerActions.indexOf(pa)).getWFPosition(pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]) == null) {
-            if (pa.getPlaceDPDie().get(1)[0] >= 0 && pa.getPlaceDPDie().get(1)[0] <= 3 && pa.getPlaceDPDie().get(1)[1] >= 0 && pa.getPlaceDPDie().get(1)[1] <= 4
-                    && model.getPlayer(playerActions.indexOf(pa)).getWFPosition(pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]) != null) {
+        if(!pa.getPlaceDPDie().isEmpty()){
+            for(int[] array: pa.getPlaceDPDie()){
+                if(!(rangeCheck(array) && nullCheck(pa,array))){
+                    return false;
+                }
+            }
+        }
+
+        /*if (rangeCheck(pa.getPlaceDPDie().get(0))
+                && nullCheck(pa,pa.getPlaceDPDie().get(0))) {
+            if (rangeCheck(pa.getPlaceDPDie().get(1))
+                    && !nullCheck(pa,pa.getPlaceDPDie().get(1))) {
                 return false;
             }
         }
-        else return false;
+        else return false;*/
 
         //It controls if a designed position to be deleted is full.
-        if (pa.getPlaceWFDie().get(0)[0] >= 0 && pa.getPlaceWFDie().get(0)[0] <= 3 && pa.getPlaceWFDie().get(0)[1] >= 0 && pa.getPlaceWFDie().get(0)[1] <= 4
-                && model.getPlayer(playerActions.indexOf(pa)).getWFPosition(pa.getPlaceWFDie().get(0)[0], pa.getPlaceWFDie().get(0)[1]) != null) {
-            if (pa.getPlaceWFDie().get(1)[0] >= 0 && pa.getPlaceWFDie().get(1)[0] <= 3 && pa.getPlaceWFDie().get(1)[1] >= 0 && pa.getPlaceWFDie().get(1)[1] <= 4
-                    && model.getPlayer(playerActions.indexOf(pa)).getWFPosition(pa.getPlaceWFDie().get(1)[0], pa.getPlaceWFDie().get(1)[1]) == null) {
+        if(!pa.getPlaceWFDie().isEmpty()){
+            for(int[] array: pa.getPlaceWFDie()){
+                if(!rangeCheck(array)){
+                    return false;
+                }
+            }
+        }
+
+        /*if (rangeCheck(pa.getPlaceWFDie().get(0))
+                && !nullCheck(pa,pa.getPlaceWFDie().get(0))) {
+            if (rangeCheck(pa.getPlaceWFDie().get(1))
+                    && nullCheck(pa,pa.getPlaceWFDie().get(1))) {
                 return false;
             }
         }
-        else return false;
+        else return false;*/
 
         //Afterward the verification of the future placement, this code portion verifies if parameters are legal.
-        if (pa.getPlaceNewWFDie().get(0)[0] >= 0 && pa.getPlaceNewWFDie().get(0)[0] <= 3 && pa.getPlaceNewWFDie().get(0)[1] >= 0 && pa.getPlaceNewWFDie().get(0)[1] <= 4
-                && !(pa.getPlaceNewWFDie().get(1)[0] >= 0 && pa.getPlaceNewWFDie().get(1)[0] <= 3 && pa.getPlaceNewWFDie().get(1)[1] >= 0 && pa.getPlaceNewWFDie().get(1)[1] <= 4)) {
-            return false;
+        if(!pa.getPlaceNewWFDie().isEmpty()){
+            for(int[] array: pa.getPlaceNewWFDie()){
+                if(!(rangeCheck(array))){
+                    return false;
+                }
+            }
         }
 
-        return ((pa.getIdToolCard() > 0)
-                && model.getToolCard(pa.getIdToolCard()).validAction(model, model.getPlayer(playerActions.indexOf(pa)).getWF(), pa));
+        /*if (!(rangeCheck(pa.getPlaceNewWFDie().get(0))
+                && rangeCheck(pa.getPlaceNewWFDie().get(1)))) {
+            return false;
+        }*/
+
+        if (pa.getIdToolCard() > 0
+                && model.getToolCard(pa.getIdToolCard()).validAction(model, model.getPlayer(playerActions.indexOf(pa)).getWF(), pa)){
+            return true;
+        }
+        else
+            if(pa.getPosDPDie().get(0) >= 0){
+                return (rangeCheck(pa.getPlaceDPDie().get(0))
+                        && model.getPlayer(playerActions.indexOf(pa)).getWF().checkRestrictions(model.getDraftPoolDie(pa.getPosDPDie().get(0)),pa.getPlaceDPDie().get(0)[0],pa.getPlaceDPDie().get(0)[1]));
+            }
+            else return false;
     }
 
-    private void performAction(PlayerAction pa) throws EmptyDiceBagException, InvalidPlaceException {
+    /* TODO: reset the playerAction instance. */
+    private void performAction(PlayerAction pa){
         if(pa.getIdToolCard() == 0) {
             // regular turn without choosing a tool card
         }
@@ -217,5 +276,7 @@ public class ServerController {
             WindowFrame windowFrame = model.getPlayer(playerActions.indexOf(pa)).getWF();
             toolCard.performAction(model, windowFrame, pa);
         }
+
+        //pa.clear();
     }
 }
