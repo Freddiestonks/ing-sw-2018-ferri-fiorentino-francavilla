@@ -1,14 +1,9 @@
 package it.polimi.se2018.model;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import it.polimi.se2018.model.*;
+import it.polimi.se2018.controller.ResourceLoader;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.Objects;
 
 import static org.junit.Assert.fail;
 
@@ -68,75 +63,16 @@ public class TestPubOC {
         dice[3][3].setValue(3);
         dice[3][4] = new Die(Color.YELLOW);
         dice[3][4].setValue(2);
-//
+        ResourceLoader resourceLoader = new ResourceLoader();
+        PatternCard testPC = resourceLoader.loadPC(0);
         for (int a = 0; a<10;a++) {
-            int id = a;
-            WindowFrame wf = new WindowFrame(0, true);
-            String path = "src/main/json/publicCards.json";
-            JsonParser jsonParser = new JsonParser();
-            PubObjCard pubObjCard = null;
-
-            try {
-                Object object = jsonParser.parse(new FileReader(path));
-                JsonObject jsonObject = (JsonObject) object;
-                JsonArray patternCards = (JsonArray) jsonObject.get("publicCards");
-                jsonObject = (JsonObject) patternCards.get(id);
-                String type = jsonObject.get("type").getAsString();
-                String name = jsonObject.get("name").getAsString();
-                String description = jsonObject.get("description").getAsString();
-                int multiplier = jsonObject.get("multiplier").getAsInt();
-                String subtype = jsonObject.get("subtype").getAsString();
-                if (type.equals("color")) {
-                    switch (subtype) {
-                        case "row":
-                            pubObjCard = new PubOCColorDet(description, name, true, false, false, multiplier);
-                            break;
-                        case "col":
-                            pubObjCard = new PubOCColorDet(description, name, false, true, false, multiplier);
-                            break;
-                        case "diagonals":
-                            pubObjCard = new PubOCColorDet(description, name, false, false, true, multiplier);
-                            break;
-                        case "set":
-                            boolean[] colors = new boolean[5];
-                            JsonArray jsonArray = jsonObject.get("values").getAsJsonArray();
-                            for (int i = 0; i < 5; i++) {
-                                colors[i] = jsonArray.get(i).getAsBoolean();
-                            }
-                            pubObjCard = new PubOCColorSet(description, name, colors, multiplier);
-                            break;
-                        default:
-                            throw new IllegalArgumentException();
-                    }
-                } else if (type.equals("shade")) {
-                    switch (subtype) {
-                        case "row":
-                            pubObjCard = new PubOCShadeDet(description, name, true, true, multiplier);
-                            break;
-                        case "col":
-                            pubObjCard = new PubOCShadeDet(description, name, false, true, multiplier);
-                            break;
-                        case "set":
-                            boolean[] shades = new boolean[6];
-                            JsonArray jsonArray = jsonObject.get("values").getAsJsonArray();
-                            for (int i = 0; i < 6; i++) {
-                                shades[i] = jsonArray.get(i).getAsBoolean();
-                            }
-                            pubObjCard = new PubOCShadeSet(description, name, shades, multiplier);
-                            break;
-                    }
-                }
-
-            } catch (FileNotFoundException ignored) {
-            }
-
-
+            WindowFrame wf = new WindowFrame(testPC, true);
+            PubObjCard pubObjCard = resourceLoader.loadPubOC(a);
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 5; j++) {
                     wf.placeDie(dice[i][j], i, j);
                 }
             }
-
             if ((pubObjCard.calculateScore(wf) != result[a])) {
 
                 fail();

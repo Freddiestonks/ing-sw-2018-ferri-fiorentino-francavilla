@@ -5,21 +5,23 @@ import it.polimi.se2018.model.*;
 
 public class ToolCard11 extends ToolCard {
 
-    public ToolCard11(String username, String description, int price,int tokens) {
-        super( username,  description,  price, tokens);
+    public ToolCard11(String username, String description, int price, int tokens) {
+        super(username, description, price, tokens);
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa){
         Die die;
         if(!pendingAction) {
-            die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
+            die = model.removeDraftPoolDie(pa.getPosDPDie().get(0));
             model.getDiceBag().replace(die);
             die = model.getDiceBag().extract();
+            model.addDraftPoolDie(die);
             setPendingDie(die);
             pendingAction = true;
         }
         else {
             die = getPendingDie();
+            model.removeDraftPoolDie(die);
             die.setValue(pa.getNewDieValue().get(0));
             wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
             pendingAction = false;

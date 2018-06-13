@@ -1,10 +1,5 @@
 package it.polimi.se2018.model;
 
-import com.google.gson.*;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.Objects;
-
 /**
  * This class consists both of public and private methods it is used to create the WindowFrame that each Player has
  * it will need to contain a PatternCard which will be randomly getCell from a pool found inside the JSON file
@@ -25,11 +20,10 @@ public class WindowFrame {
     /**
      * This is the constructor method of the class
      *
-     * @param id this parameter specifies the id of the WindowFrame specified as the position in the JSON file
      * @param wcFace if this parameter is true the player chose the front "map" of the PatternCard otherwise it will be the back
      * */
-    public WindowFrame(int id,boolean wcFace) {
-        pc = loadPC(id);
+    public WindowFrame(PatternCard pc, boolean wcFace) {
+        this.pc = pc;
         this.wcFace = wcFace;
         for(int i=0; i<4; i++) {
             for(int j=0; j<5; j++){
@@ -47,121 +41,6 @@ public class WindowFrame {
         for(int i = 0; i < 4; i++) {
             this.placements[i] = wf.placements[i].clone();
         }
-    }
-
-    /**
-     * This method is used to translate a string to a "Color"
-     * @param string this is the input string and it will be translated into a "Color"
-     * */
-    private Color colorTranslator(String string) {
-        //This method is used to translate the "Colors" in the JSON file from english to a Color, ignore
-        //all blank spaces and change letters to uppercase so that the process of adding cards
-        //is more "user friendly"
-        return Color.valueOf(string.toUpperCase().replaceAll("\\s+",""));
-
-    }
-
-    /**
-     * This method is used to retrieve a int from a JSON object
-     * @param jsonObject this is the JSON object that will be parsed
-     * @param string this is the element that is looked for in the file
-     * */
-
-    private int jIntGetter(JsonObject jsonObject,String string){
-        //returns a int from a JSON object's parameter, use a different method so that in case of updates it is easier
-        //to change all of the methods quickly
-        return jsonObject.get(string).getAsInt();
-    }
-
-    /**
-     * This method is used to retrieve a String from a JSON object
-     * @param jsonObject this is the JSON object that will be parsed
-     * @param string this is the element that is looked for in the file
-     * */
-
-    private String jStringGetter(JsonObject jsonObject,String string){
-        //returns a String from a JSON object's parameter, use a different method so that in case of updates it is easier
-        //to change all of the methods quickly
-        return jsonObject.get(string).getAsString();
-    }
-    /**
-     * This method is used to fill a Cell object with the elements found on the JSON file
-     * @param cellArray this is the matrix of cells that need to be filled
-     * @param cells this is the array in the JSON file containing all of the cells that need to be updated
-     * */
-    private Cell[][] jCellFiller(Cell[][] cellArray, JsonArray cells){
-        //this method is used to generate a ShadeCell or a ColorCell on the correct space with the correct value/color
-        for(int j= 0; j <cells.size();j++){
-            JsonObject jsonCell = (JsonObject)cells.get(j);
-            if (Objects.equals(jStringGetter(jsonCell, "type"), "shade")){
-                //this method recognize if it is a shade type and it will fill it with the correct attributes
-                int cellRow = jIntGetter(jsonCell,"row");
-                int cellCol = jIntGetter(jsonCell,"col");
-                int cellShade = jIntGetter(jsonCell, "value");
-                cellArray[cellRow][cellCol] = new ShadeCell(cellShade);
-            }
-            else if (Objects.equals(jStringGetter(jsonCell, "type"), "color")){
-                //this method recognize if it is a color type and it will fill it with the correct color (through the translator method)
-                int cellRow = jIntGetter(jsonCell,"row");
-                int cellCol = jIntGetter(jsonCell,"col");
-                String cellColor = jStringGetter(jsonCell, "color");
-                cellArray[cellRow][cellCol] = new ColorCell(colorTranslator(cellColor));
-            }
-            else{
-                throw new IllegalArgumentException();
-            }
-        }
-        return cellArray;
-    }
-    /**
-     * This method is used to load a PatternCard from the JSON file with a specific id
-     * @param id this is the id of the wanted PatternCard
-     * */
-    public PatternCard loadPC(int id) {
-        // loadPC will load a pattern card from file written in JSON where cards are kept in a specific order
-        // their position can be used as an "ID"
-        PatternCard patternCard = null;
-        String path = "src/main/json/patternCards.json";
-        //I parse the json file
-        JsonParser jsonParser = new JsonParser();
-        try {
-            //The Json file is then transferred to an object
-            Object object = jsonParser.parse(new FileReader(path));
-            JsonObject jsonObject = (JsonObject)object;
-            //transform the Object to an array of "cards"
-            JsonArray patternCards =(JsonArray)jsonObject.get("patternCards");
-            //take a particular element from the array
-            jsonObject = (JsonObject)patternCards.get(id);
-            //find from the file the difficulty levels of both faces and the names of both sides
-            int levelF = jIntGetter(jsonObject,"levelF");
-            int levelB = jIntGetter(jsonObject,"levelB");
-            String nameF = jStringGetter(jsonObject,"nameF");
-            String nameB = jStringGetter(jsonObject,"nameB");
-            //create first a matrix of "normal cells"
-            Cell[][] cellF = new Cell[4][5];
-            Cell[][] cellB = new Cell[4][5];
-            for (int i = 0; i<4;i++){
-                for (int j = 0;j<5;j++){
-                    cellF[i][j] = new Cell();
-                    cellB[i][j] = new Cell();
-                }
-            }
-            //get the information about the "special" cells and load them in a different JSON array
-            JsonArray cells = (JsonArray)jsonObject.get("cellF");
-            //use the method jCellFiller to fill the top cells
-            cellF = jCellFiller(cellF,cells);
-            //In the same way generate the bottom part
-            cells = (JsonArray)jsonObject.get("cellB");
-            cellB = jCellFiller(cellB,cells);
-            //create a new patterCard with the attributes loaded from the file
-            patternCard =  new PatternCard(levelF,levelB,nameF,nameB,cellF,cellB);
-
-        }
-        catch (FileNotFoundException nfe){
-            //in case there is no JSON file we throw an exception
-        }
-
-        return patternCard;
     }
 
     public PatternCard getPc(){
@@ -414,9 +293,7 @@ public class WindowFrame {
             && crossCheck(die, row, col)
             && (getDie(row, col) == null)) {
             return true;
-        }
-
-        return false;
+        }        return false;
     }
 
     /**

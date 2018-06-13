@@ -1,20 +1,22 @@
 package it.polimi.se2018.utils;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
-public abstract class Observable extends java.util.Observable {
-    private Scanner userInput = new Scanner(System.in);
-    private String userString = new String("");
-    private List<Observer> observers = new ArrayList<Observer>();
+public abstract class Observable {
 
-    public void input(){
-        userString = userInput.nextLine().toLowerCase();
-        notifyObservers(userString);
+    private ArrayList<Observer> observers = new ArrayList<>();
+
+    public void addObserver(Observer observer){
+        observers.add(observer);
     }
 
-    public String getUserString() {
-        return userString;
+    public void removeObserver(Observer observer){
+        observers.remove(observer);
+    }
+
+    protected void notifyObservers(){
+        for(Observer observer : observers){
+            observer.update();
+        }
     }
 }

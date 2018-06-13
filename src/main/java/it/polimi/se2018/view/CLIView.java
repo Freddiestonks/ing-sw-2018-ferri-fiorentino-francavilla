@@ -13,11 +13,10 @@ import static java.lang.System.out;
  * */
 public class CLIView extends View {
 
-    private Scanner userInput = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
     private String ip;
     private String port;
     private String type = null;
-    private String input = null;
     private static final int CARD_WIDTH = 26;
     private static final int PRIV_OC_SIZE = 1;
     private static final int ROW_SIZE = 4;
@@ -26,16 +25,22 @@ public class CLIView extends View {
     private static final String PUBLIC_OBJ_STRING = "Public Objective";
     private static final String SPACE = "        ";
 
-
+    //TODO: synchronized methods (between user and network)
     public CLIView() {
     }
+
+    public void readInput(){
+        userInput = scanner.nextLine().toLowerCase();
+        notifyObservers();
+    }
+
     //TODO IMPLEMENT PLAY
     public void play(String type){
         //TODO SEND CONNECTION TYPE
         //NetworkHandler networkHandler = new NetworkHandler();
         PlayerAction playerAction = new PlayerAction();
         out.println("Insert your username:\n");
-        playerAction.setUsernameReq(userInput.next());
+        playerAction.setUsernameReq(scanner.next());
 
     }
     @Override
@@ -50,18 +55,19 @@ public class CLIView extends View {
     }
     @Override
     public void welcomeScreen(){
+        //TODO: user view-controller interaction
         boolean correct = false;
         out.println("\n would you like to play on RMI or Socket?\n");
-        type = userInput.next().toLowerCase();
+        type = scanner.next().toLowerCase();
         PlayerAction playerAction = new PlayerAction();
         playerAction.setConnectionType(type);
         while (!correct){
             out.println("\n Ok now kindly insert the server's ip address\n");
-            ip = userInput.next();
+            ip = scanner.next();
             out.println(ip + "\nPlease insert the port now\n");
-            port = userInput.next();
+            port = scanner.next();
             out.println("Server: " + ip + "\nPort: " + port + "\nis it correct? (y/n)");
-            if(Objects.equals(userInput.next(), "y")){
+            if(Objects.equals(scanner.next(), "y")){
                 correct = true;
             }
         }
@@ -262,11 +268,7 @@ public class CLIView extends View {
         layoutFormatter(description,toolCards.length);
 
     }
-    //TODO remove input as soon as observable is implemented
-    @Override
-    public String input(){
-        return userInput.nextLine().toLowerCase();
-    }
+
     @Override
     public void invalidMoveError(){
         out.println("ERROR: Invalid Move");

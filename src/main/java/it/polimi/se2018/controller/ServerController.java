@@ -8,6 +8,7 @@ import it.polimi.se2018.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class ServerController {
     //Attributes
@@ -19,6 +20,7 @@ public class ServerController {
     private boolean lobbyGathering = true; // TODO: ?? model.started
     //private int numClients = 0;
     private int lobbyTimeout;
+    private ResourceLoader resourceLoader = new ResourceLoader();
 
     //Methods
     public ServerController(Model model, VirtualView view){
@@ -28,21 +30,14 @@ public class ServerController {
         lobbyTimeout = 10; // TODO: load lobbyTimer value from file;
     }
 
-    private boolean incomingPlayerActions() {
-        Iterator<PlayerAction> iterator = playerActions.iterator();
-        while(iterator.hasNext()) {
-            if(iterator.next().isUpdated()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void listenPlayerActions() throws InterruptedException {
         Iterator<PlayerAction> iterator;
         while(!lobbyGathering) {
-            synchronized (lock) {
-                lock.wait();
+            while(!updatedPlayerActions()
+               && emptyPreLobby()) {
+                synchronized (lock) {
+                    lock.wait();
+                }
             }
             iterator = playerActions.iterator();
             while(iterator.hasNext()) {
@@ -56,6 +51,15 @@ public class ServerController {
             }
             gatherPlayers();
         }
+    }
+
+    private boolean updatedPlayerActions() {
+        for(PlayerAction pa : playerActions) {
+            if(pa.isUpdated()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void gatherPlayers() throws InterruptedException {
@@ -78,7 +82,7 @@ public class ServerController {
                     }
                 }
                 // read prelobby clients
-                Iterator<ClientInfo> iterator = clientGatherer.getIterator();
+                Iterator<ClientInfo> iterator = clientGatherer.iterator();
                 while(iterator.hasNext()) {
                     ClientInfo clientInfo = iterator.next();
                     PlayerAction pa = clientInfo.getPlayerAction();
@@ -142,13 +146,43 @@ public class ServerController {
     }
 
     private boolean emptyPreLobby() {
-        Iterator<ClientInfo> iterator = clientGatherer.getIterator();
+        Iterator<ClientInfo> iterator = clientGatherer.iterator();
         while(iterator.hasNext()) {
             if(iterator.next().getPlayerAction().isUpdated()) {
                 return false;
             }
         }
         return true;
+    }
+
+    private void gameSetup() {
+        int numPlayer = model.getNumPlayers();
+        PatternCard[] patternCards = new PatternCard[numPlayer * 2];
+        PubObjCard[] pubObjCards = new PubObjCard[3];
+        int numPCs = 12;
+        int numPubOcs = 10; // TODO: ?? from file
+        ArrayList<Integer> pcIds = new ArrayList<>();
+        ArrayList<Integer> pubOCIds = new ArrayList<>();
+        for(int i = 0; i < numPCs; i++) {
+            pcIds.add(i);
+        }
+        for(int i = 0; i < numPubOcs; i++) {
+            pubOCIds.add(i);
+        }
+        Random random = new Random();
+        //TODO: for(int i = 0; i < numPlayer * 2; i++) {
+        for(int i = 0; i < 4; i++) {
+            int num = random.nextInt(pcIds.size());
+            int id = pcIds.remove(num);
+            patternCards[i] = resourceLoader.loadPC(id);
+        }
+        for(int i = 0; i < 3; i++) {
+            int num = random.nextInt(pubOCIds.size());
+            int id = pubOCIds.remove(num);
+            pubObjCards[i] = resourceLoader.loadPubOC(id);
+        }
+        model.setPatternCards(patternCards);
+        model.setPubOCs(pubObjCards);
     }
 
     private boolean rangeCheck(int[] array){
@@ -166,7 +200,7 @@ public class ServerController {
     }
 
     private boolean validAction(PlayerAction pa) {
-
+        //TODO: check player turn
         if (!(pa.getIdToolCard()>=0 && pa.getIdToolCard()<=12)){
             return false;
         }
@@ -195,7 +229,7 @@ public class ServerController {
 
         if(!pa.getPosRTDie().isEmpty()) {
             if (pa.getPosRTDie().get(0)[0] >= 0 && pa.getPosRTDie().get(0)[0] < model.getRound()
-                    && pa.getPosRTDie().get(0)[1] >= 0 && pa.getPosRTDie().get(0)[1] < model.getRTDieRound(pa.getPosRTDie().get(0)[0])) {
+                    && pa.getPosRTDie().get(0)[1] >= 0 && pa.getPosRTDie().get(0)[1] < model.getNumRTDiceRound(pa.getPosRTDie().get(0)[0])) {
                 if (model.getRoundTrackDie(pa.getPosRTDie().get(0)[0], pa.getPosRTDie().get(0)[1]) != null) {
                     return false;
                 }
@@ -203,12 +237,10 @@ public class ServerController {
         }
 
 
-        //It verifies if the places in the WF are empty.
-        if(!pa.getPlaceDPDie().isEmpty()){
-            for(int[] array: pa.getPlaceDPDie()){
-                if(!(rangeCheck(array) && nullCheck(pa,array))){
-                    return false;
-                }
+        //verify if the places in the WF are empty.
+        for(int[] array: pa.getPlaceDPDie()){
+            if(!(rangeCheck(array) && nullCheck(pa,array))){
+                return false;
             }
         }
 
@@ -221,15 +253,12 @@ public class ServerController {
         }
         else return false;*/
 
-        //It controls if a designed position to be deleted is full.
-        if(!pa.getPlaceWFDie().isEmpty()){
-            for(int[] array: pa.getPlaceWFDie()){
-                if(!rangeCheck(array)){
-                    return false;
-                }
+        //control if a designed position to be deleted is full.
+        for(int[] array: pa.getPlaceWFDie()){
+            if(!rangeCheck(array)){
+                return false;
             }
         }
-
         /*if (rangeCheck(pa.getPlaceWFDie().get(0))
                 && !nullCheck(pa,pa.getPlaceWFDie().get(0))) {
             if (rangeCheck(pa.getPlaceWFDie().get(1))
@@ -240,11 +269,9 @@ public class ServerController {
         else return false;*/
 
         //Afterward the verification of the future placement, this code portion verifies if parameters are legal.
-        if(!pa.getPlaceNewWFDie().isEmpty()){
-            for(int[] array: pa.getPlaceNewWFDie()){
-                if(!(rangeCheck(array))){
-                    return false;
-                }
+        for(int[] array: pa.getPlaceNewWFDie()){
+            if(!rangeCheck(array)){
+                return false;
             }
         }
 
@@ -253,7 +280,7 @@ public class ServerController {
             return false;
         }*/
 
-        if (pa.getIdToolCard() > 0
+        if ((pa.getIdToolCard() > 0)
                 && model.getToolCard(pa.getIdToolCard()).validAction(model, model.getPlayer(playerActions.indexOf(pa)).getWF(), pa)){
             return true;
         }

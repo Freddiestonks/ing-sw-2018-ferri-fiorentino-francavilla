@@ -47,9 +47,7 @@ public class Player {
      * @param privOC is the Private card passed by caller
      */
     public void setPrivOC(PrivObjCard privOC){
-        if(!privOC.isUsed()){
-            this.privObjCard = privOC;
-        }
+        this.privObjCard = privOC;
     }
 
     /**
@@ -99,6 +97,7 @@ public class Player {
     public int getTokens(){
         return tokens;
     }
+
     public void setTokens(int newValue){
         tokens = newValue;
     }

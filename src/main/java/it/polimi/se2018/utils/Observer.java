@@ -1,10 +1,7 @@
 package it.polimi.se2018.utils;
 
-import java.util.Observable;
+public interface Observer {
 
-public class Observer implements java.util.Observer{
+    void update();
 
-    @Override
-    public void update(Observable o, Object arg) {
-    }
 }

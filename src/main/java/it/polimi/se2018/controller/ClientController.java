@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.ToolCard;
+import it.polimi.se2018.network.NetworkHandler;
 import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.View;
 import it.polimi.se2018.model.LocalModel;
@@ -8,13 +9,14 @@ import it.polimi.se2018.model.LocalModel;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ClientController implements Observer{
+public class ClientController implements Observer {
     //attributes
     private LocalModel model;
     private View view;
     private PlayerActionInterface playerActionInterface;
     private PlayerAction playerAction = new PlayerAction();
     private MainScreenInfo mainScreenInfo;
+    private NetworkHandler networkHandler;
     private static final String PLACE = "place";
     private static final String WINDOW_FRAME = "windowframe";
     private static final String ROUND_TRACK = "roundtrack";
@@ -27,9 +29,9 @@ public class ClientController implements Observer{
     private static final String PLACEMENT ="placement";
     private static final String MAIN_SCREEN_INFO = "board";
     //Methods
-    public ClientController(LocalModel localModel, View localView){
-        model = localModel;
-        view = localView;
+    public ClientController(LocalModel localModel, View view){
+        this.model = localModel;
+        this.view = view;
     }
     private void parser(String str){
         String[] string = str.split(SEPARATOR);
@@ -158,6 +160,7 @@ public class ClientController implements Observer{
     private boolean validAction(PlayerAction pa){
         return true;
     }
+
     private void updateMainScreen(){
         mainScreenInfo.setRoundTrack(model.getRoundTrack());
         mainScreenInfo.setRound(model.getRound());
@@ -170,8 +173,10 @@ public class ClientController implements Observer{
     public void setView(View view) {
         this.view = view;
     }
+
     @Override
     public void update(Observable o, Object arg) {
-        parser((String) arg);
+        String userInput = view.getUserInput();
+        parser(userInput);
     }
 }

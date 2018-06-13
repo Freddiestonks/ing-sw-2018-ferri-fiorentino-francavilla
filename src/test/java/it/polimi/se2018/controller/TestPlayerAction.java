@@ -9,6 +9,7 @@ public class TestPlayerAction {
     public void TestInitialization(){
         PlayerAction pa = new PlayerAction();
 
+        pa.setPatternCard(3);
         pa.setIdToolCard(3);
         pa.addNewDieValue(3);
         pa.addPlaceDPDie(2,2);
@@ -22,6 +23,8 @@ public class TestPlayerAction {
         pa.addPosRTDie(5,8);
         pa.setUsernameReq("Tiziello");
 
+        if(!(pa.getPatternCard()==3))
+            fail();
         if(!(pa.getIdToolCard()==3))
            fail();
         if(!(pa.getNewDieValue().get(0)==3))

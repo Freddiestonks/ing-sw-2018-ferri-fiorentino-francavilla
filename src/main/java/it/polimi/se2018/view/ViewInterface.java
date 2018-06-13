@@ -4,36 +4,28 @@ import it.polimi.se2018.model.*;
 
 import java.io.IOException;
 import java.rmi.Remote;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public interface ViewInterface extends Remote {
-    void welcomeScreen();
-    void updateWaitingRoom(boolean starting);
-    void checkConnection() throws IOException,RemoteException;
+    void welcomeScreen() throws IOException;
+    void updateWaitingRoom(boolean starting) throws IOException;
+    void checkConnection() throws IOException;
     //TODO aggiornare ogni singolo componente della view
-    void updateDP(ArrayList<Die> draftPool);
-    void updateRT(ArrayList<ArrayList<Die>> roundTrack,int round);
-    void updateTokens(int tokens);
-    void updateRound(int round);
-    void updateOrder(boolean backward);
-    void updateInfo(int tokens, int round, boolean backward);
-    void updatePrivOCs(PrivObjCard privObjCard);
-    void updatePubOCs(PubObjCard[] pubObjCards);
-    void updateOpponentsWF(Player[] opponents);
-    void updatePlayerWF(Player player);
-    void updateMainScreen(MainScreenInfo mainScreenInfo);
-    void updateConnectionRequest(boolean success);
-    void endGame(Player[] leaderboard,Player player,int[] score);
-    void updateToolCards(ToolCard[] toolCard);
-    void invalidMoveError();
-    void selectionMaker(String[] string);
-    void help();
-    void updatePlayerLobby(ArrayList<Player> players);
-    void updatePlayerState(Player player);
-    public void patternCardGenerator(ArrayList<PatternCard> pc);
-        String input();
-
-
-
+    void updateDP(ArrayList<Die> draftPool) throws IOException;
+    void updateRT(ArrayList<ArrayList<Die>> roundTrack,int round) throws IOException;
+    void updateTokens(int tokens) throws IOException;
+    void updateRound(int round) throws IOException;
+    void updateOrder(boolean backward) throws IOException;
+    void updateInfo(int tokens, int round, boolean backward) throws IOException;
+    void updatePrivOCs(PrivObjCard privObjCard) throws IOException;
+    void updatePubOCs(PubObjCard[] pubObjCards) throws IOException;
+    void updateOpponentsWF(Player[] opponents) throws IOException;
+    void updatePlayerWF(Player player) throws IOException;
+    void updateMainScreen(MainScreenInfo mainScreenInfo) throws IOException;
+    void endGame(Player[] leaderboard,Player player,int[] score) throws IOException;
+    void updateToolCards(ToolCard[] toolCard) throws IOException;
+    void selectionMaker(String[] string) throws IOException;
+    void updatePlayerLobby(ArrayList<Player> players) throws IOException;
+    void updatePlayerState(Player player) throws IOException;
+    void patternCardGenerator(ArrayList<PatternCard> pc) throws IOException;
 }

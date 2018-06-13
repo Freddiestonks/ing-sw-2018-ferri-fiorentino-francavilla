@@ -1,17 +1,12 @@
 package it.polimi.se2018.model;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import it.polimi.se2018.utils.Observable;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
-//@Singleton
 /**
  * This class is the core of the Model, it generates all of the needed class for the application to work properly
  *
@@ -48,7 +43,7 @@ public class Model extends Observable {
         for(int i = 0; i < 10; i++) {
             roundTrack.add(new ArrayList<>());
         }
-
+        /*
         boolean[] usedId = new boolean[numPubOCs];
 
         for (int i = 0; i < numPubOCs; i++){
@@ -64,6 +59,7 @@ public class Model extends Observable {
             usedId[id] = true;
             pubOCs[i] = loadPC(id);
         }
+        */
     }
 
     /**
@@ -197,9 +193,19 @@ public class Model extends Observable {
      * This method is used to remove a die (of a given position) from the DraftPool.
      *
      * @param pos is an integer representing the die to be removed.
+     * @return die just removed
      */
-    public void removeDraftPoolDie(int pos) {
-        draftPool.remove(pos);
+    public Die removeDraftPoolDie(int pos) {
+        return draftPool.remove(pos);
+    }
+
+    /**
+     * This method is used to remove a die (of a given position) from the DraftPool.
+     *
+     * @param die represent the die to be removed.
+     */
+    public void removeDraftPoolDie(Die die) {
+        draftPool.remove(die);
     }
 
     /**
@@ -218,7 +224,7 @@ public class Model extends Observable {
      * @param round is a round value.
      * @return the number of dice in the Round-Track relatively to the specific round.
      */
-    public int getRTDieRound(int round){
+    public int getNumRTDiceRound(int round){
         return roundTrack.get(round).size();
     }
 
@@ -237,9 +243,10 @@ public class Model extends Observable {
      *
      * @param round an integer value representing the round in which the die is been used.
      * @param i an integer that represent the value to find the die from the RoundTrack.
+     * @return die just removed
      */
-    public void removeRoundTrackDie(int round, int i) {
-        roundTrack.get(round).remove(i);
+    public Die removeRoundTrackDie(int round, int i) {
+         return roundTrack.get(round).remove(i);
     }
 
     /**
@@ -266,7 +273,6 @@ public class Model extends Observable {
                 }
             }
         }
-
     }
 
     /**
@@ -277,76 +283,6 @@ public class Model extends Observable {
      */
     public ToolCard getToolCard(int id){
         return this.toolCards[id - 1];
-    }
-
-    /**
-     * This method is used to load a Public Card
-     *
-     * @param publicId this is the id of the wanted Public Card
-     * */
-    private PubObjCard loadPC(int publicId){
-
-        PubObjCard pubObjCard = null;
-        String path = "src/main/json/publicCards.json";
-        JsonParser jsonParser = new JsonParser();
-
-        try {
-            Object object = jsonParser.parse(new FileReader(path));
-            JsonObject jsonObject = (JsonObject) object;
-            JsonArray publicCards = (JsonArray) jsonObject.get("publicCards");
-            jsonObject = (JsonObject) publicCards.get(publicId);
-            String type = jsonObject.get("type").getAsString();
-            String name = jsonObject.get("name").getAsString();
-            String description = jsonObject.get("description").getAsString();
-            int multiplier = jsonObject.get("multiplier").getAsInt();
-            String subtype = jsonObject.get("subtype").getAsString();
-            if (type.equals("color")) {
-                switch (subtype) {
-                    case "row":
-                        pubObjCard = new PubOCColorDet(description, name, true, false, false, multiplier);
-                        break;
-                    case "col":
-                        pubObjCard = new PubOCColorDet(description, name, false, true, false, multiplier);
-                        break;
-                    case "diagonals":
-                        pubObjCard = new PubOCColorDet(description, name, false, false, true, multiplier);
-                        break;
-                    case "set":
-                        boolean[] colors = new boolean[5];
-                        JsonArray jsonArray = jsonObject.get("values").getAsJsonArray();
-                        for (int i = 0; i < 5; i++) {
-                            colors[i] = jsonArray.get(i).getAsBoolean();
-                        }
-                        pubObjCard = new PubOCColorSet(description, name, colors, multiplier);
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
-                }
-            } else if (type.equals("shade")) {
-                switch (subtype) {
-                    case "row":
-                        pubObjCard = new PubOCShadeDet(description, name, true, true, multiplier);
-                        break;
-                    case "col":
-                        pubObjCard = new PubOCShadeDet(description, name, false, true, multiplier);
-                        break;
-                    case "set":
-                        boolean[] shades = new boolean[6];
-                        JsonArray jsonArray = jsonObject.get("values").getAsJsonArray();
-                        for (int i = 0; i < 6; i++) {
-                            shades[i] = jsonArray.get(i).getAsBoolean();
-                        }
-                        pubObjCard = new PubOCShadeSet(description, name, shades, multiplier);
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
-                }
-            }
-
-        } catch (FileNotFoundException ignored) {
-        }
-
-        return pubObjCard;
     }
 
     /**
@@ -428,7 +364,19 @@ public class Model extends Observable {
      * @return an array of Public-Cards.
      */
     public PubObjCard[] getPubOCs() {
-        return pubOCs;
+        return pubOCs.clone();
+    }
+
+    public void setPubOCs(PubObjCard[] pubOCs) {
+        this.pubOCs = pubOCs.clone();
+    }
+
+    public PatternCard[] getPatternCards() {
+        return patCards.clone();
+    }
+
+    public void setPatternCards(PatternCard[] patCards) {
+        this.patCards = patCards.clone();
     }
 
     /**
@@ -447,6 +395,16 @@ public class Model extends Observable {
      */
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    public void playersSetup() {
+        ArrayList<Color> availableColors = new ArrayList<>(Arrays.asList(Color.values()));
+        Random random = new Random();
+        for(Player player : players) {
+            int num = random.nextInt(availableColors.size());
+            Color color = availableColors.remove(num);
+            player.setPrivOC(new PrivObjCard(color));
+        }
     }
 
 }

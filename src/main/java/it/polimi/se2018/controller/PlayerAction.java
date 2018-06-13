@@ -4,9 +4,10 @@ import java.util.ArrayList;
 public class PlayerAction implements PlayerActionInterface {
     private Object lock = new Object();
     private boolean updated = false;
-    private String usernameReq;
-    private String connectionType;
+    private String usernameReq = null;
+    private String connectionType = null;
     private boolean quitReq = false;
+    private int patternCard = 0;
     private ArrayList<Integer> newDieValue = new ArrayList<>();
     private ArrayList<Integer> posDPDie = new ArrayList<>();
     private ArrayList<int[]> posRTDie = new ArrayList<>();
@@ -36,6 +37,7 @@ public class PlayerAction implements PlayerActionInterface {
                 this.usernameReq = pa.usernameReq;
                 this.connectionType = pa.connectionType;
                 this.quitReq = pa.quitReq;
+                this.patternCard = pa.patternCard;
                 this.newDieValue = pa.getNewDieValue();
                 this.posDPDie = pa.getPosDPDie();
                 this.posRTDie = pa.getPosRTDie();
@@ -77,6 +79,14 @@ public class PlayerAction implements PlayerActionInterface {
 
     public boolean isQuitReq() {
         return quitReq;
+    }
+
+    public void setPatternCard(int pc) {
+        this.patternCard = pc;
+    }
+
+    public int getPatternCard() {
+        return patternCard;
     }
 
     public void addPosDPDie(int pos) {
@@ -135,11 +145,22 @@ public class PlayerAction implements PlayerActionInterface {
         return idToolCard;
     }
 
-    public void checkConnection() {
-
-    }
+    public void checkConnection() {}
 
     public void clear() {
-        //TODO: clear player actions attributes
+        synchronized (lock) {
+            this.usernameReq = null;
+            this.connectionType = null;
+            this.quitReq = false;
+            this.patternCard = 0;
+            this.newDieValue.clear();
+            this.posDPDie.clear();
+            this.posRTDie.clear();
+            this.placeDPDie.clear();
+            this.placeWFDie.clear();
+            this.placeNewWFDie.clear();
+            this.idToolCard = 0;
+            this.updated = false;
+        }
     }
 }

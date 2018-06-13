@@ -1,6 +1,6 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.model.*;
+import it.polimi.se2018.controller.ResourceLoader;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -17,10 +17,10 @@ public class TestWindowFrame {
         Die die2 = new Die(Color.BLUE);
         die.setValue(6);
         die2.setValue(3);
-        PatternCard testPC = null;
-        WindowFrame testWF = new WindowFrame(0,true);
+        ResourceLoader resourceLoader = new ResourceLoader();
+        PatternCard testPC = resourceLoader.loadPC(id);
+        WindowFrame testWF = new WindowFrame(testPC,true);
         //We load from the JSON the wanted PatternCard
-        testPC = testWF.loadPC(id);
         //We test if the first die can fit in a shade Cell and a Color cell with the right values
         //We test too if the second die cannot fit in the same cells since id does not meet the requirements
         //Last but not least we test if the name of the cards and the difficulty levels are correct
@@ -37,7 +37,10 @@ public class TestWindowFrame {
 
     @Test
     public void testChecking() throws InvalidPlaceException {
-        WindowFrame wf = new WindowFrame(0,false);
+        int id = 0;
+        ResourceLoader resourceLoader = new ResourceLoader();
+        PatternCard testPC = resourceLoader.loadPC(id);
+        WindowFrame wf = new WindowFrame(testPC,false);
         Die die1 = new Die(Color.YELLOW);
         Die die2 = new Die(Color.GREEN);
         Die die3 = new Die(Color.YELLOW);

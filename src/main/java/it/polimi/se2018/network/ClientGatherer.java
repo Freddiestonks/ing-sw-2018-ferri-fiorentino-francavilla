@@ -18,7 +18,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ClientGatherer extends Thread implements ClientGathererInterface {
+public class ClientGatherer extends Thread implements Iterable<ClientInfo>, ClientGathererInterface {
     private ServerSocket serverSocket;
     private ArrayList<ClientInfo> preLobby = new ArrayList<>();
     private ArrayList<SocketReceiver> socketReceivers = new ArrayList<>();
@@ -59,7 +59,7 @@ public class ClientGatherer extends Thread implements ClientGathererInterface {
         return paInterface;
     }
 
-    public Iterator<ClientInfo> getIterator() {
+    public Iterator<ClientInfo> iterator() {
         return preLobby.iterator();
     }
 

@@ -5,7 +5,7 @@ import it.polimi.se2018.model.*;
 
 public class ToolCard6 extends ToolCard {
 
-    public ToolCard6(String username, String description, int price,int tokens) {
+    public ToolCard6(String username, String description, int price, int tokens) {
         super( username,  description,  price, tokens);
     }
 
@@ -18,6 +18,7 @@ public class ToolCard6 extends ToolCard {
         }
         else {
             Die die = getPendingDie();
+            model.removeDraftPoolDie(die);
             wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
             pendingAction = false;
             model.updateTurn();

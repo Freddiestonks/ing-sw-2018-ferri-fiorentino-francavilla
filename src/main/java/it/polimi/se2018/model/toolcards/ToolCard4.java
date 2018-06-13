@@ -5,7 +5,7 @@ import it.polimi.se2018.model.*;
 
 public class ToolCard4 extends ToolCard {
 
-    public ToolCard4(String username, String description, int price,int tokens) {
+    public ToolCard4(String username, String description, int price, int tokens) {
         super(username,description,price,tokens);
     }
 

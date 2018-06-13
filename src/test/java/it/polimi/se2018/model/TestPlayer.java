@@ -3,12 +3,12 @@ package it.polimi.se2018.model;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.util.Random;
-import it.polimi.se2018.model.*;
+import it.polimi.se2018.controller.ResourceLoader;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Random;
 
 import static org.junit.Assert.fail;
 
@@ -20,7 +20,9 @@ public class TestPlayer {
         player.setPrivOC(privObjCard);
         Random rand = new Random();
         PubObjCard[] pubObjCard = new PubObjCard[3];
-        WindowFrame wf = new WindowFrame(0, true);
+        ResourceLoader resourceLoader = new ResourceLoader();
+        PatternCard testPC = resourceLoader.loadPC(0);
+        WindowFrame wf = new WindowFrame(testPC,true);
         final int privPoints = 4;
         final int emptySpaces = 0;
         final int tokens = 20;

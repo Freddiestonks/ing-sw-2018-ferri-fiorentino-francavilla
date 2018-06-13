@@ -5,12 +5,12 @@ import it.polimi.se2018.model.*;
 
 public class ToolCard9 extends ToolCard {
 
-    public ToolCard9(String username, String description, int price,int tokens) {
-        super( username,  description,  price, tokens);
+    public ToolCard9(String username, String description, int price, int tokens) {
+        super(username, description, price, tokens);
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException {
-        Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
+        Die die = model.removeDraftPoolDie(pa.getPosDPDie().get(0));
         wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
         model.updateTurn();
     }

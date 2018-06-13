@@ -8,15 +8,13 @@ import it.polimi.se2018.model.WindowFrame;
 
 public class ToolCard5 extends ToolCard {
 
-    public ToolCard5(String username, String description, int price,int tokens) {
-        super( username,  description,  price, tokens);
+    public ToolCard5(String username, String description, int price, int tokens) {
+        super(username, description, price, tokens);
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
-        Die dpDie = model.getDraftPoolDie(pa.getPosDPDie().get(0));
-        model.removeDraftPoolDie(pa.getPosDPDie().get(0));
-        Die rtDie = model.getRoundTrackDie(pa.getPosRTDie().get(0)[0], pa.getPosRTDie().get(0)[1]);
-        model.removeRoundTrackDie(pa.getPosRTDie().get(0)[0], pa.getPosRTDie().get(0)[1]);
+        Die dpDie = model.removeDraftPoolDie(pa.getPosDPDie().get(0));
+        Die rtDie = model.removeRoundTrackDie(pa.getPosRTDie().get(0)[0], pa.getPosRTDie().get(0)[1]);
         model.addDraftPoolDie(rtDie);
         model.addRoundTrackDie(dpDie, pa.getPosRTDie().get(0)[0]);
     }

@@ -5,12 +5,12 @@ import it.polimi.se2018.model.*;
 
 public class ToolCard10 extends ToolCard {
 
-    public ToolCard10(String username, String description, int price,int tokens) {
-        super( username,  description,  price, tokens);
+    public ToolCard10(String username, String description, int price, int tokens) {
+        super(username, description, price, tokens);
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa){
-        Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
+        Die die = model.removeDraftPoolDie(pa.getPosDPDie().get(0));
         die.setValue(7 - die.getValue());
         wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
         model.updateTurn();

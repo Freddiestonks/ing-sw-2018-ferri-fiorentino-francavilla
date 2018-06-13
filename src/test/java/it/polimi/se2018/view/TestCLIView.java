@@ -1,9 +1,11 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.ResourceLoader;
 import it.polimi.se2018.model.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TestCLIView {
     CLIView cliView = new CLIView();
@@ -22,8 +24,24 @@ public class TestCLIView {
     }
     @Test
     public void testUpdatePubOCs(){
+        ResourceLoader resourceLoader = new ResourceLoader();
         PubObjCard[] pubObjCards = new PubObjCard[3];
-        pubObjCards = model.getPubOCs();
+        /*
+        pubObjCards[0] = resourceLoader.loadPubOC(0);
+        pubObjCards[1] = resourceLoader.loadPubOC(1);
+        pubObjCards[2] = resourceLoader.loadPubOC(2);
+        */
+        int numPubOcs = 10; // TODO: ?? from file
+        ArrayList<Integer> pubOCIds = new ArrayList<>();
+        for(int i = 0; i < numPubOcs; i++) {
+            pubOCIds.add(i);
+        }
+        Random random = new Random();
+        for(int i = 0; i < 3; i++) {
+            int num = random.nextInt(pubOCIds.size());
+            int id = pubOCIds.remove(num);
+            pubObjCards[i] = resourceLoader.loadPubOC(id);
+        }
         cliView.updatePubOCs(pubObjCards);
     }
     @Test
@@ -50,7 +68,9 @@ public class TestCLIView {
     public void testMainScreen(){
         MainScreenInfo mainScreenInfo = new MainScreenInfo();
         Player player = new Player("me");
-        WindowFrame wf = new WindowFrame(0,true);
+        ResourceLoader resourceLoader = new ResourceLoader();
+        PatternCard testPC = resourceLoader.loadPC(0);
+        WindowFrame wf = new WindowFrame(testPC,true);
         Player[] opponents = new Player[3];
         ArrayList<Die> dp = new ArrayList<>();
         dp.add(new Die(Color.BLUE));
@@ -104,9 +124,10 @@ public class TestCLIView {
     @Test
     public void testPatternCard(){
         ArrayList<PatternCard> patternCard = new ArrayList<>();
-        WindowFrame windowFrame = new WindowFrame(0,true);
-        patternCard.add(windowFrame.loadPC(0));
-        patternCard.add(windowFrame.loadPC(1));
+        ResourceLoader resourceLoader = new ResourceLoader();
+        PatternCard testPC = resourceLoader.loadPC(0);
+        patternCard.add(resourceLoader.loadPC(0));
+        patternCard.add(resourceLoader.loadPC(1));
         cliView.patternCardGenerator(patternCard);
     }
 }

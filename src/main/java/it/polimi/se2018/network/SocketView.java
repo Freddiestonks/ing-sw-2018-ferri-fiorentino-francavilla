@@ -75,9 +75,7 @@ public class SocketView implements ViewInterface {
     public void updateMainScreen(MainScreenInfo mainScreenInfo) {
 
     }
-    @Override
-    public void updateConnectionRequest(boolean success) {
-    }
+    //public void updateConnectionRequest(boolean success) {}
     @Override
     public void endGame(Player[] leaderboard,Player player,int[] score){}
 
@@ -86,14 +84,13 @@ public class SocketView implements ViewInterface {
 
     }
 
-    @Override
     public void invalidMoveError(){}
 
     @Override
     public void selectionMaker(String[] string) {
 
     }
-    @Override
+
     public void help(){}
 
     @Override
@@ -109,11 +106,6 @@ public class SocketView implements ViewInterface {
     @Override
     public void patternCardGenerator(ArrayList<PatternCard> pc) {
 
-    }
-
-    @Override
-    public String input(){
-        return null;
     }
 
 }
