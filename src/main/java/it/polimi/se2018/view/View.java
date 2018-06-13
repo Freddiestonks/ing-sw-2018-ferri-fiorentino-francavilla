@@ -52,6 +52,11 @@ public abstract class View implements ViewInterface{
     public void help(){}
     @Override
     public void selectionMaker(String[] string){}
-
+    @Override
+    public void updatePlayerLobby(ArrayList<Player> players){}
+    @Override
+    public void updatePlayerState(Player player){}
+    @Override
+    public void patternCardGenerator(ArrayList<PatternCard> pc){}
 
     }

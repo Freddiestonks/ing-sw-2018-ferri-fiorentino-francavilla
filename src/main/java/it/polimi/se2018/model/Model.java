@@ -38,7 +38,7 @@ public class Model extends Observable {
     private PrivObjCard[] privOCs = new PrivObjCard[5];
     private ToolCard[] toolCards = new ToolCard[12];
     private PatternCard[] patCards = new PatternCard[12];
-    //private ArrayList<Player> leaderboard = new ArrayList<>();
+    private ArrayList<Player> leaderboard = new ArrayList<>();
     private final int numPubOCs = 10;
     //Methods
     /**
@@ -191,7 +191,6 @@ public class Model extends Observable {
      */
     public void addDraftPoolDie(Die die) {
         draftPool.add(die);
-        //TODO: increase DP counter
     }
 
     /**
@@ -201,7 +200,6 @@ public class Model extends Observable {
      */
     public void removeDraftPoolDie(int pos) {
         draftPool.remove(pos);
-        //TODO: decrease DP counter
     }
 
     /**
@@ -257,19 +255,18 @@ public class Model extends Observable {
      * attribute called "leaderboard"
      * */
     public void calculateScore(){
-        //TODO finish this
-        /*
         leaderboard = players;
         for (int i = 1; i<numPlayers;i++){
             for (int j=0; j < i;j++){
-                if(leaderboard[i].calculateScore(pubOCs) > leaderboard[j].calculateScore(pubOCs)){
+                if(leaderboard.get(i).calculateScore(pubOCs) > leaderboard.get(j).calculateScore(pubOCs)){
                     Player tempPlayer;
-                    tempPlayer = leaderboard[j];
-                    leaderboard[j] = leaderboard [i];
-                    leaderboard[i] = tempPlayer;
+                    tempPlayer = leaderboard.get(j);
+                    leaderboard.set(j,leaderboard.get(i));
+                    leaderboard.set(i,tempPlayer);
                 }
             }
-        }*/
+        }
+
     }
 
     /**
@@ -361,9 +358,9 @@ public class Model extends Observable {
         return numPlayers;
     }
 
-    /*public Player[] getLeaderboard() {
+    public ArrayList<Player> getLeaderboard() {
         return leaderboard;
-    }*/
+    }
 
     /**
      * This method provides a specific reference to a player.

@@ -29,7 +29,10 @@ public interface ViewInterface extends Remote {
     void invalidMoveError();
     void selectionMaker(String[] string);
     void help();
-    String input();
+    void updatePlayerLobby(ArrayList<Player> players);
+    void updatePlayerState(Player player);
+    public void patternCardGenerator(ArrayList<PatternCard> pc);
+        String input();
 
 
 

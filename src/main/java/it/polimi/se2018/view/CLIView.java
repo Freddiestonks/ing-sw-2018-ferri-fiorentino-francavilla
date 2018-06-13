@@ -2,7 +2,6 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.model.*;
-
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
@@ -12,22 +11,25 @@ import static java.lang.System.out;
  * @author Federico Ferri,Alessio Fiorentino,Simone Francavilla
  *
  * */
-public class CLIView extends View{
+public class CLIView extends View {
 
     private Scanner userInput = new Scanner(System.in);
     private String ip;
     private String port;
     private String type = null;
+    private String input = null;
     private static final int CARD_WIDTH = 26;
     private static final int PRIV_OC_SIZE = 1;
     private static final int ROW_SIZE = 4;
     private static final int COL_SIZE = 5;
+    private static final int PATTERN_CARD_SIZE = 25;
     private static final String PUBLIC_OBJ_STRING = "Public Objective";
     private static final String SPACE = "        ";
 
 
     public CLIView() {
     }
+    //TODO IMPLEMENT PLAY
     public void play(String type){
         //TODO SEND CONNECTION TYPE
         //NetworkHandler networkHandler = new NetworkHandler();
@@ -36,10 +38,10 @@ public class CLIView extends View{
         playerAction.setUsernameReq(userInput.next());
 
     }
-    //TODO REWIEW ABOVE METHODS
     @Override
     public void updateWaitingRoom(boolean starting){
         if(starting){
+            //TODO add pattern observable
             out.println("The game is about to start,Good Luck");
         }
         else{
@@ -173,7 +175,7 @@ public class CLIView extends View{
     }
     @Override
     public void updatePlayerWF(Player player){
-        out.println("Tu (" + player.getUsername() + "):\n");
+        out.println("You (" + player.getUsername() + "):\n");
         WindowFrame[] wf = new WindowFrame[1];
         wf[0] = player.getWF();
         windowFrameGenerator(wf);
@@ -214,10 +216,10 @@ public class CLIView extends View{
     @Override
     public void updateConnectionRequest(boolean success){
         if(success){
-            out.println("Congratulations you are now connected");
+            out.println("Congratulations you are now connected\n");
         }
         else{
-            out.println("Sorry, there was a problem connecting to the server, please check ip and port");
+            out.println("Sorry, there was a problem connecting to the server, please check ip and port\n");
         }
     }
     @Override
@@ -260,6 +262,7 @@ public class CLIView extends View{
         layoutFormatter(description,toolCards.length);
 
     }
+    //TODO remove input as soon as observable is implemented
     @Override
     public String input(){
         return userInput.nextLine().toLowerCase();
@@ -276,7 +279,6 @@ public class CLIView extends View{
             out.println(string[i]);
         }
     }
-    //TODO implement on higher classes
     @Override
     public void help(){
         out.println("All of the commands need to be on the same line separated by a comma(,), all the lines should either start with toolcard");
@@ -297,6 +299,54 @@ public class CLIView extends View{
         out.println("       select [element] = select from draftpool element #[element] ");
         out.println("       place [row][col] = place die selected from draftpool on the cell[row][col] of the window frame");
 
+    }
+    @Override
+    public void updatePlayerLobby(ArrayList<Player> players){
+        for (Player player : players) {
+            out.println(player.getUsername());
+        }
+        out.println();
+    }
+    @Override
+    public void updatePlayerState(Player player){
+        if(player.isConnected()){
+        out.println(player.getUsername() + " just disconnected from the game\n");}
+        else{
+            out.println(player.getUsername() + " just came back into the game\n");}
+    }
+
+    public void patternCardGenerator(ArrayList<PatternCard> pc){
+        for(int i =0;i<pc.size();i++){
+            String prefix= i + ": Front";
+            out.print(prefix);
+            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+                out.print(" ");
+            }
+            out.print(SPACE);
+            prefix = i + ": Back";
+            out.print(prefix);
+            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+                out.print(" ");
+            }
+            out.print(SPACE);
+
+        }
+        out.println();
+        for(int i = 0; i< ROW_SIZE; i++){
+            for(int j=0;j<pc.size();j++){
+                for(int k = 0; k< COL_SIZE; k++){
+                    out.print("|"  + pc.get(j).getCell(true,i,k) + "|");
+                }
+                out.print(SPACE);
+                for(int k = 0; k< COL_SIZE; k++){
+                    out.print("|"  + pc.get(j).getCell(false,i,k) + "|");
+                }
+                out.print(SPACE);
+
+            }
+            out.println();
+        }
+        out.println();
     }
 
     private void layoutFormatter(String[] string,int numCards) {
@@ -362,8 +412,6 @@ public class CLIView extends View{
        }
        out.println();
     }
-
-    //TODO FINISH OTHER SCREENS,CHECK METHODS ABOVE
 }
 
 

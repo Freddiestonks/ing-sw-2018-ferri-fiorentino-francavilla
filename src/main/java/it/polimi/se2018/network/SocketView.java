@@ -95,6 +95,22 @@ public class SocketView implements ViewInterface {
     }
     @Override
     public void help(){}
+
+    @Override
+    public void updatePlayerLobby(ArrayList<Player> players) {
+
+    }
+
+    @Override
+    public void updatePlayerState(Player player) {
+
+    }
+
+    @Override
+    public void patternCardGenerator(ArrayList<PatternCard> pc) {
+
+    }
+
     @Override
     public String input(){
         return null;

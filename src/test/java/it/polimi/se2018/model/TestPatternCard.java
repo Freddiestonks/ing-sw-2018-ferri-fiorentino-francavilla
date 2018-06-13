@@ -72,11 +72,11 @@ public class TestPatternCard {
             fail();
         }
 
-        if(!(pc.getNameF() == "caso")){
+        if(!(pc.getNameF().equals("caso") )){
             fail();
         }
 
-        if(!(pc.getNameB() == "casissimo")){
+        if(!(pc.getNameB().equals("casissimo"))){
             fail();
         }
 

@@ -3,6 +3,8 @@ package it.polimi.se2018.model;
 import org.junit.After;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.fail;
 
 public class TestModel {
@@ -62,7 +64,6 @@ public class TestModel {
         Player p1 = modelTest.getPlayer(0);
         Player p2 = modelTest.getPlayer(1);
         Player p3 = modelTest.getPlayer(2);
-        //Player[] leaderboard;
         System.out.println(modelTest.getNumPlayers());
         WindowFrame wf = new WindowFrame(0, true);
         PrivObjCard privObjCard = new PrivObjCard(Color.BLUE);
@@ -123,17 +124,27 @@ public class TestModel {
                 wf.placeDie(dice[i][j], i, j);
             }
         }
-        modelTest.calculateScore();/*
+        ArrayList<Player> leaderboard = null;
+        modelTest.calculateScore();
         leaderboard = modelTest.getLeaderboard();
-        if (!leaderboard[0].getUsername().equals("Santa Maria")||!leaderboard[1].getUsername().equals("Pinta")
-                ||!leaderboard[2].getUsername().equals("Niña")){
+        if (!leaderboard.get(0).getUsername().equals("Santa Maria")||!leaderboard.get(1).getUsername().equals("Pinta")
+                ||!leaderboard.get(2).getUsername().equals("Niña")){
             fail();
-        }*/
+        }
+        System.out.println(leaderboard.get(0).getUsername());
+        System.out.println(leaderboard.get(1).getUsername());
+        System.out.println(leaderboard.get(2).getUsername());
+        System.out.println(p1.getUsername()+" " +p1.calculateScore(modelTest.getPubOCs()));
+        System.out.println(p2.getUsername()+" " +p2.calculateScore(modelTest.getPubOCs()));
+        System.out.println(p3.getUsername()+" " +p3.calculateScore(modelTest.getPubOCs()));
+
+
 
     }
     @After
     public void reset3() {
         Model.instance().reset();
     }
+
 
 }

@@ -5,7 +5,10 @@ import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.View;
 import it.polimi.se2018.model.LocalModel;
 
-public class ClientController {
+import java.util.Observable;
+import java.util.Observer;
+
+public class ClientController implements Observer{
     //attributes
     private LocalModel model;
     private View view;
@@ -24,11 +27,12 @@ public class ClientController {
     private static final String PLACEMENT ="placement";
     private static final String MAIN_SCREEN_INFO = "board";
     //Methods
-    public ClientController(LocalModel model, View view){
+    public ClientController(LocalModel localModel, View localView){
+        model = localModel;
+        view = localView;
     }
-    private void parser(){
-        //TODO add methods to show
-        String[] string = view.input().split(SEPARATOR);
+    private void parser(String str){
+        String[] string = str.split(SEPARATOR);
         if(string[0].equalsIgnoreCase(TOOL_CARD)){
             toolCardParser(string);
         }
@@ -44,29 +48,31 @@ public class ClientController {
         }
         else{
             view.invalidMoveError();
-            parser();
         }
     }
     private void placementParser(String[] read){
-
-        for(int i = 1;i<read.length;i++) {
-            if(read[i].equalsIgnoreCase(SELECT)){
-                if(read[i+1].equalsIgnoreCase(DRAFT_POOL)){
-                    int element = Integer.parseInt(read[i+2]);
-                    playerAction.addPosDPDie(element);
+        int i = 1;
+        try {
+            while (i < read.length) {
+                if (read[i].equalsIgnoreCase(SELECT)) {
+                    if (read[i + 1].equalsIgnoreCase(DRAFT_POOL)) {
+                        int element = Integer.parseInt(read[i + 2]);
+                        playerAction.addPosDPDie(element);
+                        i=i+3;
+                    }
+                } else if (read[i].equalsIgnoreCase(PLACE)) {
+                    if (read[i + 1].equalsIgnoreCase(DRAFT_POOL)) {
+                        int row = Integer.parseInt(read[i + 2]);
+                        int col = Integer.parseInt(read[i + 3]);
+                        playerAction.addPlaceDPDie(row, col);
+                        i=i+4;
+                    }
+                } else {
+                    view.invalidMoveError();
                 }
             }
-            else if(read[i].equalsIgnoreCase(PLACE)){
-                if(read[i+1].equalsIgnoreCase(DRAFT_POOL)){
-                    int row = Integer.parseInt(read[i+2]);
-                    int col = Integer.parseInt(read[i+3]);
-                    playerAction.addPlaceDPDie(row,col);
-                }
-            }
-            else {
-                view.invalidMoveError();
-                parser();
-            }
+        }catch (NumberFormatException nfe){
+            view.invalidMoveError();
         }
 
     }
@@ -95,50 +101,57 @@ public class ClientController {
             }
             default:
                 view.invalidMoveError();
-                parser();
                 break;
         }
     }
     private void performToolCard(ToolCard toolCard,String[] read) {
-        playerAction.setIdToolCard(toolCard.getIdRes());
-        for(int i = 0;i<read.length;i++) {
-            if (read[i].equalsIgnoreCase(NEW_VALUE)) {
-
-                int value = Integer.parseInt(read[i+1]);
-                playerAction.addNewDieValue(value);
-            }
-            else if(read[i].equalsIgnoreCase(SELECT)){
-                if(read[i+1].equalsIgnoreCase(DRAFT_POOL)){
-                    int element = Integer.parseInt(read[i+2]);
-                    playerAction.addPosDPDie(element);
+        try {
+            playerAction.setIdToolCard(toolCard.getIdRes());
+            int i = 2;
+            while(i<read.length){
+                if (read[i].equalsIgnoreCase(NEW_VALUE)) {
+                    int value = Integer.parseInt(read[i + 1]);
+                    playerAction.addNewDieValue(value);
+                    i=i+2;
+                }
+                else if (read[i].equalsIgnoreCase(SELECT)) {
+                    if (read[i + 1].equalsIgnoreCase(DRAFT_POOL)) {
+                        int element = Integer.parseInt(read[i + 2]);
+                        playerAction.addPosDPDie(element);
+                        i = i+3;
                     }
-                else if(read[i+1].equalsIgnoreCase(ROUND_TRACK)){
-                    int round = Integer.parseInt(read[i+2]);
-                    int row = Integer.parseInt(read[i+3]);
-                    playerAction.addPosRTDie(round,row);
+                    else if (read[i + 1].equalsIgnoreCase(ROUND_TRACK)) {
+                        int round = Integer.parseInt(read[i + 2]);
+                        int row = Integer.parseInt(read[i + 3]);
+                        playerAction.addPosRTDie(round, row);
+                        i = i+4;
+                    }
+                    else if (read[i + 1].equalsIgnoreCase(WINDOW_FRAME)) {
+                        int row = Integer.parseInt(read[i + 2]);
+                        int col = Integer.parseInt(read[i + 3]);
+                        playerAction.addPlaceWFDie(row, col);
+                        i = i+4;
+                    }
                 }
-                else if(read[i+1].equalsIgnoreCase(WINDOW_FRAME)){
-                    int row = Integer.parseInt(read[i+2]);
-                    int col = Integer.parseInt(read[i+3]);
-                    playerAction.addPlaceWFDie(row,col);
+                else if (read[i].equalsIgnoreCase(PLACE)) {
+                    if (read[i + 1].equalsIgnoreCase(DRAFT_POOL)) {
+                        int row = Integer.parseInt(read[i + 2]);
+                        int col = Integer.parseInt(read[i + 3]);
+                        playerAction.addPlaceDPDie(row, col);
+                        i=i+4;
+                    }
+                    else if (read[i + 1].equalsIgnoreCase(WINDOW_FRAME)) {
+                        int row = Integer.parseInt(read[i + 2]);
+                        int col = Integer.parseInt(read[i + 3]);
+                        playerAction.addPlaceNewWFDie(row, col);
+                        i=i+4;
+                    }
+                } else {
+                    view.invalidMoveError();
                 }
             }
-            else if(read[i].equalsIgnoreCase(PLACE)) {
-                if(read[i+1].equalsIgnoreCase(DRAFT_POOL)){
-                    int row = Integer.parseInt(read[i+2]);
-                    int col = Integer.parseInt(read[i+3]);
-                    playerAction.addPlaceDPDie(row,col);
-                }
-                else if(read[i+1].equalsIgnoreCase(WINDOW_FRAME)){
-                    int row = Integer.parseInt(read[i+2]);
-                    int col = Integer.parseInt(read[i+3]);
-                    playerAction.addPlaceWFDie(row,col);
-                }
-            }
-            else {
-                view.invalidMoveError();
-                parser();
-            }
+        }catch (NumberFormatException nfe){
+            view.invalidMoveError();
         }
     }
 
@@ -146,12 +159,19 @@ public class ClientController {
         return true;
     }
     private void updateMainScreen(){
-        //TODO update main screen from model
+        mainScreenInfo.setRoundTrack(model.getRoundTrack());
+        mainScreenInfo.setRound(model.getRound());
+        mainScreenInfo.setDraftPool(model.getDraftPool());
+        mainScreenInfo.setBackward(model.isBackward());
     }
     private void performAction(PlayerAction pa){
     }
 
     public void setView(View view) {
         this.view = view;
+    }
+    @Override
+    public void update(Observable o, Object arg) {
+        parser((String) arg);
     }
 }

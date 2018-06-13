@@ -91,4 +91,22 @@ public class TestCLIView {
     public void testHelp(){
         cliView.help();
     }
+    @Test
+    public void testPlayerLobby(){
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(new Player("Milano"));
+        players.add(new Player("Torino"));
+        players.add(new Player("Venezia"));
+        cliView.updatePlayerLobby(players);
+        players.add(new Player("Roma"));
+        cliView.updatePlayerLobby(players);
+    }
+    @Test
+    public void testPatternCard(){
+        ArrayList<PatternCard> patternCard = new ArrayList<>();
+        WindowFrame windowFrame = new WindowFrame(0,true);
+        patternCard.add(windowFrame.loadPC(0));
+        patternCard.add(windowFrame.loadPC(1));
+        cliView.patternCardGenerator(patternCard);
+    }
 }
