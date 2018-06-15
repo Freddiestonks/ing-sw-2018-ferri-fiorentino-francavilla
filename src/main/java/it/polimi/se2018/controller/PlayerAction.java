@@ -1,8 +1,9 @@
 package it.polimi.se2018.controller;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PlayerAction implements PlayerActionInterface {
-    private Object lock = new Object();
+public class PlayerAction implements PlayerActionInterface, Serializable {
+    private transient Object lock = new Object();
     private boolean updated = false;
     private String usernameReq = null;
     private String connectionType = null;

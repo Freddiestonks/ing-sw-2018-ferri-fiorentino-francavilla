@@ -30,57 +30,26 @@ public class CLIView extends View {
     }
 
     public void readInput(){
+        boolean active = true;
+        while (active){
         userInput = scanner.nextLine().toLowerCase();
         notifyObservers();
+        }
     }
 
-    //TODO IMPLEMENT PLAY
-    public void play(String type){
-        //TODO SEND CONNECTION TYPE
-        //NetworkHandler networkHandler = new NetworkHandler();
-        PlayerAction playerAction = new PlayerAction();
-        out.println("Insert your username:\n");
-        playerAction.setUsernameReq(scanner.next());
-
-    }
     @Override
     public void updateWaitingRoom(boolean starting){
         if(starting){
-            //TODO add pattern observable
             out.println("The game is about to start,Good Luck");
         }
         else{
             out.println("Please wait while some other players join in");
         }
     }
-    @Override
-    public void welcomeScreen(){
-        //TODO: user view-controller interaction
-        boolean correct = false;
-        out.println("\n would you like to play on RMI or Socket?\n");
-        type = scanner.next().toLowerCase();
-        PlayerAction playerAction = new PlayerAction();
-        playerAction.setConnectionType(type);
-        while (!correct){
-            out.println("\n Ok now kindly insert the server's ip address\n");
-            ip = scanner.next();
-            out.println(ip + "\nPlease insert the port now\n");
-            port = scanner.next();
-            out.println("Server: " + ip + "\nPort: " + port + "\nis it correct? (y/n)");
-            if(Objects.equals(scanner.next(), "y")){
-                correct = true;
-            }
-        }
-        if(type.equalsIgnoreCase("socket")){
-            out.println("I will now try to establish a socket connection\n");
-            play("socket");
-        }
-        if(type.equalsIgnoreCase("rmi")){
-            out.println("I will now try to establish an RMI connection\n");
-            play("rmi");
-        }
 
+    public void welcomeScreen() {
     }
+
     @Override
     public void updateDP(ArrayList<Die> draftPool) {
         out.println("DraftPool:");
@@ -310,22 +279,25 @@ public class CLIView extends View {
         out.println();
     }
     @Override
+    //TODO PLayer Status
     public void updatePlayerState(Player player){
         if(player.isConnected()){
         out.println(player.getUsername() + " just disconnected from the game\n");}
         else{
             out.println(player.getUsername() + " just came back into the game\n");}
     }
-
+    public void connectionError(){
+        out.println("You have been disconnected, please reconnect using connect,[connection type],[ip]");
+    }
     public void patternCardGenerator(ArrayList<PatternCard> pc){
         for(int i =0;i<pc.size();i++){
-            String prefix= i + ": Front";
+            String prefix= i*2 + ":";
             out.print(prefix);
             for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
                 out.print(" ");
             }
             out.print(SPACE);
-            prefix = i + ": Back";
+            prefix = i*2+ 1+":";
             out.print(prefix);
             for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
                 out.print(" ");

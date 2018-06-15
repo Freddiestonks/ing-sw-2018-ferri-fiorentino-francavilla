@@ -3,12 +3,14 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.LocalModel;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.network.NetworkHandler;
+import it.polimi.se2018.network.RMINetworkHandler;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.CLIView;
 import it.polimi.se2018.view.GUIView;
 import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.View;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import static java.lang.System.out;
@@ -47,6 +49,38 @@ public class ClientController implements Observer {
         }
         else if(string[0].equalsIgnoreCase(HELP)){
             view.help();
+        }
+        else if(string[0].equalsIgnoreCase("connect")){
+            if(string[1].equalsIgnoreCase("rmi")){
+                networkHandler = new RMINetworkHandler(string[2]);
+                playerActionInterface = networkHandler.connect(model,view);
+                out.println("ok");
+            }
+        }
+        else if(string[0].equalsIgnoreCase("set")){
+            if(string[1].equalsIgnoreCase("username")){
+                playerAction.clear();
+                playerAction.setUsernameReq(string[2]);
+                out.println(string[2]);
+                try {
+                    playerActionInterface.setPlayerAction(playerAction);
+                }catch (IOException io){
+                    io.printStackTrace();
+                    view.connectionError();
+                }
+            }
+            if(string[1].equalsIgnoreCase("pc")){
+                try {
+                    playerAction.setPatternCard(Integer.parseInt(string[2]));
+                }catch (NumberFormatException nfe){
+                    view.invalidMoveError();
+                }
+                try{
+                    playerActionInterface.setPlayerAction(playerAction);
+                }catch (IOException io){
+                    view.connectionError();
+                }
+            }
         }
 
         else if(string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)){

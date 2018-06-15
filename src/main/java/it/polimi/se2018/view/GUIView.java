@@ -69,6 +69,10 @@ public class GUIView extends View {
 
     }
 
+    public void connectionError() {
+
+    }
+
     public void invalidMoveError() {
 
     }

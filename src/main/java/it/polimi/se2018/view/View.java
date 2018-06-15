@@ -51,6 +51,8 @@ public abstract class View extends Observable implements ViewInterface {
 
     public abstract void updateToolCards(ToolCard[] toolCards);
 
+    public abstract void connectionError();
+
     public abstract void invalidMoveError();
 
     public abstract void help();

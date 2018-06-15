@@ -1,9 +1,6 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.Die;
-import it.polimi.se2018.model.Model;
-import it.polimi.se2018.model.PatternCard;
-import it.polimi.se2018.model.PubObjCard;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.network.ClientGatherer;
 import it.polimi.se2018.network.ClientInfo;
 import it.polimi.se2018.utils.Timer;
@@ -105,6 +102,7 @@ public class ServerController {
                         if(lobbyGathering && available) {
                             //add client to lobby as players
                             model.addPlayer(username, clientInfo.getLocalModel());
+                            System.out.println(username + "joined the game");
                             view.addClient(clientInfo.getView());
                             playerActions.add(pa);
                             //clientGatherer.remove(clientInfo);
@@ -275,6 +273,14 @@ public class ServerController {
     }
 
     private void performAction(PlayerAction pa) {
+        if(!lobbyGathering && !model.isStarted()) {
+            Player player = model.getPlayer(playerActions.indexOf(pa));
+            int index = pa.getPatternCard()/2 + 2*playerActions.indexOf(pa);
+            boolean wcFace = (pa.getPatternCard()%2 == 0);
+            PatternCard pc = model.getPatternCards()[index];
+            player.setWinFrame(new WindowFrame(pc,wcFace));
+        }
+        //TODO VERIFY ALL PLAYER CHOSE A PATTERNCARD
         if(pa.getConnectionType() != null) {
             int playerIndex = playerActions.indexOf(pa);
             model.removePlayer(playerIndex);

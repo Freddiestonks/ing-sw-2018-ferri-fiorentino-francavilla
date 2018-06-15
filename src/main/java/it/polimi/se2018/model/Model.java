@@ -458,4 +458,7 @@ public class Model extends Observable {
         notifyObservers();
     }
 
+    public boolean isStarted(){
+        return started;
+    }
 }
