@@ -22,51 +22,43 @@ public class SocketView implements ViewInterface {
     }
     @Override
     public void updateWaitingRoom(boolean starting){}
-    @Override
+
     public void welcomeScreen(){}
-    @Override
+
     public void updateDP(ArrayList<Die> draftPool) {
     }
-    @Override
+
     public void updateRT(ArrayList<ArrayList<Die>> roundTrack, int round) {
     }
 
-    @Override
     public void updateTokens(int tokens) {
 
     }
 
-    @Override
     public void updateRound(int round) {
 
     }
 
-    @Override
     public void updateOrder(boolean backward) {
 
     }
 
-    @Override
     public void updateInfo(int tokens, int round, boolean backward) {
 
     }
 
-    @Override
     public void updatePrivOCs(PrivObjCard privObjCard) {
 
     }
 
-    @Override
     public void updatePubOCs(PubObjCard[] pubObjCards) {
 
     }
 
-    @Override
     public void updateOpponentsWF(Player[] opponents) {
 
     }
 
-    @Override
     public void updatePlayerWF(Player player) {
 
     }
@@ -79,14 +71,12 @@ public class SocketView implements ViewInterface {
     @Override
     public void endGame(Player[] leaderboard,Player player,int[] score){}
 
-    @Override
     public void updateToolCards(ToolCard[] toolCard) {
 
     }
 
     public void invalidMoveError(){}
 
-    @Override
     public void selectionMaker(String[] string) {
 
     }
@@ -98,7 +88,6 @@ public class SocketView implements ViewInterface {
 
     }
 
-    @Override
     public void updatePlayerState(Player player) {
 
     }

@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.utils.Observable;
 
 import java.io.IOException;
@@ -86,6 +87,8 @@ public class Model extends Observable {
         players.add(new Player(username));
         localModels.add(localModel);
         numPlayers++;
+        //TODO: update local models
+        notifyObservers();
     }
 
     /**
@@ -96,6 +99,7 @@ public class Model extends Observable {
     public void removePlayer(int i) {
         // method setConnection used to update the player's status (offline)
         players.get(i).setConnected(false);
+        notifyObservers();
     }
 
     /**
@@ -108,16 +112,15 @@ public class Model extends Observable {
         // method setConnected used to update the player's status (online)
         localModels.set(i, localModel);
         players.get(i).setConnected(true);
+        notifyObservers();
     }
 
     /**
      * This method updates the turn.
-     *
-     * @throws InvalidTurnException
      */
-    public void updateTurn() throws InvalidTurnException{
+    public void updateTurn() {
         if(round == 10 && backward && turn == 1) {
-            throw new InvalidTurnException();
+            calculateScore();
         }
         if(!backward && (turn == numPlayers)) {
             backward = true;
@@ -131,6 +134,14 @@ public class Model extends Observable {
         }
         else {
             turn++;
+        }
+        Player player = players.get(turn - 1);
+        if(player.isSkip()) {
+            player.setSkip(false);
+            updateTurn();
+        }
+        else if(!player.isConnected()) {
+            updateTurn();
         }
     }
 
@@ -178,6 +189,8 @@ public class Model extends Observable {
         for (Die die: this.draftPool){
             die.roll();
         }
+        //TODO: update local models
+        notifyObservers();
     }
 
     /**
@@ -187,6 +200,8 @@ public class Model extends Observable {
      */
     public void addDraftPoolDie(Die die) {
         draftPool.add(die);
+        //TODO: update local models
+        notifyObservers();
     }
 
     /**
@@ -196,7 +211,10 @@ public class Model extends Observable {
      * @return die just removed
      */
     public Die removeDraftPoolDie(int pos) {
-        return draftPool.remove(pos);
+        Die die = draftPool.remove(pos);
+        //TODO: update local models
+        notifyObservers();
+        return die;
     }
 
     /**
@@ -206,6 +224,8 @@ public class Model extends Observable {
      */
     public void removeDraftPoolDie(Die die) {
         draftPool.remove(die);
+        //TODO: update local models
+        notifyObservers();
     }
 
     /**
@@ -236,6 +256,8 @@ public class Model extends Observable {
      */
     public void addRoundTrackDie(Die die, int round) {
         roundTrack.get(round).add(die);
+        //TODO: update local models
+        notifyObservers();
     }
 
     /**
@@ -246,7 +268,10 @@ public class Model extends Observable {
      * @return die just removed
      */
     public Die removeRoundTrackDie(int round, int i) {
-         return roundTrack.get(round).remove(i);
+        Die die = roundTrack.get(round).remove(i);
+        //TODO: update local models
+        notifyObservers();
+        return die;
     }
 
     /**
@@ -273,6 +298,7 @@ public class Model extends Observable {
                 }
             }
         }
+        notifyObservers();
     }
 
     /**
@@ -291,7 +317,7 @@ public class Model extends Observable {
      * @return an integer value representing the number of players.
      */
     public int getNumPlayers() {
-        return numPlayers;
+        return players.size();
     }
 
     public ArrayList<Player> getLeaderboard() {
@@ -326,6 +352,8 @@ public class Model extends Observable {
         localModels.remove(i);
         players.remove(i);
         numPlayers--;
+        //TODO: update local models
+        notifyObservers();
     }
 
     /**
@@ -369,6 +397,8 @@ public class Model extends Observable {
 
     public void setPubOCs(PubObjCard[] pubOCs) {
         this.pubOCs = pubOCs.clone();
+        //TODO: update local models
+        notifyObservers(); //TODO: ??
     }
 
     public PatternCard[] getPatternCards() {
@@ -377,6 +407,8 @@ public class Model extends Observable {
 
     public void setPatternCards(PatternCard[] patCards) {
         this.patCards = patCards.clone();
+        //TODO: update local models
+        notifyObservers();
     }
 
     /**
@@ -405,6 +437,25 @@ public class Model extends Observable {
             Color color = availableColors.remove(num);
             player.setPrivOC(new PrivObjCard(color));
         }
+    }
+
+    public void placeWFDie(int playerIndex, Die die, int row, int col) {
+        //TODO: ?? playerIndex == this.turn
+        Player player = getPlayer(playerIndex);
+        WindowFrame wf = player.getWF();
+        wf.placeDie(die, row, col);
+        updateTurn();
+        //TODO: local models
+        notifyObservers();
+    }
+
+    public void performToolCard(int playerIndex, PlayerAction pa) {
+        //TODO: ?? playerIndex == this.turn
+        ToolCard toolCard = getToolCard(pa.getIdToolCard());
+        WindowFrame windowFrame = getPlayer(playerIndex).getWF();
+        toolCard.performAction(this, windowFrame, pa);
+        //TODO: local models
+        notifyObservers();
     }
 
 }

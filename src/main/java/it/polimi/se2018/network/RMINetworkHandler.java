@@ -26,7 +26,7 @@ public class RMINetworkHandler extends NetworkHandler {
         ViewInterface viewInterface;
         PlayerActionInterface playerActionInterface = null;
         try {
-            clientGatherer = (ClientGathererInterface)Naming.lookup("//" + host + "/Server");
+            clientGatherer = (ClientGathererInterface)Naming.lookup("//" + host + ":" + PORT + "/Server");
             localModelInterface = (LocalModelInterface)UnicastRemoteObject.exportObject(localModel, 0);
             viewInterface = (ViewInterface)UnicastRemoteObject.exportObject(view, 0);
             playerActionInterface = clientGatherer.connectRMI(localModelInterface, viewInterface);

@@ -1,6 +1,9 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.Die;
+import it.polimi.se2018.model.Model;
+import it.polimi.se2018.model.PatternCard;
+import it.polimi.se2018.model.PubObjCard;
 import it.polimi.se2018.network.ClientGatherer;
 import it.polimi.se2018.network.ClientInfo;
 import it.polimi.se2018.utils.Timer;
@@ -200,18 +203,26 @@ public class ServerController {
     }
 
     private boolean validAction(PlayerAction pa) {
-        //TODO: check player turn
+
+        if(pa.getConnectionType() != null) {
+            switch(pa.getConnectionType()) {
+                case "socket":
+                case "rmi":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         if (!(pa.getIdToolCard()>=0 && pa.getIdToolCard()<=12)){
             return false;
         }
 
-        if(!pa.getNewDieValue().isEmpty()){
-            if(!(pa.getNewDieValue().get(0) >= 1 && pa.getNewDieValue().get(0) <= 6)){
+        for(int dieFace : pa.getNewDieValue()){
+            if(!(dieFace >= 1 && dieFace <= 6)){
                 return false;
             }
         }
-        else return false;
-
 
         //Checking for the position in the Draft Pool
         for(int value : pa.getPosDPDie()){
@@ -220,22 +231,15 @@ public class ServerController {
             }
         }
 
-        /*if (pa.getPosDPDie().get(0) >= 0 && model.getDraftPoolDie(pa.getPosDPDie().get(0)) != null) {
-            if (pa.getPosDPDie().get(1) >= 0 && model.getDraftPoolDie(pa.getPosDPDie().get(1)) == null) {
-                return false;
-            }
-        }
-        else return false;*/
-
-        if(!pa.getPosRTDie().isEmpty()) {
-            if (pa.getPosRTDie().get(0)[0] >= 0 && pa.getPosRTDie().get(0)[0] < model.getRound()
-                    && pa.getPosRTDie().get(0)[1] >= 0 && pa.getPosRTDie().get(0)[1] < model.getNumRTDiceRound(pa.getPosRTDie().get(0)[0])) {
-                if (model.getRoundTrackDie(pa.getPosRTDie().get(0)[0], pa.getPosRTDie().get(0)[1]) != null) {
+        for(int[] posRT : pa.getPosRTDie()){
+            if(posRT[0] >=0 && posRT[0] < model.getRound()
+                    && posRT[1] >=0 && posRT[1] < model.getNumRTDiceRound(posRT[0])){
+                if(model.getRoundTrackDie(posRT[0],posRT[1]) != null){
                     return false;
                 }
-            } else return false;
+            }
+            else return false;
         }
-
 
         //verify if the places in the WF are empty.
         for(int[] array: pa.getPlaceDPDie()){
@@ -244,29 +248,12 @@ public class ServerController {
             }
         }
 
-        /*if (rangeCheck(pa.getPlaceDPDie().get(0))
-                && nullCheck(pa,pa.getPlaceDPDie().get(0))) {
-            if (rangeCheck(pa.getPlaceDPDie().get(1))
-                    && !nullCheck(pa,pa.getPlaceDPDie().get(1))) {
-                return false;
-            }
-        }
-        else return false;*/
-
         //control if a designed position to be deleted is full.
         for(int[] array: pa.getPlaceWFDie()){
             if(!rangeCheck(array)){
                 return false;
             }
         }
-        /*if (rangeCheck(pa.getPlaceWFDie().get(0))
-                && !nullCheck(pa,pa.getPlaceWFDie().get(0))) {
-            if (rangeCheck(pa.getPlaceWFDie().get(1))
-                    && nullCheck(pa,pa.getPlaceWFDie().get(1))) {
-                return false;
-            }
-        }
-        else return false;*/
 
         //Afterward the verification of the future placement, this code portion verifies if parameters are legal.
         for(int[] array: pa.getPlaceNewWFDie()){
@@ -274,11 +261,6 @@ public class ServerController {
                 return false;
             }
         }
-
-        /*if (!(rangeCheck(pa.getPlaceNewWFDie().get(0))
-                && rangeCheck(pa.getPlaceNewWFDie().get(1)))) {
-            return false;
-        }*/
 
         if ((pa.getIdToolCard() > 0)
                 && model.getToolCard(pa.getIdToolCard()).validAction(model, model.getPlayer(playerActions.indexOf(pa)).getWF(), pa)){
@@ -292,14 +274,39 @@ public class ServerController {
             else return false;
     }
 
-    private void performAction(PlayerAction pa){
+    private void performAction(PlayerAction pa) {
+        if(pa.getConnectionType() != null) {
+            int playerIndex = playerActions.indexOf(pa);
+            model.removePlayer(playerIndex);
+        }
         if(pa.getIdToolCard() == 0) {
             // regular turn without choosing a tool card
+            Die die = model.removeDraftPoolDie(pa.getPosDPDie().get(0));
+            int[] place = pa.getPlaceDPDie().get(0);
+            int playerIndex = playerActions.indexOf(pa);
+            model.placeWFDie(playerIndex, die, place[0], place[1]);
         }
         else {
-            ToolCard toolCard = model.getToolCard(pa.getIdToolCard());
-            WindowFrame windowFrame = model.getPlayer(playerActions.indexOf(pa)).getWF();
-            toolCard.performAction(model, windowFrame, pa);
+            int playerIndex = playerActions.indexOf(pa);
+            model.performToolCard(playerIndex, pa);
+        }
+    }
+
+    public static void main(String[] args) {
+        Model model = Model.instance();
+        VirtualView virtualView = new VirtualView();
+        ServerController serverController = new ServerController(model, virtualView);
+        model.addObserver(virtualView);
+        try {
+            serverController.gatherPlayers();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        serverController.gameSetup();
+        try {
+            serverController.listenPlayerActions();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

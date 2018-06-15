@@ -1,9 +1,13 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.model.Model;
+import it.polimi.se2018.utils.Observer;
+
 import java.util.ArrayList;
 
-public class VirtualView {
+public class VirtualView implements Observer {
     ArrayList<ViewInterface> views = new ArrayList<>();
+    Model model = Model.instance();
 
     public VirtualView() {
 
@@ -23,6 +27,10 @@ public class VirtualView {
 
     public ViewInterface getView(int i) {
         return views.get(i);
+    }
+
+    public void update() {
+        //TODO: update views from model
     }
 
     public boolean checkConnection(int i) {

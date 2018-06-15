@@ -1,13 +1,17 @@
 package it.polimi.se2018.controller;
 
+import it.polimi.se2018.model.LocalModel;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.network.NetworkHandler;
+import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.view.CLIView;
+import it.polimi.se2018.view.GUIView;
 import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.View;
-import it.polimi.se2018.model.LocalModel;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.Scanner;
+
+import static java.lang.System.out;
 
 public class ClientController implements Observer {
     //attributes
@@ -174,9 +178,35 @@ public class ClientController implements Observer {
         this.view = view;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
+    public void update() {
         String userInput = view.getUserInput();
         parser(userInput);
+    }
+
+    public static void main(String[] args) {
+        View view = null;
+        Scanner user_input = new Scanner(System.in);
+        boolean correct = false;
+        out.println("Welcome to Sagrada\nHow would you like to play? (CLI/GUI)");
+        while (!correct){
+            String input = user_input.next().toLowerCase();
+            switch (input) {
+                case "cli":
+                    view = new CLIView();
+                    correct = true;
+                    break;
+                case "gui":
+                    view = new GUIView();
+                    correct = true;
+                    break;
+                default:
+                    out.println("Please insert a valid command (GUI or CLI)");
+                    break;
+            }
+        }
+        LocalModel localModel = new LocalModel();
+        ClientController clientController = new ClientController(localModel, view);
+        view.addObserver(clientController);
+        view.startView();
     }
 }

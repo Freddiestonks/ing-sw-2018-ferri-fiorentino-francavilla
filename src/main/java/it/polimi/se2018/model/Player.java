@@ -18,6 +18,7 @@ public class Player {
     private PrivObjCard privObjCard;
     private int score = 0;
     private boolean connected = true;
+    private boolean skip = false;
 
     //Methods
 
@@ -112,6 +113,14 @@ public class Player {
 
     public WindowFrame getWF(){
         return this.wf;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
+
+    public boolean isSkip() {
+        return skip;
     }
 }
 

@@ -5,8 +5,8 @@ import it.polimi.se2018.model.*;
 
 public class ToolCard4 extends ToolCard {
 
-    public ToolCard4(String username, String description, int price, int tokens) {
-        super(username,description,price,tokens);
+    public ToolCard4(String name, String description, int price, int tokens) {
+        super(name,description,price,tokens);
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {

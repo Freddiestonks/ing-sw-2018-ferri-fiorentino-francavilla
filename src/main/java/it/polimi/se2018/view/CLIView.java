@@ -351,6 +351,10 @@ public class CLIView extends View {
         out.println();
     }
 
+    public void startView() {
+        readInput();
+    }
+
     private void layoutFormatter(String[] string,int numCards) {
         int[] size = new int[numCards];
         int big = 0;
