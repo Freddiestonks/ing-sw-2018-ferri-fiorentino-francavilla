@@ -4,9 +4,12 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.network.ClientGatherer;
 import it.polimi.se2018.network.ClientInfo;
 import it.polimi.se2018.utils.Timer;
+import it.polimi.se2018.view.ViewInterface;
 import it.polimi.se2018.view.VirtualView;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -66,13 +69,17 @@ public class ServerController {
         synchronized (lock) {
             Timer lobbyTimer = new Timer(10, lock);
             do {
+                System.out.println("1 WAIT");
                 while(lobbyGathering
                         && emptyPreLobby()
                         && !lobbyTimer.isTimeout()) {
                     lock.wait();
                 }
+                System.out.println("2 WAIT");
                 // check if other players are still connected by clientinfo
+                System.out.println("check +");
                 checkConnections();
+                System.out.println("check -");
                 if(lobbyTimer.isTimeout()) {
                     if(model.getNumPlayers() >= 2) {
                         lobbyGathering = false;
@@ -101,6 +108,7 @@ public class ServerController {
                         }
                         if(lobbyGathering && available) {
                             //add client to lobby as players
+                            System.out.println("PLAYER");
                             model.addPlayer(username, clientInfo.getLocalModel());
                             System.out.println(username + "joined the game");
                             view.addClient(clientInfo.getView());
@@ -116,16 +124,20 @@ public class ServerController {
                             }
                         }
                         else if(!available && !model.getPlayer(i).isConnected()) {
+                            System.out.println("REINSERTED");
                             model.reinsertPlayer(i, clientInfo.getLocalModel());
                             view.reinsertClient(i, clientInfo.getView());
                             playerActions.set(i, pa);
                             iterator.remove();
                         }
+                        System.out.println("+");
                         pa.clear();
+                        System.out.println("-");
                     }
                 }
             } while(lobbyGathering);
         }
+        System.out.println("END LOBBY");
     }
 
     private void checkConnections() {
@@ -142,6 +154,9 @@ public class ServerController {
                     model.removePlayer(i);
                     i++;
                 }
+            }
+            else {
+                i++;
             }
         }
     }
@@ -160,8 +175,8 @@ public class ServerController {
         int numPlayer = model.getNumPlayers();
         PatternCard[] patternCards = new PatternCard[numPlayer * 2];
         PubObjCard[] pubObjCards = new PubObjCard[3];
-        int numPCs = 12;
-        int numPubOcs = 10; // TODO: ?? from file
+        int numPCs = 8;
+        int numPubOcs = 8; // TODO: ?? from file
         ArrayList<Integer> pcIds = new ArrayList<>();
         ArrayList<Integer> pubOCIds = new ArrayList<>();
         for(int i = 0; i < numPCs; i++) {
@@ -175,6 +190,7 @@ public class ServerController {
         for(int i = 0; i < 4; i++) {
             int num = random.nextInt(pcIds.size());
             int id = pcIds.remove(num);
+            System.out.println("PC:"+ id);
             patternCards[i] = resourceLoader.loadPC(id);
         }
         for(int i = 0; i < 3; i++) {
@@ -184,6 +200,20 @@ public class ServerController {
         }
         model.setPatternCards(patternCards);
         model.setPubOCs(pubObjCards);
+    }
+
+    private void patternCardsSelection() {
+        ArrayList<PatternCard> patternCards = new ArrayList<>(Arrays.asList(model.getPatternCards()));
+        for(int i = 0; i < model.getNumPlayers(); i++) {
+            ViewInterface playerView = view.getView(i);
+            int offset = 2 * i;
+            ArrayList<PatternCard> playerPCs = new ArrayList<>(patternCards.subList(offset, offset + 2));
+            try {
+                playerView.patternCardGenerator(playerPCs);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private boolean rangeCheck(int[] array){
@@ -264,12 +294,14 @@ public class ServerController {
                 && model.getToolCard(pa.getIdToolCard()).validAction(model, model.getPlayer(playerActions.indexOf(pa)).getWF(), pa)){
             return true;
         }
-        else
+        else if(!pa.getPosDPDie().isEmpty()) {
             if(pa.getPosDPDie().get(0) >= 0){
                 return (rangeCheck(pa.getPlaceDPDie().get(0))
                         && model.getPlayer(playerActions.indexOf(pa)).getWF().checkRestrictions(model.getDraftPoolDie(pa.getPosDPDie().get(0)),pa.getPlaceDPDie().get(0)[0],pa.getPlaceDPDie().get(0)[1]));
             }
             else return false;
+        }
+        return true;
     }
 
     private void performAction(PlayerAction pa) {
@@ -285,16 +317,18 @@ public class ServerController {
             int playerIndex = playerActions.indexOf(pa);
             model.removePlayer(playerIndex);
         }
-        if(pa.getIdToolCard() == 0) {
-            // regular turn without choosing a tool card
-            Die die = model.removeDraftPoolDie(pa.getPosDPDie().get(0));
-            int[] place = pa.getPlaceDPDie().get(0);
-            int playerIndex = playerActions.indexOf(pa);
-            model.placeWFDie(playerIndex, die, place[0], place[1]);
-        }
-        else {
-            int playerIndex = playerActions.indexOf(pa);
-            model.performToolCard(playerIndex, pa);
+        if(model.isStarted()) {
+            if((pa.getIdToolCard() == 0)) {
+                // regular turn without choosing a tool card
+                Die die = model.removeDraftPoolDie(pa.getPosDPDie().get(0));
+                int[] place = pa.getPlaceDPDie().get(0);
+                int playerIndex = playerActions.indexOf(pa);
+                model.placeWFDie(playerIndex, die, place[0], place[1]);
+            }
+            else {
+                int playerIndex = playerActions.indexOf(pa);
+                model.performToolCard(playerIndex, pa);
+            }
         }
     }
 
@@ -309,6 +343,7 @@ public class ServerController {
             e.printStackTrace();
         }
         serverController.gameSetup();
+        serverController.patternCardsSelection();
         try {
             serverController.listenPlayerActions();
         } catch (InterruptedException e) {

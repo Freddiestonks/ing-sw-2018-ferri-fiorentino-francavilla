@@ -1,6 +1,8 @@
 package it.polimi.se2018.model;
 
-public class Cell {
+import java.io.Serializable;
+
+public class Cell implements Serializable {
     //Methods
 
     public boolean placeableShade(Die die) {

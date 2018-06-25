@@ -130,4 +130,5 @@ public class TestCLIView {
         patternCard.add(resourceLoader.loadPC(1));
         cliView.patternCardGenerator(patternCard);
     }
+
 }

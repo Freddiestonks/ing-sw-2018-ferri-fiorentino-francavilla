@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * It's a class that represents the board inserted into the WindowFrame.
  * A single Pattern-Card has two different faces and conventionally are named 'front' and 'back' sides.
@@ -9,7 +11,7 @@ package it.polimi.se2018.model;
  * @author Simone Francavilla
  *
  */
-public class PatternCard {
+public class PatternCard implements Serializable {
     //Attributes
     private Cell[][] front;
     private Cell[][] back;

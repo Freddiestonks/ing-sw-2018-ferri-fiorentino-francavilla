@@ -17,10 +17,10 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
     private ArrayList<int[]> placeNewWFDie = new ArrayList<>();
     private int idToolCard = 0;
 
-    public void PlayerAction() {
+    public PlayerAction() {
     }
 
-    public void PlayerAction(Object lock) {
+    public PlayerAction(Object lock) {
         this.lock = lock;
     }
 

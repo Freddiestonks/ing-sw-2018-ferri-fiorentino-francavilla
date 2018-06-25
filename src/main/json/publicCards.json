@@ -45,7 +45,7 @@
   {
     "type" : "shade",
     "subtype" : "set",
-    "name" : "Dark Shades",
+    "name" : "Deep Shades",
     "description" : "Sets of 5's & 6's anywhere on your board",
     "multiplier" : 2,
     "values" : [false,false,false,false,true,true]
@@ -53,7 +53,7 @@
   {
     "type" : "shade",
     "subtype" : "set",
-    "name" : "Different Shades",
+    "name" : "Shade Variety",
     "description" : "Sets of each value anywhere on your board",
     "multiplier" : 5,
     "values" : [true,true,true,true,true,true]
@@ -69,7 +69,7 @@
     "type" : "color",
     "subtype" : "set",
     "multiplier" : 4,
-    "name" : "Rainbow",
+    "name" : "Color Variety",
     "description" : "Sets of dice with different colors anywhere on your board",
     "values" : [true,true,true,true,true]
     }]
