@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * This class identifies the player instantiation. It's completely controlled by the 'Model' class in which
  * is instantiated, depending on the number of player who access to a single match.
@@ -10,15 +12,15 @@ package it.polimi.se2018.model;
  */
 
 
-public class Player {
+public class Player implements Serializable {
     //Attr.
     private String username;
     private WindowFrame wf = null;
     private int tokens;
-    private PrivObjCard privObjCard;
-    private int score = 0;
+    private transient PrivObjCard privObjCard;
+    private transient int score = 0;
     private boolean connected = true;
-    private boolean skip = false;
+    private transient boolean skip = false;
 
     //Methods
 
@@ -58,7 +60,6 @@ public class Player {
      * @throws IllegalArgumentException
      */
     public void spendTokens(int tokens) throws IllegalArgumentException{
-
         if(this.tokens >= tokens && tokens >= 0){
             this.tokens -= tokens;
         }
@@ -107,11 +108,11 @@ public class Player {
         return username;
     }
 
-    public Die getWFPosition(int row, int col){
+    public Die getWinFrameDie(int row, int col){
         return this.wf.getDie(row,col);
     }
 
-    public WindowFrame getWF(){
+    public WindowFrame getWindowFrame(){
         return this.wf;
     }
 
@@ -121,6 +122,10 @@ public class Player {
 
     public boolean isSkip() {
         return skip;
+    }
+
+    public boolean hasChosenPC() {
+        return (wf != null);
     }
 }
 

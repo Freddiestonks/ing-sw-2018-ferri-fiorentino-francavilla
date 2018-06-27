@@ -20,8 +20,8 @@ public class Model extends Observable {
     //Attributes
     private static final Model instance = new Model();
     private ArrayList<LocalModelInterface> localModels = new ArrayList<>();
-    private int idMatch;
-    private boolean started;
+    private boolean lobbyGathering = true;
+    private boolean started = false;
     private ArrayList<Player> players = new ArrayList<>();
     private int round = 1;
     private int turn = 1;
@@ -31,14 +31,14 @@ public class Model extends Observable {
     private ArrayList<Die> draftPool = new ArrayList<>();
     private ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
     private PubObjCard[] pubOCs = new PubObjCard[3];
-    private PrivObjCard[] privOCs = new PrivObjCard[5];
-    private ToolCard[] toolCards = new ToolCard[12];
-    private PatternCard[] patCards = new PatternCard[12];
-    private ArrayList<Player> leaderboard = new ArrayList<>();
-    private final int numPubOCs = 10;
+    //private PrivObjCard[] privOCs = new PrivObjCard[5];
+    private ToolCard[] toolCards = new ToolCard[3];
+    private boolean toolCardUsed = false;
+    private PatternCard[] patCards = null;
+    private ArrayList<Player> leaderBoard = new ArrayList<>();
     //Methods
     /**
-     * This is the constructor method for the model, it will generate the whole roundTrack and all of the Public Cards
+     * This is the constructor method for the model, it will initialize the whole roundTrack
      * */
     private Model() {
         for(int i = 0; i < 10; i++) {
@@ -80,14 +80,13 @@ public class Model extends Observable {
      * @param localModel is the reference to the LocalModel class.
      * @throws MaxNumPlayersException
      */
-    public void addPlayer(String username, LocalModelInterface localModel) throws MaxNumPlayersException{
+    public void addPlayer(String username, LocalModelInterface localModel) {
         if(numPlayers >= 4) {
             throw new MaxNumPlayersException();
         }
         players.add(new Player(username));
         localModels.add(localModel);
         numPlayers++;
-        //TODO: update local models
         notifyObservers();
     }
 
@@ -121,13 +120,14 @@ public class Model extends Observable {
     public void updateTurn() {
         if(round == 10 && backward && turn == 1) {
             calculateScore();
+            return;
         }
         if(!backward && (turn == numPlayers)) {
             backward = true;
         }
         else if(backward && (turn == 1)) {
+            rollDraftPool();
             backward = false;
-            round++;
         }
         else if(backward) {
             turn--;
@@ -135,14 +135,26 @@ public class Model extends Observable {
         else {
             turn++;
         }
+        ToolCard.resetPendingAction();
+        toolCardUsed = false;
         Player player = players.get(turn - 1);
         if(player.isSkip()) {
             player.setSkip(false);
             updateTurn();
+            return;
         }
         else if(!player.isConnected()) {
             updateTurn();
+            return;
         }
+        for(LocalModelInterface localModel : localModels) {
+            try {
+                localModel.updateTurn(round, turn, backward);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        notifyObservers();
     }
 
     /**
@@ -183,14 +195,23 @@ public class Model extends Observable {
     }
 
     /**
-     * This method is used to rool every die into the DraftPool.
+     * This method is used to roll the dice from the DiceBag into the DraftPool.
      */
-    public void rollDraftPool(){
-        for (Die die: this.draftPool){
-            die.roll();
+    private void rollDraftPool() {
+        while(!draftPool.isEmpty()) {
+            roundTrack.get(round - 1).add(draftPool.remove(0));
         }
-        //TODO: update local models
-        notifyObservers();
+        for(int i = 0; i < 2 * numPlayers + 1; i++) {
+            draftPool.add(diceBag.extract());
+        }
+        for(LocalModelInterface localModel : localModels) {
+            try {
+                localModel.setDraftPool(draftPool);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //notifyObservers();
     }
 
     /**
@@ -200,8 +221,14 @@ public class Model extends Observable {
      */
     public void addDraftPoolDie(Die die) {
         draftPool.add(die);
-        //TODO: update local models
-        notifyObservers();
+        for(LocalModelInterface localModel : localModels) {
+            try {
+                localModel.setDraftPool(draftPool);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //notifyObservers();
     }
 
     /**
@@ -212,8 +239,14 @@ public class Model extends Observable {
      */
     public Die removeDraftPoolDie(int pos) {
         Die die = draftPool.remove(pos);
-        //TODO: update local models
-        notifyObservers();
+        for(LocalModelInterface localModel : localModels) {
+            try {
+                localModel.setDraftPool(draftPool);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //notifyObservers();
         return die;
     }
 
@@ -224,8 +257,18 @@ public class Model extends Observable {
      */
     public void removeDraftPoolDie(Die die) {
         draftPool.remove(die);
-        //TODO: update local models
-        notifyObservers();
+        for(LocalModelInterface localModel : localModels) {
+            try {
+                localModel.setDraftPool(draftPool);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //notifyObservers();
+    }
+
+    public int getDraftPoolSize() {
+        return draftPool.size();
     }
 
     /**
@@ -236,16 +279,7 @@ public class Model extends Observable {
      * @return a Die reference to the die wanted.
      */
     public Die getRoundTrackDie(int round, int i) {
-        return roundTrack.get(round).get(i);
-    }
-
-    /**
-     * This method provides the number of dice inserted in a Round-Track's round.
-     * @param round is a round value.
-     * @return the number of dice in the Round-Track relatively to the specific round.
-     */
-    public int getNumRTDiceRound(int round){
-        return roundTrack.get(round).size();
+        return roundTrack.get(round - 1).get(i);
     }
 
     /**
@@ -255,9 +289,15 @@ public class Model extends Observable {
      * @param round is the round in which is used and so the column of the matrix representing the RoundTrack.
      */
     public void addRoundTrackDie(Die die, int round) {
-        roundTrack.get(round).add(die);
-        //TODO: update local models
-        notifyObservers();
+        roundTrack.get(round - 1).add(die);
+        for(LocalModelInterface localModel : localModels) {
+            try {
+                localModel.setRoundTrack(roundTrack);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //notifyObservers();
     }
 
     /**
@@ -268,10 +308,25 @@ public class Model extends Observable {
      * @return die just removed
      */
     public Die removeRoundTrackDie(int round, int i) {
-        Die die = roundTrack.get(round).remove(i);
-        //TODO: update local models
-        notifyObservers();
+        Die die = roundTrack.get(round - 1).remove(i);
+        for(LocalModelInterface localModel : localModels) {
+            try {
+                localModel.setRoundTrack(roundTrack);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //notifyObservers();
         return die;
+    }
+
+    /**
+     * This method provides the number of dice inserted in a Round-Track's round.
+     * @param round is a round value.
+     * @return the number of dice in the Round-Track relatively to the specific round.
+     */
+    public int getRoundTrackSize(int round) {
+        return roundTrack.get(round - 1).size();
     }
 
     /**
@@ -284,17 +339,17 @@ public class Model extends Observable {
     }
     /**
      * This is the method used to calculate the overall score of the game, it will order the players by score in an
-     * attribute called "leaderboard"
+     * attribute called "leaderBoard"
      * */
     public void calculateScore(){
-        leaderboard = players;
+        leaderBoard = players;
         for (int i = 1; i<numPlayers;i++){
             for (int j=0; j < i;j++){
-                if(leaderboard.get(i).calculateScore(pubOCs) > leaderboard.get(j).calculateScore(pubOCs)){
+                if(leaderBoard.get(i).calculateScore(pubOCs) > leaderBoard.get(j).calculateScore(pubOCs)){
                     Player tempPlayer;
-                    tempPlayer = leaderboard.get(j);
-                    leaderboard.set(j,leaderboard.get(i));
-                    leaderboard.set(i,tempPlayer);
+                    tempPlayer = leaderBoard.get(j);
+                    leaderBoard.set(j, leaderBoard.get(i));
+                    leaderBoard.set(i,tempPlayer);
                 }
             }
         }
@@ -320,8 +375,8 @@ public class Model extends Observable {
         return players.size();
     }
 
-    public ArrayList<Player> getLeaderboard() {
-        return leaderboard;
+    public ArrayList<Player> getLeaderBoard() {
+        return leaderBoard;
     }
 
     /**
@@ -352,7 +407,6 @@ public class Model extends Observable {
         localModels.remove(i);
         players.remove(i);
         numPlayers--;
-        //TODO: update local models
         notifyObservers();
     }
 
@@ -372,6 +426,7 @@ public class Model extends Observable {
         turn = 1;
         backward = false;
         numPlayers = 0;
+        ToolCard.resetPendingAction();
         //TODO: reset other game elements
     }
 
@@ -397,8 +452,6 @@ public class Model extends Observable {
 
     public void setPubOCs(PubObjCard[] pubOCs) {
         this.pubOCs = pubOCs.clone();
-        //TODO: update local models
-        notifyObservers(); //TODO: ??
     }
 
     public PatternCard[] getPatternCards() {
@@ -407,8 +460,16 @@ public class Model extends Observable {
 
     public void setPatternCards(PatternCard[] patCards) {
         this.patCards = patCards.clone();
-        //TODO: update local models
         notifyObservers();
+    }
+
+    /**
+     * This method provides a reference to the players.
+     *
+     * @return an Arraylist reference of the players.
+     */
+    public ArrayList<Player> getPlayers() {
+        return new ArrayList<>(players);
     }
 
     /**
@@ -417,16 +478,20 @@ public class Model extends Observable {
      * @return an Arraylist reference of the DraftPool.
      */
     public ArrayList<Die> getDraftPool() {
-        return draftPool;
+        return new ArrayList<>(draftPool);
     }
 
     /**
-     * This method provides a reference to the set of players.
+     * This method provides a reference to the RoundTrack.
      *
-     * @return an Arraylist reference representing the list of players.
+     * @return an Arraylist reference of the RoundTrack.
      */
-    public ArrayList<Player> getPlayers() {
-        return players;
+    public ArrayList<ArrayList<Die>> getRoundTrack() {
+        ArrayList<ArrayList<Die>> rt = new ArrayList<>();
+        for(int i = 0; i < 10; i++) {
+            rt.add(new ArrayList<>(roundTrack.get(i)));
+        }
+        return rt;
     }
 
     public void playersSetup() {
@@ -439,22 +504,66 @@ public class Model extends Observable {
         }
     }
 
+    public boolean isLobbyGathering() {
+        return lobbyGathering;
+    }
+
+    public void setLobbyGathering(boolean lobbyGathering) {
+        this.lobbyGathering = lobbyGathering;
+    }
+
     public void placeWFDie(int playerIndex, Die die, int row, int col) {
         //TODO: ?? playerIndex == this.turn
         Player player = getPlayer(playerIndex);
-        WindowFrame wf = player.getWF();
-        wf.placeDie(die, row, col);
+        WindowFrame windowFrame = player.getWindowFrame();
+        windowFrame.placeDie(die, row, col);
         updateTurn();
-        //TODO: local models
+        try {
+            localModels.get(playerIndex).setWindowFrame(windowFrame);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         notifyObservers();
     }
 
     public void performToolCard(int playerIndex, PlayerAction pa) {
         //TODO: ?? playerIndex == this.turn
         ToolCard toolCard = getToolCard(pa.getIdToolCard());
-        WindowFrame windowFrame = getPlayer(playerIndex).getWF();
+        WindowFrame windowFrame = getPlayer(playerIndex).getWindowFrame();
         toolCard.performAction(this, windowFrame, pa);
-        //TODO: local models
+        toolCardUsed = true;
+        try {
+            localModels.get(playerIndex).setWindowFrame(windowFrame);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        notifyObservers();
+    }
+
+    public boolean isToolCardUsed() {
+        return toolCardUsed;
+    }
+
+    public void startMatch() {
+        started = true;
+        rollDraftPool();
+        int playerIndex = 0;
+        for(LocalModelInterface localModel : localModels) {
+            WindowFrame windowFrame = players.get(playerIndex).getWindowFrame();
+            try {
+                localModel.setWindowFrame(windowFrame);
+                localModel.updateTurn(round, turn, backward);
+                localModel.setDraftPool(draftPool);
+                localModel.setRoundTrack(roundTrack);
+                localModel.setPubOCs(pubOCs);
+                localModel.setToolCards(toolCards);
+                localModel.setToolCardUsed(toolCardUsed);
+                localModel.setState(started, lobbyGathering);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            playerIndex++;
+        }
         notifyObservers();
     }
 

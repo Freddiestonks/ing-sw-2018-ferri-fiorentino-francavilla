@@ -7,70 +7,70 @@
     "multiplier" : 6
   },
     {
-    "type" : "color",
-    "subtype" : "col",
-    "name" : "Different Colors - Columns",
-    "description" : "Columns with no repetition of color",
-    "multiplier" : 5
-  },{
-    "type" : "shade",
-    "subtype" : "row",
-    "name" : "Different Shades - Rows",
-    "description" : "Rows whose dice value don't repeat",
-    "multiplier" : 5
-  },
-  {
-    "type" : "shade",
-    "subtype" : "col",
-    "name" : "Different Shades - Column",
-    "description" : "Columns whose dice value don't repeat",
-    "multiplier" : 4
-  },
-  {
-    "type" : "shade",
-    "subtype" : "set",
-    "name" : "Light Shades",
-    "description" : "Sets of 1's & 2's anywhere on your board",
-    "multiplier" : 2,
-    "values" : [true,true,false,false,false,false]
-  },
-  {
-    "type" : "shade",
-    "subtype" : "set",
-    "name" : "Medium Shades",
-    "description" : "Sets of 3's & 4's anywhere on your board",
-    "multiplier" : 2,
-    "values" : [false,false,true,true,false,false]
-  },
-  {
-    "type" : "shade",
-    "subtype" : "set",
-    "name" : "Deep Shades",
-    "description" : "Sets of 5's & 6's anywhere on your board",
-    "multiplier" : 2,
-    "values" : [false,false,false,false,true,true]
-  },
-  {
-    "type" : "shade",
-    "subtype" : "set",
-    "name" : "Shade Variety",
-    "description" : "Sets of each value anywhere on your board",
-    "multiplier" : 5,
-    "values" : [true,true,true,true,true,true]
-  },
-   {
-    "type" : "color",
-    "subtype" : "diagonals",
-     "name" : "Colored Diagonals",
-     "description" : "Number of dice with the same color diagonally attached",
-    "multiplier" : 1
-   },
+      "type" : "color",
+      "subtype" : "col",
+      "name" : "Different Colors - Columns",
+      "description" : "Columns with no repetition of color",
+      "multiplier" : 5
+    },{
+      "type" : "shade",
+      "subtype" : "row",
+      "name" : "Different Shades - Rows",
+      "description" : "Rows whose dice value don't repeat",
+      "multiplier" : 5
+    },
     {
-    "type" : "color",
-    "subtype" : "set",
-    "multiplier" : 4,
-    "name" : "Color Variety",
-    "description" : "Sets of dice with different colors anywhere on your board",
-    "values" : [true,true,true,true,true]
+      "type" : "shade",
+      "subtype" : "col",
+      "name" : "Different Shades - Column",
+      "description" : "Columns whose dice value don't repeat",
+      "multiplier" : 4
+    },
+    {
+      "type" : "shade",
+      "subtype" : "set",
+      "name" : "Light Shades",
+      "description" : "Sets of 1's & 2's anywhere on your board",
+      "multiplier" : 2,
+      "values" : [true,true,false,false,false,false]
+    },
+    {
+      "type" : "shade",
+      "subtype" : "set",
+      "name" : "Medium Shades",
+      "description" : "Sets of 3's & 4's anywhere on your board",
+      "multiplier" : 2,
+      "values" : [false,false,true,true,false,false]
+    },
+    {
+      "type" : "shade",
+      "subtype" : "set",
+      "name" : "Deep Shades",
+      "description" : "Sets of 5's & 6's anywhere on your board",
+      "multiplier" : 2,
+      "values" : [false,false,false,false,true,true]
+    },
+    {
+      "type" : "shade",
+      "subtype" : "set",
+      "name" : "Shade Variety",
+      "description" : "Sets of each value anywhere on your board",
+      "multiplier" : 5,
+      "values" : [true,true,true,true,true,true]
+    },
+    {
+      "type" : "color",
+      "subtype" : "diagonals",
+      "name" : "Colored Diagonals",
+      "description" : "Number of dice with the same color diagonally attached",
+      "multiplier" : 1
+    },
+    {
+      "type" : "color",
+      "subtype" : "set",
+      "multiplier" : 4,
+      "name" : "Color Variety",
+      "description" : "Sets of dice with different colors anywhere on your board",
+      "values" : [true,true,true,true,true]
     }]
 }

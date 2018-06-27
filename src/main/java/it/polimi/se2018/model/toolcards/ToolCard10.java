@@ -17,6 +17,9 @@ public class ToolCard10 extends ToolCard {
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
+        if(pa.getPosDPDie().isEmpty() || pa.getPlaceDPDie().isEmpty()) {
+            return false;
+        }
         // create a copy of the die
         Die die = new Die(model.getDraftPoolDie(pa.getPosDPDie().get(0)));
         die.setValue(7 - die.getValue());

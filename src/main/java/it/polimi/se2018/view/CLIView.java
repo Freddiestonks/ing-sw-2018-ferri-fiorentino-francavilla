@@ -1,6 +1,5 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.model.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -24,64 +23,71 @@ public class CLIView extends View {
     private static final int PATTERN_CARD_SIZE = 25;
     private static final String PUBLIC_OBJ_STRING = "Public Objective";
     private static final String SPACE = "        ";
+    private static final String CURSOR = ">>";
 
-    //TODO: synchronized methods (between user and network)
     public CLIView() {
     }
 
     public void readInput(){
         boolean active = true;
         while (active){
-        userInput = scanner.nextLine().toLowerCase();
-        notifyObservers();
+            out.print(CURSOR);
+            userInput = scanner.nextLine().toLowerCase();
+            notifyObservers();
         }
     }
 
-    @Override
-    public void updateWaitingRoom(boolean starting){
+
+    public synchronized void updateWaitingRoom(boolean starting){
         if(starting){
-            out.println("The game is about to start,Good Luck");
+            out.println("The game is about to start, Good Luck");
         }
         else{
             out.println("Please wait while some other players join in");
         }
     }
 
-    public void welcomeScreen() {
+    public synchronized void welcomeScreen() {
     }
 
-    @Override
-    public void updateDP(ArrayList<Die> draftPool) {
+
+    public synchronized void updateDP(ArrayList<Die> draftPool) {
         out.println("DraftPool:");
         for (int i = 0; i<draftPool.size();i++){
             out.println(i + " : " + draftPool.get(i));
         }
     }
-    @Override
-    public void updateTokens(int tokens){
+
+    public synchronized void updateTokens(int tokens){
         out.println("You currently have " + tokens + " tokens");
     }
-    @Override
-    public void updateRound(int round){
-        out.println("Round: " + (round+1));
+
+    public synchronized void updateRound(int round){
+        out.println("Round: " + round);
     }
-    @Override
-    public void updateOrder(boolean backward){
+
+    public synchronized void updateOrder(boolean backward) {
         if (backward){
-            out.println("You are in the first turn of this round");
+            out.println("You are in the backward order of this round");
         }
         else {
-            out.println("You are in the second turn of the round");
+            out.println("You are in the afterward order of the round");
         }
     }
-    @Override
-    public void updateInfo(int tokens, int round, boolean backward){
+
+    public synchronized void updateTurnPlayer(String turnPlayer) {
+        out.println("It is " + turnPlayer + "'s turn");
+    }
+
+    public synchronized void updateInfo(int tokens, int round, boolean backward, String turnPlayer) {
         updateTokens(tokens);
         updateRound(round);
         updateOrder(backward);
+        updateTurnPlayer(turnPlayer);
     }
     @Override
-    public void updatePrivOCs(PrivObjCard privObjCard){
+    public synchronized void updatePrivOCs(PrivObjCard privObjCard){
+        clearScreen();
         String[] string = new String[PRIV_OC_SIZE];
         for (int i = 0; i < PRIV_OC_SIZE; i++) {
             for (int z = 0; z < CARD_WIDTH +4; z++) {
@@ -96,10 +102,11 @@ public class CLIView extends View {
         layoutFormatter(string, PRIV_OC_SIZE);
         string[0] = "You score as many points as the values of the shades on all of the " + privObjCard + " dice";
         layoutFormatter(string, PRIV_OC_SIZE);
-
+        out.print(CURSOR);
     }
-    @Override
-    public void updatePubOCs(PubObjCard[] pubObjCards){
+
+    public synchronized void updatePubOCs(PubObjCard[] pubObjCards) {
+        clearScreen();
         int pubOCSize = pubObjCards.length;
         for (int i = 0; i < pubOCSize; i++) {
             for (int z = 0; z < CARD_WIDTH +4; z++) {
@@ -125,71 +132,98 @@ public class CLIView extends View {
             pOCs[i] = "Points: " + pubObjCards[i].getPoints();
         }
         layoutFormatter(pOCs,pubOCSize);
-
-
+        out.print(CURSOR);
     }
-    @Override
-    public void updateOpponentsWF(Player[] opponents){
-        WindowFrame[] wf = new  WindowFrame[opponents.length];
-        for(int i = 0;i<opponents.length;i++){
-            if(opponents[i].getUsername().length() <= 24){
-                out.print(opponents[i].getUsername() + ":");}
-            else {
-                out.print(opponents[i].getUsername().substring(0,24) + ":");
+
+    public void updateOpponentsWF(ArrayList<Player> opponents) {
+        out.println();
+        String offline = "(OFFLINE)";
+        WindowFrame[] wf = new  WindowFrame[opponents.size()];
+        for(int i = 0;i<opponents.size();i++) {
+            if(!opponents.get(i).isConnected()){
+                out.print(offline);
             }
-            for (int j =0;j< (24 - opponents[i].getUsername().length());j++){
+            for (int j = 0; j < (24 - offline.length()); j++){
+                out.print(" ");
+            }
+            out.print("       ");
+        }
+        out.println();
+        for(int i = 0;i<opponents.size();i++) {
+            if(opponents.get(i).getUsername().length() <= 24){
+                out.print(opponents.get(i).getUsername() + ":");}
+            else {
+                out.print(opponents.get(i).getUsername().substring(0,24) + ":");
+            }
+            for (int j = 0; j < (24 - opponents.get(i).getUsername().length()); j++){
                 out.print(" ");
             }
             out.print("       ");
         }
         out.println("\n");
-        for(int i = 0;i<opponents.length;i++){
-            wf[i] = opponents[i].getWF();
+        for(int i = 0;i<opponents.size();i++){
+            wf[i] = opponents.get(i).getWindowFrame();
         }
         windowFrameGenerator(wf);
     }
-    @Override
-    public void updatePlayerWF(Player player){
+
+    public synchronized void updatePlayerWF(Player player){
         out.println("You (" + player.getUsername() + "):\n");
         WindowFrame[] wf = new WindowFrame[1];
-        wf[0] = player.getWF();
+        wf[0] = player.getWindowFrame();
         windowFrameGenerator(wf);
     }
-    @Override
-    public void updateRT(ArrayList<ArrayList<Die>> roundTrack, int round) {
-        int big = 0;
-        for (int i=0;i<round;i++){
-            if(roundTrack.get(i).size() > big){
-                big = roundTrack.get(i).size();
+
+    public synchronized void updateRT(ArrayList<ArrayList<Die>> roundTrack) {
+        int max = 0;
+        for (int i = 0; i < 10; i++){
+            if(roundTrack.get(i).size() > max){
+                max = roundTrack.get(i).size();
             }
         }
-        out.println("Roundtrack:\n");
-        for (int i=0;i<big;i++){
-            for (int j =0;j<round;j++){
-                out.print((j+1) + ": " + roundTrack.get(j).get(i) + " | ");
+        out.println("Roundtrack:");
+        for(int i = 0; i < 9; i++) {
+            out.print("  " + (i + 1) + " | ");
+        }
+        out.println(" 10 |");
+        for(int i = 0; i < 10; i++) {
+            out.print("------");
+        }
+        out.println();
+        for(int i = 0; i < max; i++) {
+            for(int j = 0; j < 10; j++) {
+                if(i < roundTrack.get(j).size()) {
+                    out.print(roundTrack.get(j).get(i) + " | ");
+                }
+                else {
+                    out.print(" -  | ");
+                }
             }
             out.println();
         }
         out.println();
     }
-    @Override
-    public void updateMainScreen(MainScreenInfo mainScreenInfo){
+
+    public synchronized void updateMainScreen(MainScreenInfo mainScreenInfo) {
+        clearScreen();
         Player player = mainScreenInfo.getPlayer();
-        Player[] opponents = mainScreenInfo.getOpponents();
+        ArrayList<Player> opponents = mainScreenInfo.getOpponents();
         int round = mainScreenInfo.getRound();
         boolean backward = mainScreenInfo.isBackward();
+        String turnPlayer = mainScreenInfo.getTurnPlayer();
         ArrayList<Die> draftPool = mainScreenInfo.getDraftPool();
         ArrayList<ArrayList<Die>> roundTrack = mainScreenInfo.getRoundTrack();
-        updateInfo(player.getTokens(),round,backward);
+        updateInfo(player.getTokens(),round,backward,turnPlayer);
         out.println();
         updateDP(draftPool);
         out.println();
-        updateRT(roundTrack,round);
+        updateRT(roundTrack);
         updateOpponentsWF(opponents);
         updatePlayerWF(player);
+        out.print(CURSOR);
     }
-    @Override
-    public void updateConnectionRequest(boolean success){
+
+    public synchronized void updateConnectionRequest(boolean success){
         if(success){
             out.println("Congratulations you are now connected\n");
         }
@@ -197,8 +231,9 @@ public class CLIView extends View {
             out.println("Sorry, there was a problem connecting to the server, please check ip and port\n");
         }
     }
-    @Override
-    public void endGame(Player[] leaderboard,Player player,int[] score){
+
+    public void endGame(Player[] leaderboard,Player player,int[] score) {
+        clearScreen();
         out.println("Match is over here is the Leaderboard:\n");
         for(int i = 0; i<leaderboard.length;i++){
             out.println("#"+i+" - " + leaderboard[i].getUsername() + "Points: " + score[i]+ "\n\n");
@@ -215,10 +250,12 @@ public class CLIView extends View {
         else{
             out.println("You came out fourth");
         }
+        out.print(CURSOR);
     }
+
     //TODO TEST AFTER TOOLCARDS ARE DONE
-    @Override
-    public void updateToolCards(ToolCard[] toolCards){
+    public synchronized void updateToolCards(ToolCard[] toolCards) {
+        clearScreen();
         String[] names = new String[toolCards.length];
         String[] description = new String[toolCards.length];
         for (int i = 0; i < toolCards.length; i++) {
@@ -235,23 +272,23 @@ public class CLIView extends View {
 
         layoutFormatter(names,toolCards.length);
         layoutFormatter(description,toolCards.length);
-
+        out.print(CURSOR);
     }
 
-    @Override
-    public void invalidMoveError(){
+    public synchronized void invalidMoveError(){
         out.println("ERROR: Invalid Move");
     }
-    @Override
-    public void selectionMaker(String[] string){
+
+    public synchronized void selectionMaker(String[] string){
         out.println("Please select an option:");
         for(int i=0; i<string.length;i++){
             out.print(i + ": ");
             out.println(string[i]);
         }
     }
-    @Override
-    public void help(){
+
+    public synchronized void help() {
+        clearScreen();
         out.println("All of the commands need to be on the same line separated by a comma(,), all the lines should either start with toolcard");
         out.println("or with placement, if toolcard is chosen you should only select one toolcard at a time when making selections/placements\n");
         out.println("Here are the possible commands you can use:\n");
@@ -269,27 +306,41 @@ public class CLIView extends View {
         out.println("   placement");
         out.println("       select [element] = select from draftpool element #[element] ");
         out.println("       place [row][col] = place die selected from draftpool on the cell[row][col] of the window frame");
+        out.print(CURSOR);
+    }
 
-    }
-    @Override
-    public void updatePlayerLobby(ArrayList<Player> players){
-        for (Player player : players) {
-            out.println(player.getUsername());
+    public synchronized void updatePlayerLobby(ArrayList<String> usernames) {
+        clearScreen();
+        out.println("Players currently in the lobby:");
+        String separator = "-----------------------------------------------------";
+        out.println(separator);
+        for (String username : usernames) {
+            out.println("- " + username);
         }
+        out.println(separator);
         out.println();
+        out.print(CURSOR);
     }
-    @Override
+
     //TODO PLayer Status
-    public void updatePlayerState(Player player){
+    public synchronized void updatePlayerState(Player player) {
         if(player.isConnected()){
-        out.println(player.getUsername() + " just disconnected from the game\n");}
-        else{
-            out.println(player.getUsername() + " just came back into the game\n");}
+            out.println(player.getUsername() + " just disconnected from the game\n");
+        }
+        else {
+            out.println(player.getUsername() + " just came back into the game\n");
+        }
     }
-    public void connectionError(){
+
+    public synchronized void connectionError() {
+        clearScreen();
         out.println("You have been disconnected, please reconnect using connect,[connection type],[ip]");
+        out.print(CURSOR);
     }
-    public void patternCardGenerator(ArrayList<PatternCard> pc){
+
+    public synchronized void patternCardGenerator(ArrayList<PatternCard> pc) {
+        clearScreen();
+        out.println("Pick a Pattern Card\n");
         for(int i =0;i<pc.size();i++){
             String prefix= i*2 + ":";
             out.print(prefix);
@@ -321,6 +372,7 @@ public class CLIView extends View {
             out.println();
         }
         out.println();
+        out.print(CURSOR);
     }
 
     public void startView() {
@@ -375,21 +427,30 @@ public class CLIView extends View {
     }
 
     private void windowFrameGenerator(WindowFrame[] wf){
-       for(int i = 0; i< ROW_SIZE; i++){
-          for(int j=0;j<wf.length;j++){
-              for(int k = 0; k< COL_SIZE; k++){
-                  Die die = wf[j].getPlacements()[i][k];
-                  if(wf[j].getPlacements()[i][k] != null){
-                      out.print("|" + die + "|");}
-                  else {
-                      out.print("|"  + wf[j].getPCCell(i,k) + "|");}
-              }
-              out.print("       ");
-          }
-          out.println();
-       }
-       out.println();
+        for(int i = 0; i< ROW_SIZE; i++){
+            for(int j=0;j<wf.length;j++){
+                for(int k = 0; k< COL_SIZE; k++){
+                    Die die = wf[j].getPlacements()[i][k];
+                    if(wf[j].getPlacements()[i][k] != null){
+                        out.print("|" + die + "|");
+                    }
+                    else {
+                        out.print("|"  + wf[j].getPCCell(i,k) + "|");
+                    }
+                }
+                out.print("       ");
+            }
+            out.println();
+        }
+        out.println();
     }
+
+    private void clearScreen() {
+        for(int i = 0; i < 50; i++) {
+            out.println();
+        }
+    }
+
 }
 
 

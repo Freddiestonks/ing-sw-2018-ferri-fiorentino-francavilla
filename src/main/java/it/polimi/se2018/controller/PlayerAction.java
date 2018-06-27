@@ -6,7 +6,7 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
     private transient Object lock = new Object();
     private boolean updated = false;
     private String usernameReq = null;
-    private String connectionType = null;
+    private boolean switchConnReq = false;
     private boolean quitReq = false;
     private int patternCard = 0;
     private ArrayList<Integer> newDieValue = new ArrayList<>();
@@ -36,8 +36,7 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
         synchronized (lock) {
             if(!updated) {
                 this.usernameReq = pa.usernameReq;
-                this.connectionType = pa.connectionType;
-                this.quitReq = pa.quitReq;
+                this.switchConnReq = pa.switchConnReq;
                 this.patternCard = pa.patternCard;
                 this.newDieValue = pa.getNewDieValue();
                 this.posDPDie = pa.getPosDPDie();
@@ -66,20 +65,12 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
         return usernameReq;
     }
 
-    public void setConnectionType(String connectionType) {
-        this.connectionType = connectionType;
+    public void setSwitchConnReq(boolean switchConnReq) {
+        this.switchConnReq = switchConnReq;
     }
 
-    public String getConnectionType() {
-        return connectionType;
-    }
-
-    public void setQuitReq(boolean quitReq) {
-        this.quitReq = quitReq;
-    }
-
-    public boolean isQuitReq() {
-        return quitReq;
+    public boolean isSwitchConnReq() {
+        return switchConnReq;
     }
 
     public void setPatternCard(int pc) {
@@ -151,7 +142,7 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
     public void clear() {
         synchronized (lock) {
             this.usernameReq = null;
-            this.connectionType = null;
+            this.switchConnReq = false;
             this.quitReq = false;
             this.patternCard = 0;
             this.newDieValue.clear();

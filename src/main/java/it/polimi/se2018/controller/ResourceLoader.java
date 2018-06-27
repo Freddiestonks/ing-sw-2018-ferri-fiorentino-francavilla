@@ -77,6 +77,23 @@ public class ResourceLoader {
         }
         return cellArray;
     }
+
+    public int loadLobbyTimeout() {
+        return 10; //TODO: from file
+    }
+
+    public int loadTurnTimeout() {
+        return 10; //TODO: from file
+    }
+
+    public int loadNumPCs() {
+        return 12; //TODO: from file
+    }
+
+    public int loadNumPubOCs() {
+        return 10; //TODO: from file
+    }
+
     /**
      * This method is used to load a PatternCard from the JSON file with a specific id
      * @param id this is the id of the wanted PatternCard

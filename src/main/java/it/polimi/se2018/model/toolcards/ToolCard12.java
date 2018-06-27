@@ -21,6 +21,11 @@ public class ToolCard12 extends ToolCard {
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
+        if((pa.getPlaceWFDie().size() < 2)
+           || (pa.getPlaceNewWFDie().size() < 2)
+           || pa.getPosRTDie().isEmpty()) {
+            return false;
+        }
         Die die1 = wf.getDie(pa.getPlaceWFDie().get(0)[0], pa.getPlaceWFDie().get(0)[1]);
         Die die2 = wf.getDie(pa.getPlaceWFDie().get(1)[0], pa.getPlaceWFDie().get(1)[1]);
         Die rtDie = model.getRoundTrackDie(pa.getPosRTDie().get(0)[0], pa.getPosRTDie().get(0)[1]);

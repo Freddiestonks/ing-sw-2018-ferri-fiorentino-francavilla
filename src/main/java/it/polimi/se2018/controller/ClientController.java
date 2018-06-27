@@ -4,6 +4,7 @@ import it.polimi.se2018.model.LocalModel;
 import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.network.NetworkHandler;
 import it.polimi.se2018.network.RMINetworkHandler;
+import it.polimi.se2018.network.SocketNetworkHandler;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.CLIView;
 import it.polimi.se2018.view.GUIView;
@@ -51,7 +52,12 @@ public class ClientController implements Observer {
             view.help();
         }
         else if(string[0].equalsIgnoreCase("connect")){
-            if(string[1].equalsIgnoreCase("rmi")){
+            if(string[1].equalsIgnoreCase("socket")){
+                networkHandler = new SocketNetworkHandler(string[2]);
+                playerActionInterface = networkHandler.connect(model,view);
+                out.println("ok");
+            }
+            else if(string[1].equalsIgnoreCase("rmi")){
                 networkHandler = new RMINetworkHandler(string[2]);
                 playerActionInterface = networkHandler.connect(model,view);
                 out.println("ok");

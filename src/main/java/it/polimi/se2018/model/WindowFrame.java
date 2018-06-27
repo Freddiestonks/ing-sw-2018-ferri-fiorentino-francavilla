@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * This class consists both of public and private methods it is used to create the WindowFrame that each Player has
  * it will need to contain a PatternCard which will be randomly getCell from a pool found inside the JSON file
@@ -10,13 +12,14 @@ package it.polimi.se2018.model;
  *
  * */
 
-public class WindowFrame {
+public class WindowFrame implements Serializable {
     //Attributes
     private PatternCard pc = null;
     private boolean wcFace; //true for front
     private Die[][] placements = new Die[4][5];
     private int numDice = 0;
     //Methods
+
     /**
      * This is the constructor method of the class
      *
@@ -46,7 +49,6 @@ public class WindowFrame {
     public PatternCard getPc(){
         return pc;
     }
-
 
     /**
      * This method controls if the positioning principles are respected, so there cannot be
@@ -293,7 +295,8 @@ public class WindowFrame {
             && crossCheck(die, row, col)
             && (getDie(row, col) == null)) {
             return true;
-        }        return false;
+        }
+        return false;
     }
 
     /**

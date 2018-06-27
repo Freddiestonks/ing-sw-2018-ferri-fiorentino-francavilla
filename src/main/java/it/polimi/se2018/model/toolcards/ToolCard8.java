@@ -22,6 +22,9 @@ public class ToolCard8 extends ToolCard {
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
+        if(pa.getPosDPDie().size() < 2) {
+            return false;
+        }
         // clone the WindowFrame
         wf = new WindowFrame(wf);
         Die die1 = model.getDraftPoolDie(pa.getPosDPDie().get(0));

@@ -18,7 +18,6 @@ public class PubOCShadeDet extends PubObjCard {
     private boolean col;
     private ArrayList<Integer> check = new ArrayList<>(0);
 
-
     //methods
     /**
 

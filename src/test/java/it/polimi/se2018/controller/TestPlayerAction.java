@@ -61,14 +61,7 @@ public class TestPlayerAction {
             fail();
         if(!(pa.getPosRTDie().get(0)[1]==8))
             fail();
-        if(pa.isQuitReq())
-            fail();
         if(!(pa.getUsernameReq().equals("Tiziello")))
-            fail();
-
-        pa.setQuitReq(true);
-
-        if(!(pa.isQuitReq()))
             fail();
 
         PlayerAction pa2 = new PlayerAction();

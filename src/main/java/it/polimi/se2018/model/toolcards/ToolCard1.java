@@ -17,6 +17,9 @@ public class ToolCard1 extends ToolCard {
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
+        if(pa.getPlaceWFDie().isEmpty() || pa.getNewDieValue().isEmpty()) {
+            return false;
+        }
         Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
         int row = pa.getPlaceWFDie().get(0)[0];
         int col = pa.getPlaceWFDie().get(0)[1];

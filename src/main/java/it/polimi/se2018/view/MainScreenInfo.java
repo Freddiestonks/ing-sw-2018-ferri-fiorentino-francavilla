@@ -3,12 +3,14 @@ package it.polimi.se2018.view;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MainScreenInfo {
+public class MainScreenInfo implements Serializable {
     private Player player;
-    private Player[] opponents;
+    private ArrayList<Player> opponents;
     private int round;
+    private String turnPlayer;
     private boolean backward;
     private ArrayList<Die> draftPool;
     private ArrayList<ArrayList<Die>> roundTrack;
@@ -23,12 +25,12 @@ public class MainScreenInfo {
         this.player = player;
     }
 
-    public Player[] getOpponents() {
-        return opponents;
+    public ArrayList<Player> getOpponents() {
+        return new ArrayList<>(opponents);
     }
 
-    public void setOpponents(Player[] opponents) {
-        this.opponents = opponents;
+    public void setOpponents(ArrayList<Player> opponents) {
+        this.opponents = new ArrayList<>(opponents);
     }
 
     public int getRound() {
@@ -37,6 +39,14 @@ public class MainScreenInfo {
 
     public void setRound(int round) {
         this.round = round;
+    }
+
+    public String getTurnPlayer() {
+        return turnPlayer;
+    }
+
+    public void setTurnPlayer(String turnPlayer) {
+        this.turnPlayer = turnPlayer;
     }
 
     public boolean isBackward() {
@@ -48,26 +58,19 @@ public class MainScreenInfo {
     }
 
     public ArrayList<Die> getDraftPool() {
-        return draftPool;
+        return new ArrayList<>(draftPool);
     }
 
     public void setDraftPool(ArrayList<Die> draftPool) {
-        this.draftPool = draftPool;
+        this.draftPool = new ArrayList<>(draftPool);
     }
 
     public ArrayList<ArrayList<Die>> getRoundTrack() {
-        return roundTrack;
+        return new ArrayList<>(roundTrack);
     }
 
     public void setRoundTrack(ArrayList<ArrayList<Die>> roundTrack) {
-        this.roundTrack = roundTrack;
+        this.roundTrack = new ArrayList<>(roundTrack);
     }
 
-    public String[] getDraftPoolAsString(){
-        String[] string = new String[draftPool.size()];
-        for (int i =0;i<draftPool.size();i++){
-            string[i] = draftPool.get(i).toString();
-        }
-        return string;
-    }
 }

@@ -5,6 +5,8 @@ import java.rmi.Remote;
 import java.util.ArrayList;
 
 public interface LocalModelInterface extends Remote {
+    void setState(boolean started, boolean lobbyGathering) throws IOException;
+
     void setWindowFrame(WindowFrame wf) throws IOException;
 
     void updateTurn(int round, int turn, boolean backward) throws IOException;
@@ -16,6 +18,8 @@ public interface LocalModelInterface extends Remote {
     void setPubOCs(PubObjCard[] pubOCs) throws IOException;
 
     void setToolCards(ToolCard[] toolCards) throws IOException;
+
+    void setToolCardUsed(boolean toolCardUsed) throws IOException;
 
     void checkConnection() throws IOException;
 }

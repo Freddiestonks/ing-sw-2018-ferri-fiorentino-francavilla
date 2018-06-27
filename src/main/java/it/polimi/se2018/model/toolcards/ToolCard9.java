@@ -16,9 +16,12 @@ public class ToolCard9 extends ToolCard {
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
+        if(pa.getPosDPDie().isEmpty() || pa.getPlaceDPDie().isEmpty()) {
+            return false;
+        }
         Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
         int row = pa.getPlaceDPDie().get(0)[0];
-        int col = pa.getPlaceDPDie().get(1)[0];
+        int col = pa.getPlaceDPDie().get(0)[1];
         Cell cell = wf.getPCCell(row, col);
         if(!cell.placeableShade(die)
            || !cell.placeableColor(die)

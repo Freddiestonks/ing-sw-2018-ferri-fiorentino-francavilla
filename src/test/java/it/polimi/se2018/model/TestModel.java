@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 
 public class TestModel {
     @Test
-    public void TestAddingPlayers() throws MaxNumPlayersException {
+    public void testAddingPlayers() throws MaxNumPlayersException {
         //tests the maximum number of players is respected.
         Model modelExample = Model.instance();
         modelExample.addPlayer("Alessio", null);
@@ -21,15 +21,14 @@ public class TestModel {
     }
 
     @Test
-    public void TestUpdatingTurn() throws InvalidTurnException, MaxNumPlayersException {
+    public void testUpdatingTurn() throws InvalidTurnException, MaxNumPlayersException {
         //tests if the end of the match is respected and if the order of some casual turn are respected too.
         Model modelExample = Model.instance();
-        modelExample.addPlayer("Alessio", null);
-        modelExample.addPlayer("Sfidante", null);
-        modelExample.addPlayer("Tizio", null);
+        modelExample.addPlayer("Alessio", new LocalModel());
+        modelExample.addPlayer("Sfidante", new LocalModel());
+        modelExample.addPlayer("Tizio", new LocalModel());
 
         for(int i=1; i<=59; i++){
-
             if(i==3){
                 if(!(modelExample.getTurn()==3)){
                     fail();

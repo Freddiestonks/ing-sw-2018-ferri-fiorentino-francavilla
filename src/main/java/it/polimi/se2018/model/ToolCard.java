@@ -11,8 +11,8 @@ public abstract class ToolCard {
     private int idRes;
     ////TODO: to be verified effective use of this attributes.
     /*private Color color;*/
-    protected boolean pendingAction = false;
-    private Die pendingDie;
+    protected static ToolCard pendingToolCard = null;
+    protected static Die pendingDie;
     //Methods
 
     public ToolCard(String name, String description, int price, int tokens){
@@ -28,12 +28,17 @@ public abstract class ToolCard {
 
     public abstract boolean validAction(Model model, WindowFrame wf, PlayerAction pa);
 
-    public Die getPendingDie() {
-        return pendingDie;
+    public static boolean isPendingAction() {
+        return (pendingToolCard != null);
     }
 
-    public void setPendingDie(Die die) {
-        pendingDie = die;
+    public static ToolCard getPendingToolCard() {
+        return pendingToolCard;
+    }
+
+    public static void resetPendingAction() {
+        pendingToolCard.pendingDie = null;
+        pendingToolCard = null;
     }
 
     public String getDescription() {

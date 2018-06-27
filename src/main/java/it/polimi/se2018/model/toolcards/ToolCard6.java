@@ -10,28 +10,31 @@ public class ToolCard6 extends ToolCard {
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException {
-        if(!pendingAction) {
+        if(!isPendingAction()) {
             Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
             die.roll();
-            setPendingDie(die);
-            pendingAction = true;
+            pendingDie = die;
+            pendingToolCard = this;
         }
         else {
-            Die die = getPendingDie();
-            model.removeDraftPoolDie(die);
-            wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
-            pendingAction = false;
+            model.removeDraftPoolDie(pendingDie);
+            int[] wfPlace = pa.getPlaceDPDie().get(0);
+            wf.placeDie(pendingDie, wfPlace[0], wfPlace[1]);
+            resetPendingAction();
             model.updateTurn();
         }
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
-        if(!pendingAction) {
-            return true;
+        if(!isPendingAction()) {
+            return !pa.getPosDPDie().isEmpty();
         }
         else {
-            Die die = getPendingDie();
-            return wf.checkRestrictions(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
+            if(pa.getPlaceDPDie().isEmpty()) {
+                return false;
+            }
+            int[] wfPlace = pa.getPlaceDPDie().get(0);
+            return wf.checkRestrictions(pendingDie, wfPlace[0], wfPlace[1]);
         }
     }
 }

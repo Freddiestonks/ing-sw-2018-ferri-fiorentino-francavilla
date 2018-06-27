@@ -20,6 +20,9 @@ public class ToolCard5 extends ToolCard {
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
+        if(pa.getPosDPDie().isEmpty() || pa.getPosRTDie().isEmpty()) {
+            return false;
+        }
         return true;
     }
 }

@@ -17,6 +17,9 @@ public class ToolCard3 extends ToolCard {
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
+        if(pa.getPlaceWFDie().isEmpty() || pa.getPlaceNewWFDie().isEmpty()) {
+            return false;
+        }
         // clone the WindowFrame
         wf = new WindowFrame(wf);
         Die die = wf.getDie(pa.getPlaceWFDie().get(0)[0], pa.getPlaceWFDie().get(0)[1]);

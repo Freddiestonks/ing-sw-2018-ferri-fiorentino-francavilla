@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Random;
  */
 
 
-public class Die {
+public class Die implements Serializable {
     //Attributes
     private int value;
     private Color color;

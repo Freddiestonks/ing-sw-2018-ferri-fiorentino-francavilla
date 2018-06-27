@@ -3,7 +3,8 @@ package it.polimi.se2018.model;
 import java.util.ArrayList;
 
 public class LocalModel implements LocalModelInterface {
-    private boolean started;
+    private boolean started = false;
+    private boolean lobbyGathering = false;
     private WindowFrame windowFrame;
     private int round = 1;
     private int turn = 1;
@@ -12,9 +13,23 @@ public class LocalModel implements LocalModelInterface {
     private ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
     private PubObjCard[] pubOCs = new PubObjCard[3];
     private ToolCard[] toolCards = new ToolCard[3];
+    private boolean toolCardUsed = false;
 
     public LocalModel() {
 
+    }
+
+    public void setState(boolean started, boolean lobbyGathering) {
+        this.started = started;
+        this.lobbyGathering = lobbyGathering;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public boolean isLobbyGathering() {
+        return lobbyGathering;
     }
 
     public void setWindowFrame(WindowFrame wf) {
@@ -52,8 +67,9 @@ public class LocalModel implements LocalModelInterface {
     }
 
     public void setRoundTrack(ArrayList<ArrayList<Die>> roundTrack) {
+        this.roundTrack.clear();
         for(int i = 0; i < 10; i++) {
-            this.roundTrack.set(i, new ArrayList<>(roundTrack.get(i)));
+            this.roundTrack.add(new ArrayList<>(roundTrack.get(i)));
         }
     }
 
@@ -81,7 +97,14 @@ public class LocalModel implements LocalModelInterface {
         return toolCards.clone();
     }
 
-    public void checkConnection() {
+    public void setToolCardUsed(boolean toolCardUsed) {
+        this.toolCardUsed = toolCardUsed;
     }
 
+    public boolean isToolCardUsed() {
+        return toolCardUsed;
+    }
+
+    public void checkConnection() {
+    }
 }

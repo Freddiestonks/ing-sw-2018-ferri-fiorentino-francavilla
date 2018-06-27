@@ -52,16 +52,26 @@ public class TestCLIView {
     @Test
     public void testRT(){
         ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
+        for(int i = 0; i < 10; i++) {
+            roundTrack.add(new ArrayList<>());
+        }
         Die die = new Die(Color.BLUE);
-        ArrayList< Die> dice = new ArrayList<>();
+        ArrayList<Die> dice = new ArrayList<>();
         dice.add(die);
         dice.add(die);
         dice.add(die);
-        roundTrack.add(dice);
-        roundTrack.add(dice);
-        roundTrack.add(dice);
-        roundTrack.add(dice);
-        cliView.updateRT(roundTrack,4);
+        roundTrack.set(0, dice);
+        ArrayList<Die> dice2 = new ArrayList<>(dice);
+        dice2.remove(0);
+        roundTrack.set(1, dice2);
+        ArrayList<Die> dice3 = new ArrayList<>(dice);
+        dice3.add(new Die(Color.GREEN));
+        dice3.add(new Die(Color.RED));
+        roundTrack.set(2, dice3);
+        ArrayList<Die> dice4 = new ArrayList<>(dice);
+        dice4.add(new Die(Color.RED));
+        roundTrack.set(3, dice4);
+        cliView.updateRT(roundTrack);
 
     }
     @Test
@@ -71,7 +81,7 @@ public class TestCLIView {
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(0);
         WindowFrame wf = new WindowFrame(testPC,true);
-        Player[] opponents = new Player[3];
+        ArrayList<Player> opponents = new ArrayList<>();
         ArrayList<Die> dp = new ArrayList<>();
         dp.add(new Die(Color.BLUE));
         dp.add(new Die(Color.PURPLE));
@@ -80,12 +90,12 @@ public class TestCLIView {
         dp.add(new Die(Color.GREEN));
         int round = 4;
         player.setWinFrame(wf);
-        opponents[0] = new Player("Well I guess I should test a long username");
-        opponents[1] = new Player("Opp 2");
-        opponents[2] = new Player("Opp 3");
-        opponents[0].setWinFrame(wf);
-        opponents[1].setWinFrame(wf);
-        opponents[2].setWinFrame(wf);
+        opponents.add(new Player("Well I guess I should test a long username"));
+        opponents.add(new Player("Opp 2"));
+        opponents.add(new Player("Opp 3"));
+        opponents.get(0).setWinFrame(wf);
+        opponents.get(1).setWinFrame(wf);
+        opponents.get(2).setWinFrame(wf);
         ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
         Die die = new Die(Color.BLUE);
         ArrayList<Die> dice = new ArrayList<>();
@@ -96,8 +106,14 @@ public class TestCLIView {
         roundTrack.add(dice);
         roundTrack.add(dice);
         roundTrack.add(dice);
+        roundTrack.add(new ArrayList<>());
+        roundTrack.add(new ArrayList<>());
+        roundTrack.add(new ArrayList<>());
+        roundTrack.add(new ArrayList<>());
+        roundTrack.add(new ArrayList<>());
+        roundTrack.add(new ArrayList<>());
         die.setValue(4);
-        player.getWF().placeDie(die,0,0);
+        player.getWindowFrame().placeDie(die,0,0);
         mainScreenInfo.setPlayer(player);
         mainScreenInfo.setBackward(false);
         mainScreenInfo.setDraftPool(dp);
@@ -113,13 +129,13 @@ public class TestCLIView {
     }
     @Test
     public void testPlayerLobby(){
-        ArrayList<Player> players = new ArrayList<>();
-        players.add(new Player("Milano"));
-        players.add(new Player("Torino"));
-        players.add(new Player("Venezia"));
-        cliView.updatePlayerLobby(players);
-        players.add(new Player("Roma"));
-        cliView.updatePlayerLobby(players);
+        ArrayList<String> usernames = new ArrayList<>();
+        usernames.add("Milano");
+        usernames.add("Torino");
+        usernames.add("Venezia");
+        cliView.updatePlayerLobby(usernames);
+        usernames.add("Roma");
+        cliView.updatePlayerLobby(usernames);
     }
     @Test
     public void testPatternCard(){
@@ -130,5 +146,4 @@ public class TestCLIView {
         patternCard.add(resourceLoader.loadPC(1));
         cliView.patternCardGenerator(patternCard);
     }
-
 }

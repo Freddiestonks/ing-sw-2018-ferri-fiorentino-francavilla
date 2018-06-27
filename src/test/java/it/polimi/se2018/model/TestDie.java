@@ -1,6 +1,5 @@
 package it.polimi.se2018.model;
-import it.polimi.se2018.model.Color;
-import it.polimi.se2018.model.Die;
+import org.junit.After;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
@@ -25,5 +24,9 @@ public class TestDie {
         if (die1.getValue()!=4){
             fail();
         }
+    }
+    @After
+    public void reset() {
+        Model.instance().reset();
     }
 }

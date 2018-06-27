@@ -1,12 +1,14 @@
 package it.polimi.se2018.model;
 
-public abstract class PubObjCard {
+import java.io.Serializable;
+
+public abstract class PubObjCard implements Serializable {
     private String description;
     private String cardName;
     protected int points;
     private boolean used = false;
 
-    protected PubObjCard(String desc, String name) {
+    public PubObjCard(String desc, String name) {
         description = desc;
         cardName = name;
 

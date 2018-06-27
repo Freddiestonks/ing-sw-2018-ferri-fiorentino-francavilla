@@ -47,8 +47,8 @@ public class ClientGatherer extends Thread implements Iterable<ClientInfo>, Clie
 
     public PlayerActionInterface connectRMI(LocalModelInterface localModel, ViewInterface view) {
         PlayerActionInterface paInterface = null;
-        synchronized (ServerController.lock) {
-            PlayerAction pa = new PlayerAction(ServerController.lock);
+        synchronized (ServerController.LOCK) {
+            PlayerAction pa = new PlayerAction(ServerController.LOCK);
             try {
                 paInterface = (PlayerActionInterface) UnicastRemoteObject.exportObject(pa, 0);
             } catch (RemoteException e) {
@@ -72,13 +72,13 @@ public class ClientGatherer extends Thread implements Iterable<ClientInfo>, Clie
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            PlayerAction pa = new PlayerAction(ServerController.lock);
+            PlayerAction pa = new PlayerAction(ServerController.LOCK);
             SocketReceiver socketReceiver = new SocketReceiver(socket);
             socketReceiver.setPlayerAction(pa);
             socketReceiver.start();
             SocketLocalModel localModel = new SocketLocalModel(socket);
             SocketView view = new SocketView(socket);
-            synchronized (ServerController.lock) {
+            synchronized (ServerController.LOCK) {
                 preLobby.add(new ClientInfo(localModel, view, pa));
             }
             Iterator<SocketReceiver> iterator = socketReceivers.iterator();

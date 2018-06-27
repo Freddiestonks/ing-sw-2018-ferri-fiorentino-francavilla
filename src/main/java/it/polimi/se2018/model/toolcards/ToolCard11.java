@@ -11,30 +11,32 @@ public class ToolCard11 extends ToolCard {
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa){
         Die die;
-        if(!pendingAction) {
+        if(!isPendingAction()) {
             die = model.removeDraftPoolDie(pa.getPosDPDie().get(0));
             model.getDiceBag().replace(die);
             die = model.getDiceBag().extract();
             model.addDraftPoolDie(die);
-            setPendingDie(die);
-            pendingAction = true;
+            pendingDie = die;
+            pendingToolCard = this;
         }
         else {
-            die = getPendingDie();
-            model.removeDraftPoolDie(die);
-            die.setValue(pa.getNewDieValue().get(0));
-            wf.placeDie(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
-            pendingAction = false;
+            model.removeDraftPoolDie(pendingDie);
+            pendingDie.setValue(pa.getNewDieValue().get(0));
+            wf.placeDie(pendingDie, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
+            resetPendingAction();
             model.updateTurn();
         }
     }
 
     public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
-        if(!pendingAction) {
-            return true;
+        if(!isPendingAction()) {
+            return !pa.getPosDPDie().isEmpty();
         }
         else {
-            Die die = new Die(getPendingDie());
+            if(pa.getNewDieValue().isEmpty() || pa.getPlaceDPDie().isEmpty()) {
+                return false;
+            }
+            Die die = new Die(pendingDie);
             die.setValue(pa.getNewDieValue().get(0));
             return wf.checkRestrictions(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
         }

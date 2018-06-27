@@ -13,7 +13,7 @@ public class GUIView extends View {
 
     }
 
-    public void updateRT(ArrayList<ArrayList<Die>> roundTrack, int round) {
+    public void updateRT(ArrayList<ArrayList<Die>> roundTrack) {
 
     }
 
@@ -33,7 +33,7 @@ public class GUIView extends View {
 
     }
 
-    public void updateInfo(int tokens, int round, boolean backward) {
+    public void updateInfo(int tokens, int round, boolean backward, String turnPlayer) {
 
     }
 
@@ -45,7 +45,7 @@ public class GUIView extends View {
 
     }
 
-    public void updateOpponentsWF(Player[] opponents) {
+    public void updateOpponentsWF(ArrayList<Player> opponents) {
 
     }
 
@@ -85,7 +85,7 @@ public class GUIView extends View {
 
     }
 
-    public void updatePlayerLobby(ArrayList<Player> players) {
+    public void updatePlayerLobby(ArrayList<String> usernames) {
 
     }
 

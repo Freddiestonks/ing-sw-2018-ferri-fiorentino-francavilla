@@ -12,6 +12,9 @@ public class SocketPlayerAction implements PlayerActionInterface {
     private Socket socket;
     private Gson gson = new Gson();
 
+    private static final String GAP = ":";
+    public static final String PLAYER_ACTION = "PLAYERACTION";
+
     public SocketPlayerAction(Socket socket) {
         this.socket = socket;
     }
@@ -19,7 +22,8 @@ public class SocketPlayerAction implements PlayerActionInterface {
     public void setPlayerAction(PlayerAction pa) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
         String json = gson.toJson(pa);
-        writer.write("PLAYERACTION:" + json + "\n");
+        writer.write(PLAYER_ACTION + "\n");
+        writer.write(json + "\n");
         writer.flush();
     }
 

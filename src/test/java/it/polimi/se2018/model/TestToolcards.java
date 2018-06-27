@@ -12,8 +12,8 @@ public class TestToolcards {
     @Test
     public void TestT1(){
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard1 t1 = new ToolCard1("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -40,8 +40,8 @@ public class TestToolcards {
     @Test
     public void TestT2(){
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard2 t2 = new ToolCard2("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -70,8 +70,8 @@ public class TestToolcards {
     @Test
     public void TestT3(){
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard3 t3 = new ToolCard3("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -97,8 +97,8 @@ public class TestToolcards {
     @Test
     public void TestT4(){
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard4 t4 = new ToolCard4("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -106,11 +106,11 @@ public class TestToolcards {
         PlayerAction pa = new PlayerAction();
         pa.addPlaceWFDie(0,0);
         pa.addPlaceWFDie(0,1);
-        pa.addPlaceNewWFDie(2,4);
-        pa.addPlaceNewWFDie(3,4);
+        pa.addPlaceNewWFDie(0,2);
+        pa.addPlaceNewWFDie(0,3);
         Die d1 = new Die(Color.YELLOW);
         Die d2 = new Die(Color.RED);
-        d1.setValue(2);
+        d1.setValue(6);
         d2.setValue(3);
         wf.placeDie(d1,0,0);
         wf.placeDie(d2,0,1);
@@ -127,8 +127,8 @@ public class TestToolcards {
     @Test
     public void TestT5(){
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard5 t5 = new ToolCard5("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -136,9 +136,9 @@ public class TestToolcards {
         PlayerAction pa = new PlayerAction();
         pa.addPosDPDie(0);
         pa.addPosDPDie(1);
-        pa.addPosRTDie(0,0);
+        pa.addPosRTDie(1,0);
         model.addDraftPoolDie(new Die(Color.GREEN));
-        model.addRoundTrackDie(new Die(Color.GREEN),0);
+        model.addRoundTrackDie(new Die(Color.GREEN),1);
         if(t5.validAction(model,wf,pa)){
             t5.performAction(model,wf,pa);
         }
@@ -152,8 +152,8 @@ public class TestToolcards {
     @Test
     public void TestT6(){
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard6 t6 = new ToolCard6("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -182,8 +182,8 @@ public class TestToolcards {
     @Test
     public void TestT7(){
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard7 t7 = new ToolCard7("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -204,8 +204,8 @@ public class TestToolcards {
     @Test
     public void TestT8() {
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard8 t8 = new ToolCard8("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -234,8 +234,8 @@ public class TestToolcards {
     @Test
     public void TestT9(){
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard9 t9 = new ToolCard9("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -262,8 +262,8 @@ public class TestToolcards {
     @Test
     public void TestT10() {
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard10 t10 = new ToolCard10("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -292,8 +292,8 @@ public class TestToolcards {
     @Test
     public void TestT11(){
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard11 t11 = new ToolCard11("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -318,8 +318,8 @@ public class TestToolcards {
     @Test
     public void TestT12(){
         Model model = Model.instance();
-        model.addPlayer("A", null);
-        model.addPlayer("B", null);
+        model.addPlayer("A", new LocalModel());
+        model.addPlayer("B", new LocalModel());
         ToolCard12 t12 = new ToolCard12("caso","casos",2,3);
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(1);
@@ -335,11 +335,11 @@ public class TestToolcards {
         pa.addPlaceWFDie(2,1);
         pa.addPlaceNewWFDie(2,4);
         pa.addPlaceNewWFDie(3,3);
-        pa.addPosRTDie(0, 0);
+        pa.addPosRTDie(1, 0);
         wf.placeDie(d1,0,0);
         wf.placeDie(d2,3,4);
         wf.placeDie(d3,2,1);
-        model.addRoundTrackDie(new Die(Color.YELLOW),0);
+        model.addRoundTrackDie(new Die(Color.YELLOW),1);
         if(t12.validAction(model,wf,pa)){
             t12.performAction(model,wf,pa);
         }
@@ -372,9 +372,6 @@ public class TestToolcards {
         }
 
         generic.putTokens();
-
-        Die d1;
-        d1 = generic.getPendingDie();
     }
     @After
     public void reset13() {
