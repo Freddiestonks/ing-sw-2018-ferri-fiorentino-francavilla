@@ -16,7 +16,7 @@ import java.util.Random;
  * @author Simone Francavilla
  *
  * */
-public class Model extends Observable {
+public class Model extends Observable implements ModelInterface {
     //Attributes
     private static final Model instance = new Model();
     private ArrayList<LocalModelInterface> localModels = new ArrayList<>();
@@ -111,6 +111,7 @@ public class Model extends Observable {
         // method setConnected used to update the player's status (online)
         localModels.set(i, localModel);
         players.get(i).setConnected(true);
+        players.get(i).setSwitchingConn(false);
         notifyObservers();
     }
 
@@ -127,6 +128,7 @@ public class Model extends Observable {
         }
         else if(backward && (turn == 1)) {
             rollDraftPool();
+            round++;
             backward = false;
         }
         else if(backward) {
@@ -356,14 +358,18 @@ public class Model extends Observable {
         notifyObservers();
     }
 
+    public void setToolCards(ToolCard[] toolCards) {
+        this.toolCards = toolCards.clone();
+    }
+
     /**
      * This method is used to provide a specific Tool-card.
      *
-     * @param id is the number of the requested Tool-card.
+     * @param i is the number of the requested Tool-card.
      * @return a Tool-card reference.
      */
-    public ToolCard getToolCard(int id){
-        return this.toolCards[id - 1];
+    public ToolCard getToolCard(int i){
+        return this.toolCards[i - 1];
     }
 
     /**
@@ -510,6 +516,15 @@ public class Model extends Observable {
 
     public void setLobbyGathering(boolean lobbyGathering) {
         this.lobbyGathering = lobbyGathering;
+    }
+
+    public WindowFrame getWindowFrame(int playerIndex) {
+        return players.get(playerIndex).getWindowFrame();
+    }
+
+    public boolean playerHasChosenPC(int playerIndex) {
+        WindowFrame wf = players.get(playerIndex).getWindowFrame();
+        return (wf != null);
     }
 
     public void placeWFDie(int playerIndex, Die die, int row, int col) {

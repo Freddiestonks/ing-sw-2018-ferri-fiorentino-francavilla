@@ -2,7 +2,7 @@ package it.polimi.se2018.model;
 
 import java.util.ArrayList;
 
-public class LocalModel implements LocalModelInterface {
+public class LocalModel implements LocalModelInterface, ModelInterface {
     private boolean started = false;
     private boolean lobbyGathering = false;
     private WindowFrame windowFrame;
@@ -14,6 +14,7 @@ public class LocalModel implements LocalModelInterface {
     private PubObjCard[] pubOCs = new PubObjCard[3];
     private ToolCard[] toolCards = new ToolCard[3];
     private boolean toolCardUsed = false;
+    private int playerIndex;
 
     public LocalModel() {
 
@@ -32,12 +33,16 @@ public class LocalModel implements LocalModelInterface {
         return lobbyGathering;
     }
 
+    public WindowFrame getWindowFrame(int playerIndex) {
+        return windowFrame;
+    }
+
     public void setWindowFrame(WindowFrame wf) {
         this.windowFrame = wf;
     }
 
-    public WindowFrame getWindowFrame() {
-        return windowFrame;
+    public boolean playerHasChosenPC(int playerIndex) {
+        return false;
     }
 
     public void updateTurn(int round, int turn, boolean backward) {
@@ -66,6 +71,14 @@ public class LocalModel implements LocalModelInterface {
         return new ArrayList<>(draftPool);
     }
 
+    public Die getDraftPoolDie(int pos) {
+        return draftPool.get(pos);
+    }
+
+    public int getDraftPoolSize() {
+        return draftPool.size();
+    }
+
     public void setRoundTrack(ArrayList<ArrayList<Die>> roundTrack) {
         this.roundTrack.clear();
         for(int i = 0; i < 10; i++) {
@@ -73,12 +86,24 @@ public class LocalModel implements LocalModelInterface {
         }
     }
 
-    public ArrayList<ArrayList<Die>> getRoundTrack() {
+    public Die getRoundTrackDie(int round, int i) {
+        return roundTrack.get(round - 1).get(i);
+    }
+
+    /*public ArrayList<ArrayList<Die>> getRoundTrack() {
         ArrayList<ArrayList<Die>> rt = new ArrayList<>();
         for(int i = 0; i < 10; i++) {
             this.roundTrack.add(new ArrayList<>(roundTrack.get(i)));
         }
         return rt;
+    }*/
+
+    public int getRoundTrackSize(int round) {
+        return roundTrack.get(round - 1).size();
+    }
+
+    public ToolCard getToolCard(int i) {
+        return toolCards[i - 1];
     }
 
     public void setPubOCs(PubObjCard[] pubOCs) {
@@ -105,6 +130,15 @@ public class LocalModel implements LocalModelInterface {
         return toolCardUsed;
     }
 
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
     public void checkConnection() {
+
     }
 }

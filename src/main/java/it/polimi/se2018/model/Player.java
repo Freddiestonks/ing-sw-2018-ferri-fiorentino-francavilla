@@ -21,6 +21,7 @@ public class Player implements Serializable {
     private transient int score = 0;
     private boolean connected = true;
     private transient boolean skip = false;
+    private transient boolean switchingConn = false;
 
     //Methods
 
@@ -124,8 +125,12 @@ public class Player implements Serializable {
         return skip;
     }
 
-    public boolean hasChosenPC() {
-        return (wf != null);
+    public boolean isSwitchingConn() {
+        return switchingConn;
+    }
+
+    public void setSwitchingConn(boolean switchingConn) {
+        this.switchingConn = switchingConn;
     }
 }
 

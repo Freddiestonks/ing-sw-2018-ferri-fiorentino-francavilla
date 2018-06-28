@@ -11,8 +11,9 @@ import java.util.Objects;
 
 public class ResourceLoader {
 
-    private final String PCS_PATH = "src/main/json/patternCards.json";
-    private final String PUBOCS_PATH = "src/main/json/publicCards.json";
+    private static final String CONFIG_PATH = "src/main/json/config.json";
+    private static final String PCS_PATH = "src/main/json/patternCards.json";
+    private static final String PUBOCS_PATH = "src/main/json/publicCards.json";
 
     /**
      * This method is used to translate a string to a "Color"
@@ -31,7 +32,7 @@ public class ResourceLoader {
      * @param string this is the element that is looked for in the file
      * */
 
-    private int jIntGetter(JsonObject jsonObject, String string){
+    private int jIntGetter(JsonObject jsonObject, String string) {
         //returns a int from a JSON object's parameter, use a different method so that in case of updates it is easier
         //to change all of the methods quickly
         return jsonObject.get(string).getAsInt();
@@ -43,19 +44,20 @@ public class ResourceLoader {
      * @param string this is the element that is looked for in the file
      * */
 
-    private String jStringGetter(JsonObject jsonObject, String string){
+    private String jStringGetter(JsonObject jsonObject, String string) {
         //returns a String from a JSON object's parameter, use a different method so that in case of updates it is easier
         //to change all of the methods quickly
         return jsonObject.get(string).getAsString();
     }
+
     /**
      * This method is used to fill a Cell object with the elements found on the JSON file
      * @param cellArray this is the matrix of cells that need to be filled
      * @param cells this is the array in the JSON file containing all of the cells that need to be updated
      * */
-    private Cell[][] jCellFiller(Cell[][] cellArray, JsonArray cells){
+    private Cell[][] jCellFiller(Cell[][] cellArray, JsonArray cells) throws ResourceLoaderException {
         //this method is used to generate a ShadeCell or a ColorCell on the correct space with the correct value/color
-        for(int j= 0; j <cells.size();j++){
+        for(int j = 0; j < cells.size(); j++){
             JsonObject jsonCell = (JsonObject)cells.get(j);
             if (Objects.equals(jStringGetter(jsonCell, "type"), "shade")){
                 //this method recognize if it is a shade type and it will fill it with the correct attributes
@@ -71,34 +73,72 @@ public class ResourceLoader {
                 String cellColor = jStringGetter(jsonCell, "color");
                 cellArray[cellRow][cellCol] = new ColorCell(colorTranslator(cellColor));
             }
-            else{
-                throw new IllegalArgumentException();
+            else {
+                throw new ResourceLoaderException();
             }
         }
         return cellArray;
     }
 
-    public int loadLobbyTimeout() {
-        return 10; //TODO: from file
+    public int loadLobbyTimeout() throws ResourceLoaderException {
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject;
+        try {
+            //The Json file is then transferred to an object
+            Object object = jsonParser.parse(new FileReader(CONFIG_PATH));
+            jsonObject = (JsonObject)object;
+        } catch (FileNotFoundException e) {
+            throw new ResourceLoaderException();
+        }
+        return jIntGetter(jsonObject, "lobbyTimeout");
     }
 
-    public int loadTurnTimeout() {
-        return 10; //TODO: from file
+    public int loadTurnTimeout() throws ResourceLoaderException {
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject;
+        try {
+            //The Json file is then transferred to an object
+            Object object = jsonParser.parse(new FileReader(CONFIG_PATH));
+            jsonObject = (JsonObject)object;
+        } catch (FileNotFoundException e) {
+            throw new ResourceLoaderException();
+        }
+        return jIntGetter(jsonObject, "turnTimeout");
     }
 
-    public int loadNumPCs() {
-        return 12; //TODO: from file
+    public int loadNumPCs() throws ResourceLoaderException {
+        JsonParser jsonParser = new JsonParser();
+        Object object;
+        try {
+            object = jsonParser.parse(new FileReader(PCS_PATH));
+        } catch (FileNotFoundException e) {
+            throw new ResourceLoaderException();
+        }
+        JsonObject jsonObject = (JsonObject)object;
+        //transform the Object to an array of "cards"
+        JsonArray patternCards = (JsonArray)jsonObject.get("patternCards");
+        return patternCards.size();
     }
 
-    public int loadNumPubOCs() {
-        return 10; //TODO: from file
+    public int loadNumPubOCs() throws ResourceLoaderException {
+        JsonParser jsonParser = new JsonParser();
+        Object object;
+        try {
+            object = jsonParser.parse(new FileReader(PUBOCS_PATH));
+        } catch (FileNotFoundException e) {
+            throw new ResourceLoaderException();
+        }
+        JsonObject jsonObject = (JsonObject)object;
+        //transform the Object to an array of "public cards"
+        JsonArray publicCards = (JsonArray)jsonObject.get("publicCards");
+        return publicCards.size();
     }
 
     /**
      * This method is used to load a PatternCard from the JSON file with a specific id
      * @param id this is the id of the wanted PatternCard
      * */
-    public PatternCard loadPC(int id) {
+    public PatternCard loadPC(int id) throws ResourceLoaderException {
         // loadPC will load a pattern card from file written in JSON where cards are kept in a specific order
         // their position can be used as an "ID"
         PatternCard patternCard = null;
@@ -109,7 +149,7 @@ public class ResourceLoader {
             Object object = jsonParser.parse(new FileReader(PCS_PATH));
             JsonObject jsonObject = (JsonObject)object;
             //transform the Object to an array of "cards"
-            JsonArray patternCards =(JsonArray)jsonObject.get("patternCards");
+            JsonArray patternCards = (JsonArray)jsonObject.get("patternCards");
             //take a particular element from the array
             jsonObject = (JsonObject)patternCards.get(id);
             //find from the file the difficulty levels of both faces and the names of both sides
@@ -138,8 +178,8 @@ public class ResourceLoader {
         }
         catch (FileNotFoundException nfe){
             //in case there is no JSON file we throw an exception
+            throw new ResourceLoaderException();
         }
-
         return patternCard;
     }
 
@@ -148,7 +188,7 @@ public class ResourceLoader {
      *
      * @param id this is the id of the wanted Public Objective Card
      * */
-    public PubObjCard loadPubOC(int id){
+    public PubObjCard loadPubOC(int id) throws ResourceLoaderException {
         PubObjCard pubObjCard = null;
         JsonParser jsonParser = new JsonParser();
         try {
@@ -181,7 +221,7 @@ public class ResourceLoader {
                         pubObjCard = new PubOCColorSet(description, name, colors, multiplier);
                         break;
                     default:
-                        throw new IllegalArgumentException();
+                        throw new ResourceLoaderException();
                 }
             } else if (type.equals("shade")) {
                 switch (subtype) {
@@ -200,10 +240,11 @@ public class ResourceLoader {
                         pubObjCard = new PubOCShadeSet(description, name, shades, multiplier);
                         break;
                     default:
-                        throw new IllegalArgumentException();
+                        throw new ResourceLoaderException();
                 }
             }
-        } catch (FileNotFoundException ignored) {
+        } catch (FileNotFoundException e) {
+            throw new ResourceLoaderException();
         }
         return pubObjCard;
     }

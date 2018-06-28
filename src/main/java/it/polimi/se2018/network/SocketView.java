@@ -2,10 +2,7 @@ package it.polimi.se2018.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import it.polimi.se2018.model.Cell;
-import it.polimi.se2018.model.PatternCard;
-import it.polimi.se2018.model.Player;
-import it.polimi.se2018.model.PubObjCard;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.ViewInterface;
 
@@ -31,6 +28,7 @@ public class SocketView implements ViewInterface {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Cell.class, new JsonAdapter<Cell>());
         gsonBuilder.registerTypeAdapter(PubObjCard.class, new JsonAdapter<PubObjCard>());
+        gsonBuilder.registerTypeAdapter(ToolCard.class, new JsonAdapter<ToolCard>());
         this.gson = gsonBuilder.create();
     }
 

@@ -2,31 +2,35 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.PlayerAction;
 
-public abstract class ToolCard {
+import java.io.Serializable;
+
+public abstract class ToolCard implements Serializable {
     //Attributes
     private String name;
     private String description;
     private int price;
-    private int tokens;
-    private int idRes;
-    ////TODO: to be verified effective use of this attributes.
-    /*private Color color;*/
+    private int tokens = 0;
     protected static ToolCard pendingToolCard = null;
     protected static Die pendingDie;
     //Methods
 
-    public ToolCard(String name, String description, int price, int tokens){
+    public ToolCard(String name, String description, int price){
         this.name = name;
         this.description = description;
         this.price = price;
-        this.tokens = tokens;
     }
 
-    public void putTokens(){}
+    public void putTokens(int tokens){
+        this.tokens += tokens;
+    }
+
+    public int getTokens() {
+        return tokens;
+    }
 
     public abstract void performAction(Model model, WindowFrame wf, PlayerAction pa);
 
-    public abstract boolean validAction(Model model, WindowFrame wf, PlayerAction pa);
+    public abstract boolean validAction(ModelInterface model, WindowFrame wf, PlayerAction pa);
 
     public static boolean isPendingAction() {
         return (pendingToolCard != null);
@@ -47,10 +51,6 @@ public abstract class ToolCard {
 
     public String getName() {
         return name;
-    }
-
-    public int getIdRes() {
-        return idRes;
     }
 }
 

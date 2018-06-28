@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.se2018.controller.ResourceLoader;
+import it.polimi.se2018.controller.ResourceLoaderException;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -21,7 +22,12 @@ public class TestPlayer {
         Random rand = new Random();
         PubObjCard[] pubObjCard = new PubObjCard[3];
         ResourceLoader resourceLoader = new ResourceLoader();
-        PatternCard testPC = resourceLoader.loadPC(0);
+        PatternCard testPC = null;
+        try {
+            testPC = resourceLoader.loadPC(0);
+        } catch (ResourceLoaderException e) {
+            e.printStackTrace();
+        }
         WindowFrame wf = new WindowFrame(testPC,true);
         final int privPoints = 4;
         final int emptySpaces = 0;

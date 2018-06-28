@@ -1,7 +1,6 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.LocalModel;
-import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.network.NetworkHandler;
 import it.polimi.se2018.network.RMINetworkHandler;
 import it.polimi.se2018.network.SocketNetworkHandler;
@@ -16,7 +15,7 @@ import java.util.Scanner;
 
 import static java.lang.System.out;
 
-public class ClientController implements Observer {
+public class ClientController extends AbstractController implements Observer {
     //attributes
     private LocalModel model;
     private View view;
@@ -35,11 +34,14 @@ public class ClientController implements Observer {
     private static final String SEPARATOR = ", ?";
     private static final String PLACEMENT ="placement";
     private static final String MAIN_SCREEN_INFO = "board";
+
     //Methods
-    public ClientController(LocalModel localModel, View view){
+    public ClientController(LocalModel localModel, View view) {
+        super(localModel);
         this.model = localModel;
         this.view = view;
     }
+
     private void parser(String str){
         String[] string = str.split(SEPARATOR);
         if(string[0].equalsIgnoreCase(TOOL_CARD)){
@@ -52,6 +54,7 @@ public class ClientController implements Observer {
             view.help();
         }
         else if(string[0].equalsIgnoreCase("connect")){
+            //TODO: check whether user is already connect
             if(string[1].equalsIgnoreCase("socket")){
                 networkHandler = new SocketNetworkHandler(string[2]);
                 playerActionInterface = networkHandler.connect(model,view);
@@ -68,27 +71,17 @@ public class ClientController implements Observer {
                 playerAction.clear();
                 playerAction.setUsernameReq(string[2]);
                 out.println(string[2]);
-                try {
-                    playerActionInterface.setPlayerAction(playerAction);
-                }catch (IOException io){
-                    io.printStackTrace();
-                    view.connectionError();
-                }
+                performAction();
             }
-            if(string[1].equalsIgnoreCase("pc")){
+            else if(string[1].equalsIgnoreCase("pc")){
                 try {
                     playerAction.setPatternCard(Integer.parseInt(string[2]));
                 }catch (NumberFormatException nfe){
                     view.invalidMoveError();
                 }
-                try{
-                    playerActionInterface.setPlayerAction(playerAction);
-                }catch (IOException io){
-                    view.connectionError();
-                }
+                performAction();
             }
         }
-
         else if(string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)){
             view.updateMainScreen(mainScreenInfo);
         }
@@ -126,18 +119,18 @@ public class ClientController implements Observer {
 
         switch (string[1]) {
             case "1": {
-                ToolCard toolCard = model.getToolCards()[0];
-                performToolCard(toolCard,string);
+                //ToolCard toolCard = model.getToolCards()[0];
+                performToolCard(string);
                 break;
             }
             case "2": {
-                ToolCard toolCard = model.getToolCards()[1];
-                performToolCard(toolCard,string);
+                //ToolCard toolCard = model.getToolCards()[1];
+                performToolCard(string);
                 break;
             }
             case "3": {
-                ToolCard toolCard = model.getToolCards()[2];
-                performToolCard(toolCard,string);
+                //ToolCard toolCard = model.getToolCards()[2];
+                performToolCard(string);
                 break;
             }
             case "all":{
@@ -150,9 +143,10 @@ public class ClientController implements Observer {
                 break;
         }
     }
-    private void performToolCard(ToolCard toolCard,String[] read) {
+
+    private void performToolCard(String[] read) {
         try {
-            playerAction.setIdToolCard(toolCard.getIdRes());
+            playerAction.setIdToolCard(Integer.parseInt(read[2]));
             int i = 2;
             while(i<read.length){
                 if (read[i].equalsIgnoreCase(NEW_VALUE)) {
@@ -201,17 +195,23 @@ public class ClientController implements Observer {
         }
     }
 
-    private boolean validAction(PlayerAction pa){
-        return true;
+    protected int getPlayerIndex(PlayerAction pa) {
+        return model.getPlayerIndex();
     }
 
-    private void updateMainScreen(){
+    /*private void updateMainScreen(){
         mainScreenInfo.setRoundTrack(model.getRoundTrack());
         mainScreenInfo.setRound(model.getRound());
         mainScreenInfo.setDraftPool(model.getDraftPool());
         mainScreenInfo.setBackward(model.isBackward());
-    }
-    private void performAction(PlayerAction pa){
+    }*/
+
+    private void performAction() {
+        try {
+            playerActionInterface.setPlayerAction(playerAction);
+        } catch (IOException e) {
+            view.connectionError();
+        }
     }
 
     public void setView(View view) {
@@ -221,6 +221,7 @@ public class ClientController implements Observer {
     public void update() {
         String userInput = view.getUserInput();
         parser(userInput);
+        this.playerAction.clear();
     }
 
     public static void main(String[] args) {

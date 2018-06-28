@@ -22,17 +22,18 @@ public class SocketLocalModel implements LocalModelInterface {
     public static final String RT = "RT";
     public static final String PUBOCS = "PUBOCS";
     public static final String TC = "TC";
-    public static final String TCUSED = "TCUSED";
+    public static final String TC_USED = "TC_USED";
+    public static final String PLAYER_INDEX = "PLAYERINDEX";
 
     public SocketLocalModel(Socket socket) {
         this.socket = socket;
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Cell.class, new JsonAdapter<Cell>());
         gsonBuilder.registerTypeAdapter(PubObjCard.class, new JsonAdapter<PubObjCard>());
+        gsonBuilder.registerTypeAdapter(ToolCard.class, new JsonAdapter<ToolCard>());
         this.gson = gsonBuilder.create();
     }
 
-    @Override
     public void setState(boolean started, boolean lobbyGathering) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
         String json = gson.toJson(started);
@@ -95,11 +96,18 @@ public class SocketLocalModel implements LocalModelInterface {
         writer.flush();
     }
 
-    @Override
     public void setToolCardUsed(boolean toolCardUsed) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
         String json = gson.toJson(toolCardUsed);
-        writer.write(LOCAL_MODEL + GAP + TCUSED + "\n");
+        writer.write(LOCAL_MODEL + GAP + TC_USED + "\n");
+        writer.write(json + "\n");
+        writer.flush();
+    }
+
+    public void setPlayerIndex(int playerIndex) throws IOException {
+        OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
+        String json = gson.toJson(playerIndex);
+        writer.write(LOCAL_MODEL + GAP + PLAYER_INDEX + "\n");
         writer.write(json + "\n");
         writer.flush();
     }

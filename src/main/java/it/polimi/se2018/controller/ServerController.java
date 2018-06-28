@@ -1,6 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.toolcards.*;
 import it.polimi.se2018.network.ClientGatherer;
 import it.polimi.se2018.network.ClientInfo;
 import it.polimi.se2018.utils.Timer;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-public class ServerController {
+public class ServerController extends AbstractController {
     //Attributes
     public static final Object LOCK = new Object();
     private Model model;
@@ -24,7 +25,8 @@ public class ServerController {
     private ResourceLoader resourceLoader = new ResourceLoader();
 
     //Methods
-    public ServerController(Model model, VirtualView view){
+    public ServerController(Model model, VirtualView view) throws ResourceLoaderException {
+        super(model);
         this.model = model;
         this.view = view;
         clientGatherer = new ClientGatherer();
@@ -49,10 +51,10 @@ public class ServerController {
                 }
                 else {
                     for(int i = 0; i < model.getNumPlayers(); i++) {
-                        Player player = model.getPlayer(i);
-                        if(!player.hasChosenPC()) {
+                        if(!model.playerHasChosenPC(i)) {
                             System.out.println("NO PC: " + i);
                             PatternCard pc = model.getPatternCards()[2 * i];
+                            Player player = model.getPlayer(i);
                             player.setWinFrame(new WindowFrame(pc, true));
                         }
                     }
@@ -145,7 +147,8 @@ public class ServerController {
                                 model.setLobbyGathering(false);
                             }
                         }
-                        else if(!available && !model.getPlayer(i).isConnected()) {
+                        else if(!available
+                           && (!model.getPlayer(i).isConnected() || model.getPlayer(i).isSwitchingConn())) {
                             System.out.println("REINSERTED");
                             model.reinsertPlayer(i, clientInfo.getLocalModel());
                             view.reinsertClient(i, clientInfo.getView());
@@ -165,7 +168,10 @@ public class ServerController {
     private void checkConnections() {
         int i = 0;
         while(i < model.getNumPlayers()) {
-            if(!model.checkConnection(i) || !view.checkConnection(i)) {
+            Player player = model.getPlayer(i);
+            if((!model.checkConnection(i) || !view.checkConnection(i))
+               && player.isConnected()
+               && !player.isSwitchingConn()) {
                 //take into account that the player has quitted
                 if(model.isLobbyGathering()) {
                     model.removeClient(i);
@@ -193,19 +199,25 @@ public class ServerController {
         return true;
     }
 
-    private void gameSetup() {
+    private void gameSetup() throws ResourceLoaderException {
         int numPlayer = model.getNumPlayers();
         PatternCard[] patternCards = new PatternCard[numPlayer * 2];
         PubObjCard[] pubObjCards = new PubObjCard[3];
+        ToolCard[] toolCards = new ToolCard[3];
         int numPCs = resourceLoader.loadNumPCs();
         int numPubOcs = resourceLoader.loadNumPubOCs();
+        int numToolCards = 12;
         ArrayList<Integer> pcIds = new ArrayList<>();
         ArrayList<Integer> pubOCIds = new ArrayList<>();
+        ArrayList<Integer> toolCardIds = new ArrayList<>();
         for(int i = 0; i < numPCs; i++) {
             pcIds.add(i);
         }
         for(int i = 0; i < numPubOcs; i++) {
             pubOCIds.add(i);
+        }
+        for(int i = 0; i < numToolCards; i++) {
+            toolCardIds.add(i);
         }
         Random random = new Random();
         for(int i = 0; i < numPlayer * 2; i++) {
@@ -219,113 +231,57 @@ public class ServerController {
             int id = pubOCIds.remove(num);
             pubObjCards[i] = resourceLoader.loadPubOC(id);
         }
+        for(int i = 0; i < 3; i++) {
+            int num = random.nextInt(toolCardIds.size());
+            int id = toolCardIds.remove(num);
+            //TODO: load tool card description from file
+            switch(id) {
+                case 0:
+                    toolCards[i] = new ToolCard1("name", "description", 2);
+                    break;
+                case 1:
+                    toolCards[i] = new ToolCard2("name", "description", 2);
+                    break;
+                case 2:
+                    toolCards[i] = new ToolCard3("name", "description", 2);
+                    break;
+                case 3:
+                    toolCards[i] = new ToolCard4("name", "description", 2);
+                    break;
+                case 4:
+                    toolCards[i] = new ToolCard5("name", "description", 2);
+                    break;
+                case 5:
+                    toolCards[i] = new ToolCard6("name", "description", 2);
+                    break;
+                case 6:
+                    toolCards[i] = new ToolCard7("name", "description", 2);
+                    break;
+                case 7:
+                    toolCards[i] = new ToolCard8("name", "description", 2);
+                    break;
+                case 8:
+                    toolCards[i] = new ToolCard9("name", "description", 2);
+                    break;
+                case 9:
+                    toolCards[i] = new ToolCard10("name", "description", 2);
+                    break;
+                case 10:
+                    toolCards[i] = new ToolCard11("name", "description", 2);
+                    break;
+                case 11:
+                    toolCards[i] = new ToolCard12("name", "description", 2);
+                    break;
+            }
+        }
         model.setPatternCards(patternCards);
         model.setPubOCs(pubObjCards);
+        model.setToolCards(toolCards);
         model.playersSetup();
     }
 
-    private boolean rangeCheck(int[] array){
-        if(array.length == 2){
-            return (array[0] >= 0 && array[0] <= 3 && array[1] >= 0 && array[1] <= 4);
-        }
-        else return false;
-    }
-
-    private boolean emptyWFPlaceCheck(PlayerAction pa, int[] array){
-        if(array.length == 2){
-            return model.getPlayer(playerActions.indexOf(pa)).getWinFrameDie(array[0], array[1]) == null;
-        }
-        else return false;
-    }
-
-    private boolean validAction(PlayerAction pa) {
-        int playerIndex = playerActions.indexOf(pa);
-
-        if(!model.isStarted()) {
-            Player player = model.getPlayer(playerIndex);
-            return !player.hasChosenPC();
-        }
-
-        if(playerIndex + 1 != model.getTurn()) {
-            return false;
-        }
-
-        if (!(pa.getIdToolCard()>=0 && pa.getIdToolCard()<=12)){
-            return false;
-        }
-
-        for(int dieFace : pa.getNewDieValue()){
-            if(!(dieFace >= 1 && dieFace <= 6)){
-                return false;
-            }
-        }
-
-        //Checking for the position in the Draft Pool
-        for(int value : pa.getPosDPDie()){
-            if(!(value >= 0 && value < model.getDraftPoolSize())){
-                return false;
-            }
-        }
-
-        for(int[] posRT : pa.getPosRTDie()){
-            if(!(posRT[0] >=0
-               && posRT[0] < model.getRound()
-               && posRT[1] >=0
-               && posRT[1] < model.getRoundTrackSize(posRT[0]))){
-                return false;
-            }
-        }
-
-        //verify if the places in the WF are empty.
-        for(int[] array: pa.getPlaceDPDie()){
-            if(!rangeCheck(array)){
-                return false;
-            }
-        }
-
-        //control if a designed position to be deleted is full.
-        for(int[] array: pa.getPlaceWFDie()){
-            if(!rangeCheck(array)){
-                return false;
-            }
-        }
-
-        //Afterward the verification of the future placement, this code portion verifies if parameters are legal.
-        for(int[] array: pa.getPlaceNewWFDie()){
-            if(!rangeCheck(array)){
-                return false;
-            }
-        }
-
-        if(pa.getIdToolCard() > 3) {
-            return false;
-        }
-        if(model.isStarted()) {
-            WindowFrame wf = model.getPlayer(playerActions.indexOf(pa)).getWindowFrame();
-            if((pa.getIdToolCard() > 0) && !model.isToolCardUsed()) {
-                // turn using tool card
-                ToolCard toolCard = model.getToolCard(pa.getIdToolCard());
-                return toolCard.validAction(model, wf, pa);
-            }
-            else if(ToolCard.isPendingAction()) {
-                ToolCard toolCard = ToolCard.getPendingToolCard();
-                return toolCard.validAction(model, wf, pa);
-            }
-            else if(!pa.getPosDPDie().isEmpty() && !pa.getPlaceDPDie().isEmpty()) {
-                // regular turn
-                if(pa.getPosDPDie().get(0) >= 0){
-                    Die die = model.getDraftPoolDie(pa.getPosDPDie().get(0));
-                    int[] wfPlace = pa.getPlaceDPDie().get(0);
-                    return (rangeCheck(pa.getPlaceDPDie().get(0))
-                            && wf.checkRestrictions(die, wfPlace[0], wfPlace[1]));
-                }
-                else return false;
-            }
-            else {
-                return false;
-            }
-        }
-        return true;
+    protected int getPlayerIndex(PlayerAction pa) {
+        return playerActions.indexOf(pa);
     }
 
     private void performAction(PlayerAction pa) {
@@ -342,7 +298,8 @@ public class ServerController {
         }
         else if(pa.isSwitchConnReq()) {
             int playerIndex = playerActions.indexOf(pa);
-            model.removePlayer(playerIndex);
+            Player player = model.getPlayer(playerIndex);
+            player.setSwitchingConn(true);
         }
         else if(model.isStarted()) {
             if((pa.getIdToolCard() > 0)
@@ -363,18 +320,16 @@ public class ServerController {
     public static void main(String[] args) {
         Model model = Model.instance();
         VirtualView virtualView = new VirtualView();
-        ServerController serverController = new ServerController(model, virtualView);
-        model.addObserver(virtualView);
         try {
+            ServerController serverController = new ServerController(model, virtualView);
+            model.addObserver(virtualView);
             serverController.gatherPlayers();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        serverController.gameSetup();
-        try {
+            serverController.gameSetup();
             serverController.listenPlayerActions();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (ResourceLoaderException e) {
+            System.out.println("ERROR LOADING RESOURCE FILES");
         }
     }
 }

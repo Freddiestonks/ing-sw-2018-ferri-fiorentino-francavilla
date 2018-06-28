@@ -7,7 +7,6 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
     private boolean updated = false;
     private String usernameReq = null;
     private boolean switchConnReq = false;
-    private boolean quitReq = false;
     private int patternCard = 0;
     private ArrayList<Integer> newDieValue = new ArrayList<>();
     private ArrayList<Integer> posDPDie = new ArrayList<>();
@@ -143,7 +142,6 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
         synchronized (lock) {
             this.usernameReq = null;
             this.switchConnReq = false;
-            this.quitReq = false;
             this.patternCard = 0;
             this.newDieValue.clear();
             this.posDPDie.clear();

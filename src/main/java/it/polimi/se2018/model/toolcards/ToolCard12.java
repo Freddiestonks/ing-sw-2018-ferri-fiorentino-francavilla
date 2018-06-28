@@ -5,8 +5,8 @@ import it.polimi.se2018.model.*;
 
 public class ToolCard12 extends ToolCard {
 
-    public ToolCard12(String name, String description, int price, int tokens) {
-        super(name, description, price, tokens);
+    public ToolCard12(String name, String description, int price) {
+        super(name, description, price);
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) throws InvalidPlaceException {
@@ -20,7 +20,7 @@ public class ToolCard12 extends ToolCard {
         wf.placeDie(die2, pa.getPlaceNewWFDie().get(1)[0], pa.getPlaceNewWFDie().get(1)[1]);
     }
 
-    public boolean validAction(Model model, WindowFrame wf, PlayerAction pa) {
+    public boolean validAction(ModelInterface model, WindowFrame wf, PlayerAction pa) {
         if((pa.getPlaceWFDie().size() < 2)
            || (pa.getPlaceNewWFDie().size() < 2)
            || pa.getPosRTDie().isEmpty()) {

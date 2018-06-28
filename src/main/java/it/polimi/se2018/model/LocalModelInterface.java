@@ -21,5 +21,7 @@ public interface LocalModelInterface extends Remote {
 
     void setToolCardUsed(boolean toolCardUsed) throws IOException;
 
+    void setPlayerIndex(int playerIndex) throws IOException;
+
     void checkConnection() throws IOException;
 }

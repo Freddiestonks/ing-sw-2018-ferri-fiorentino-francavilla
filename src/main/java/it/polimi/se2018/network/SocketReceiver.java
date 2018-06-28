@@ -32,6 +32,7 @@ public class SocketReceiver extends Thread {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Cell.class, new JsonAdapter<Cell>());
         gsonBuilder.registerTypeAdapter(PubObjCard.class, new JsonAdapter<PubObjCard>());
+        gsonBuilder.registerTypeAdapter(ToolCard.class, new JsonAdapter<ToolCard>());
         this.gson = gsonBuilder.create();
     }
 
@@ -110,10 +111,15 @@ public class SocketReceiver extends Thread {
                         ToolCard[] toolCards = gson.fromJson(message, ToolCard[].class);
                         localModel.setToolCards(toolCards);
                     }
-                    else if(message.substring(length).equals(SocketLocalModel.TCUSED)) {
+                    else if(message.substring(length).equals(SocketLocalModel.TC_USED)) {
                         message = is.readLine();
                         boolean toolCardUsed = gson.fromJson(message, boolean.class);
                         localModel.setToolCardUsed(toolCardUsed);
+                    }
+                    else if(message.substring(length).equals(SocketLocalModel.PLAYER_INDEX)) {
+                        message = is.readLine();
+                        int playerIndex = gson.fromJson(message, int.class);
+                        localModel.setPlayerIndex(playerIndex);
                     }
                 }
                 else if(message.startsWith(SocketView.VIEW + GAP)) {
