@@ -6,7 +6,7 @@ public interface ModelInterface {
 
     boolean isStarted();
 
-    boolean isLobbyGathering();
+    //boolean isLobbyGathering();
 
     WindowFrame getWindowFrame(int playerIndex);
 

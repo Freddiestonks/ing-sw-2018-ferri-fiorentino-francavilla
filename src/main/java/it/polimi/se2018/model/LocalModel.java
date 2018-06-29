@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.view.MainScreenInfo;
+
 import java.util.ArrayList;
 
 public class LocalModel implements LocalModelInterface, ModelInterface {
@@ -15,6 +17,7 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
     private ToolCard[] toolCards = new ToolCard[3];
     private boolean toolCardUsed = false;
     private int playerIndex;
+    private MainScreenInfo mainScreenInfo;
 
     public LocalModel() {
 
@@ -29,9 +32,9 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
         return started;
     }
 
-    public boolean isLobbyGathering() {
+    /*public boolean isLobbyGathering() {
         return lobbyGathering;
-    }
+    }*/
 
     public WindowFrame getWindowFrame(int playerIndex) {
         return windowFrame;
@@ -42,7 +45,7 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
     }
 
     public boolean playerHasChosenPC(int playerIndex) {
-        return false;
+        return (windowFrame != null);
     }
 
     public void updateTurn(int round, int turn, boolean backward) {

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public interface ViewInterface extends Remote {
     void updateWaitingRoom(boolean starting) throws IOException;
 
-    //TODO aggiornare ogni singolo componente della view
     void updateMainScreen(MainScreenInfo mainScreenInfo) throws IOException;
 
     void endGame(Player[] leaderboard,Player player,int[] score) throws IOException;

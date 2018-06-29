@@ -20,7 +20,7 @@ public class ClientController extends AbstractController implements Observer {
     private LocalModel model;
     private View view;
     private PlayerActionInterface playerActionInterface;
-    private PlayerAction playerAction = new PlayerAction();
+    //private PlayerAction playerAction = new PlayerAction();
     private MainScreenInfo mainScreenInfo;
     private NetworkHandler networkHandler;
     private static final String PLACE = "place";
@@ -42,13 +42,14 @@ public class ClientController extends AbstractController implements Observer {
         this.view = view;
     }
 
-    private void parser(String str){
+    private void parser(String str) {
+        PlayerAction playerAction = new PlayerAction();
         String[] string = str.split(SEPARATOR);
         if(string[0].equalsIgnoreCase(TOOL_CARD)){
-            toolCardParser(string);
+            toolCardParser(playerAction, string);
         }
         else if(string[0].equalsIgnoreCase(PLACEMENT)){
-            placementParser(string);
+            placementParser(playerAction, string);
         }
         else if(string[0].equalsIgnoreCase(HELP)){
             view.help();
@@ -68,109 +69,96 @@ public class ClientController extends AbstractController implements Observer {
         }
         else if(string[0].equalsIgnoreCase("set")){
             if(string[1].equalsIgnoreCase("username")){
-                playerAction.clear();
                 playerAction.setUsernameReq(string[2]);
                 out.println(string[2]);
-                performAction();
+                performAction(playerAction);
             }
             else if(string[1].equalsIgnoreCase("pc")){
                 try {
                     playerAction.setPatternCard(Integer.parseInt(string[2]));
-                }catch (NumberFormatException nfe){
+                } catch (NumberFormatException nfe){
                     view.invalidMoveError();
                 }
-                performAction();
+                performAction(playerAction);
             }
         }
         else if(string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)){
-            view.updateMainScreen(mainScreenInfo);
+            view.showMainScreen();
         }
-        else{
+        else {
             view.invalidMoveError();
         }
     }
-    private void placementParser(String[] read){
+
+    private void placementParser(PlayerAction playerAction, String[] read){
         int i = 1;
         try {
             while (i < read.length) {
                 if (read[i].equalsIgnoreCase(SELECT)) {
-                    if (read[i + 1].equalsIgnoreCase(DRAFT_POOL)) {
-                        int element = Integer.parseInt(read[i + 2]);
-                        playerAction.addPosDPDie(element);
-                        i=i+3;
-                    }
+                    int element = Integer.parseInt(read[i + 1]);
+                    playerAction.addPosDPDie(element);
+                    i += 2;
                 } else if (read[i].equalsIgnoreCase(PLACE)) {
-                    if (read[i + 1].equalsIgnoreCase(DRAFT_POOL)) {
-                        int row = Integer.parseInt(read[i + 2]);
-                        int col = Integer.parseInt(read[i + 3]);
-                        playerAction.addPlaceDPDie(row, col);
-                        i=i+4;
-                    }
+                    int row = Integer.parseInt(read[i + 1]);
+                    int col = Integer.parseInt(read[i + 2]);
+                    playerAction.addPlaceDPDie(row, col);
+                    i += 3;
                 } else {
                     view.invalidMoveError();
+                    return;
                 }
             }
-        }catch (NumberFormatException nfe){
+            performAction(playerAction);
+        } catch (NumberFormatException nfe){
             view.invalidMoveError();
         }
 
     }
-    private void toolCardParser(String[] string){
 
+    private void toolCardParser(PlayerAction playerAction, String[] string){
         switch (string[1]) {
-            case "1": {
-                //ToolCard toolCard = model.getToolCards()[0];
-                performToolCard(string);
-                break;
-            }
-            case "2": {
-                //ToolCard toolCard = model.getToolCards()[1];
-                performToolCard(string);
-                break;
-            }
-            case "3": {
+            case "1":
+            case "2":
+            case "3":
                 //ToolCard toolCard = model.getToolCards()[2];
-                performToolCard(string);
+                performToolCard(playerAction, string);
                 break;
-            }
-            case "all":{
+            case "show":
                 view.updateToolCards(model.getToolCards());
                 break;
-
-            }
             default:
                 view.invalidMoveError();
                 break;
         }
     }
 
-    private void performToolCard(String[] read) {
+    private void performToolCard(PlayerAction playerAction, String[] read) {
         try {
             playerAction.setIdToolCard(Integer.parseInt(read[2]));
             int i = 2;
-            while(i<read.length){
+            while(i < read.length) {
                 if (read[i].equalsIgnoreCase(NEW_VALUE)) {
                     int value = Integer.parseInt(read[i + 1]);
                     playerAction.addNewDieValue(value);
-                    i=i+2;
+                    i += 2;
                 }
                 else if (read[i].equalsIgnoreCase(SELECT)) {
                     if (read[i + 1].equalsIgnoreCase(DRAFT_POOL)) {
                         int element = Integer.parseInt(read[i + 2]);
                         playerAction.addPosDPDie(element);
-                        i = i+3;
+                        i += 3;
                     }
                     else if (read[i + 1].equalsIgnoreCase(ROUND_TRACK)) {
                         int round = Integer.parseInt(read[i + 2]);
                         int row = Integer.parseInt(read[i + 3]);
                         playerAction.addPosRTDie(round, row);
-                        i = i+4;
+                        i += 4;
                     }
                     else if (read[i + 1].equalsIgnoreCase(WINDOW_FRAME)) {
                         int row = Integer.parseInt(read[i + 2]);
                         int col = Integer.parseInt(read[i + 3]);
                         playerAction.addPlaceWFDie(row, col);
-                        i = i+4;
+                        i += 4;
                     }
                 }
                 else if (read[i].equalsIgnoreCase(PLACE)) {
@@ -178,19 +166,21 @@ public class ClientController extends AbstractController implements Observer {
                         int row = Integer.parseInt(read[i + 2]);
                         int col = Integer.parseInt(read[i + 3]);
                         playerAction.addPlaceDPDie(row, col);
-                        i=i+4;
+                        i += 4;
                     }
                     else if (read[i + 1].equalsIgnoreCase(WINDOW_FRAME)) {
                         int row = Integer.parseInt(read[i + 2]);
                         int col = Integer.parseInt(read[i + 3]);
                         playerAction.addPlaceNewWFDie(row, col);
-                        i=i+4;
+                        i += 4;
                     }
                 } else {
                     view.invalidMoveError();
+                    return;
                 }
             }
-        }catch (NumberFormatException nfe){
+            performAction(playerAction);
+        } catch (NumberFormatException nfe){
             view.invalidMoveError();
         }
     }
@@ -206,22 +196,26 @@ public class ClientController extends AbstractController implements Observer {
         mainScreenInfo.setBackward(model.isBackward());
     }*/
 
-    private void performAction() {
-        try {
-            playerActionInterface.setPlayerAction(playerAction);
-        } catch (IOException e) {
-            view.connectionError();
+    private void performAction(PlayerAction playerAction) {
+        if(validAction(playerAction)) {
+            try {
+                playerActionInterface.setPlayerAction(playerAction);
+            } catch (IOException e) {
+                view.connectionError();
+            }
+        }
+        else {
+            view.invalidMoveError();
         }
     }
 
-    public void setView(View view) {
+    /*public void setView(View view) {
         this.view = view;
-    }
+    }*/
 
     public void update() {
         String userInput = view.getUserInput();
         parser(userInput);
-        this.playerAction.clear();
     }
 
     public static void main(String[] args) {

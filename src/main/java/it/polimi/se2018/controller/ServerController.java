@@ -286,11 +286,11 @@ public class ServerController extends AbstractController {
 
     private void performAction(PlayerAction pa) {
         if(!model.isLobbyGathering() && !model.isStarted()) {
-            Player player = model.getPlayer(playerActions.indexOf(pa));
+            int playerIndex = playerActions.indexOf(pa);
             int index = pa.getPatternCard() / 2 + 2 * playerActions.indexOf(pa);
             boolean wcFace = (pa.getPatternCard() % 2 == 0);
             PatternCard pc = model.getPatternCards()[index];
-            player.setWinFrame(new WindowFrame(pc, wcFace));
+            model.setWindowFrame(playerIndex, new WindowFrame(pc, wcFace));
             readyPlayers++;
             if(readyPlayers == model.getNumPlayers()) {
                 model.startMatch();

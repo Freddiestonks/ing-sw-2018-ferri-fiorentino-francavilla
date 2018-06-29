@@ -53,6 +53,10 @@ public class GUIView extends View {
 
     }
 
+    public void showMainScreen() {
+
+    }
+
     public void updateMainScreen(MainScreenInfo mainScreenInfo) {
 
     }

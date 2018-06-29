@@ -19,7 +19,7 @@ public abstract class View extends Observable implements ViewInterface {
 
     public abstract void updateWaitingRoom(boolean starting);
 
-    public abstract void welcomeScreen();
+    //public abstract void welcomeScreen();
 
     public abstract void updateRT(ArrayList<ArrayList<Die>> roundTrack);
 
@@ -41,11 +41,11 @@ public abstract class View extends Observable implements ViewInterface {
 
     public abstract void updatePlayerWF(Player player);
 
+    public abstract void showMainScreen();
+
     public abstract void updateMainScreen(MainScreenInfo mainScreenInfo);
 
-    public abstract void updateConnectionRequest(boolean success);
-
-    public abstract void endGame(Player[] leaderboard,Player player,int[] score);
+    public abstract void endGame(Player[] leaderboard, Player player, int[] score);
 
     public abstract void updateToolCards(ToolCard[] toolCards);
 
@@ -55,11 +55,7 @@ public abstract class View extends Observable implements ViewInterface {
 
     public abstract void help();
 
-    public abstract void selectionMaker(String[] string);
-
     public abstract void updatePlayerLobby(ArrayList<String> usernames);
-
-    public abstract void updatePlayerState(Player player);
 
     public abstract void patternCardGenerator(ArrayList<PatternCard> pc);
 

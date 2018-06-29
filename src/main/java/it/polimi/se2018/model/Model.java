@@ -518,6 +518,15 @@ public class Model extends Observable implements ModelInterface {
         this.lobbyGathering = lobbyGathering;
     }
 
+    public void setWindowFrame(int playerIndex, WindowFrame wf) {
+        players.get(playerIndex).setWinFrame(wf);
+        try {
+            localModels.get(playerIndex).setWindowFrame(wf);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public WindowFrame getWindowFrame(int playerIndex) {
         return players.get(playerIndex).getWindowFrame();
     }

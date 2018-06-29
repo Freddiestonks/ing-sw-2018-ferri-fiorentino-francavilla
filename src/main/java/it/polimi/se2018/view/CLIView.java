@@ -16,6 +16,7 @@ public class CLIView extends View {
     private String ip;
     private String port;
     private String type = null;
+    private MainScreenInfo mainScreenInfo;
     private static final int CARD_WIDTH = 26;
     private static final int PRIV_OC_SIZE = 1;
     private static final int ROW_SIZE = 4;
@@ -204,8 +205,13 @@ public class CLIView extends View {
         out.println();
     }
 
+    public synchronized void showMainScreen() {
+        updateMainScreen(this.mainScreenInfo);
+    }
+
     public synchronized void updateMainScreen(MainScreenInfo mainScreenInfo) {
         clearScreen();
+        this.mainScreenInfo = mainScreenInfo;
         Player player = mainScreenInfo.getPlayer();
         ArrayList<Player> opponents = mainScreenInfo.getOpponents();
         int round = mainScreenInfo.getRound();
@@ -223,14 +229,14 @@ public class CLIView extends View {
         out.print(CURSOR);
     }
 
-    public synchronized void updateConnectionRequest(boolean success){
+    /*public synchronized void updateConnectionRequest(boolean success){
         if(success){
             out.println("Congratulations you are now connected\n");
         }
         else{
             out.println("Sorry, there was a problem connecting to the server, please check ip and port\n");
         }
-    }
+    }*/
 
     public void endGame(Player[] leaderboard,Player player,int[] score) {
         clearScreen();
@@ -269,23 +275,21 @@ public class CLIView extends View {
            names[i] = toolCards[i].getName();
            description[i] = toolCards[i].getDescription();
         }
-
         layoutFormatter(names,toolCards.length);
         layoutFormatter(description,toolCards.length);
-        out.print(CURSOR);
     }
 
     public synchronized void invalidMoveError(){
         out.println("ERROR: Invalid Move");
     }
 
-    public synchronized void selectionMaker(String[] string){
+    /*public synchronized void selectionMaker(String[] string){
         out.println("Please select an option:");
         for(int i=0; i<string.length;i++){
             out.print(i + ": ");
             out.println(string[i]);
         }
-    }
+    }*/
 
     public synchronized void help() {
         clearScreen();
@@ -302,11 +306,10 @@ public class CLIView extends View {
         out.println("           place = make a placement");
         out.println("               draftpool [row][col] = place die selected from draftpool on cell[row][col]");
         out.println("               windowframe [row][col] = move die selected from windowframe die on cell[row][col]");
-        out.println("       all = show all Tool Cards\n");
+        out.println("       show = show all Tool Cards\n");
         out.println("   placement");
         out.println("       select [element] = select from draftpool element #[element] ");
         out.println("       place [row][col] = place die selected from draftpool on the cell[row][col] of the window frame");
-        out.print(CURSOR);
     }
 
     public synchronized void updatePlayerLobby(ArrayList<String> usernames) {
@@ -322,7 +325,7 @@ public class CLIView extends View {
         out.print(CURSOR);
     }
 
-    //TODO PLayer Status
+    /*//TODO PLayer Status
     public synchronized void updatePlayerState(Player player) {
         if(player.isConnected()){
             out.println(player.getUsername() + " just disconnected from the game\n");
@@ -330,7 +333,7 @@ public class CLIView extends View {
         else {
             out.println(player.getUsername() + " just came back into the game\n");
         }
-    }
+    }*/
 
     public synchronized void connectionError() {
         clearScreen();

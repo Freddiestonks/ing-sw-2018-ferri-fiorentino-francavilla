@@ -15,7 +15,9 @@ public class MainScreenInfo implements Serializable {
     private ArrayList<Die> draftPool;
     private ArrayList<ArrayList<Die>> roundTrack;
 
-    public MainScreenInfo(){}
+    public MainScreenInfo() {
+
+    }
 
     public Player getPlayer() {
         return player;
