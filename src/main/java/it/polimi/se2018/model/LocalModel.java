@@ -23,12 +23,12 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
 
     }
 
-    public void setState(boolean started, boolean lobbyGathering) {
+    public synchronized void setState(boolean started, boolean lobbyGathering) {
         this.started = started;
         this.lobbyGathering = lobbyGathering;
     }
 
-    public boolean isStarted() {
+    public synchronized boolean isStarted() {
         return started;
     }
 
@@ -36,60 +36,60 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
         return lobbyGathering;
     }*/
 
-    public WindowFrame getWindowFrame(int playerIndex) {
+    public synchronized WindowFrame getWindowFrame(int playerIndex) {
         return windowFrame;
     }
 
-    public void setWindowFrame(WindowFrame wf) {
+    public synchronized void setWindowFrame(WindowFrame wf) {
         this.windowFrame = wf;
     }
 
-    public boolean playerHasChosenPC(int playerIndex) {
+    public synchronized boolean playerHasChosenPC(int playerIndex) {
         return (windowFrame != null);
     }
 
-    public void updateTurn(int round, int turn, boolean backward) {
+    public synchronized void updateTurn(int round, int turn, boolean backward) {
         this.round = round;
         this.turn = turn;
         this.backward = backward;
     }
 
-    public int getRound() {
+    public synchronized int getRound() {
         return round;
     }
 
-    public int getTurn() {
+    public synchronized int getTurn() {
         return turn;
     }
 
-    public boolean isBackward() {
+    public synchronized boolean isBackward() {
         return backward;
     }
 
-    public void setDraftPool(ArrayList<Die> draftPool) {
+    public synchronized void setDraftPool(ArrayList<Die> draftPool) {
         this.draftPool = new ArrayList<>(draftPool);
     }
 
-    public ArrayList<Die> getDraftPool() {
+    public synchronized ArrayList<Die> getDraftPool() {
         return new ArrayList<>(draftPool);
     }
 
-    public Die getDraftPoolDie(int pos) {
+    public synchronized Die getDraftPoolDie(int pos) {
         return draftPool.get(pos);
     }
 
-    public int getDraftPoolSize() {
+    public synchronized int getDraftPoolSize() {
         return draftPool.size();
     }
 
-    public void setRoundTrack(ArrayList<ArrayList<Die>> roundTrack) {
+    public synchronized void setRoundTrack(ArrayList<ArrayList<Die>> roundTrack) {
         this.roundTrack.clear();
         for(int i = 0; i < 10; i++) {
             this.roundTrack.add(new ArrayList<>(roundTrack.get(i)));
         }
     }
 
-    public Die getRoundTrackDie(int round, int i) {
+    public synchronized Die getRoundTrackDie(int round, int i) {
         return roundTrack.get(round - 1).get(i);
     }
 
@@ -101,43 +101,43 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
         return rt;
     }*/
 
-    public int getRoundTrackSize(int round) {
+    public synchronized int getRoundTrackSize(int round) {
         return roundTrack.get(round - 1).size();
     }
 
-    public ToolCard getToolCard(int i) {
+    public synchronized ToolCard getToolCard(int i) {
         return toolCards[i - 1];
     }
 
-    public void setPubOCs(PubObjCard[] pubOCs) {
+    public synchronized void setPubOCs(PubObjCard[] pubOCs) {
         this.pubOCs = pubOCs.clone();
     }
 
-    public PubObjCard[] getPubOCs() {
+    public synchronized PubObjCard[] getPubOCs() {
         return pubOCs.clone();
     }
 
-    public void setToolCards(ToolCard[] toolCards) {
+    public synchronized void setToolCards(ToolCard[] toolCards) {
         this.toolCards = toolCards.clone();
     }
 
-    public ToolCard[] getToolCards() {
+    public synchronized ToolCard[] getToolCards() {
         return toolCards.clone();
     }
 
-    public void setToolCardUsed(boolean toolCardUsed) {
+    public synchronized void setToolCardUsed(boolean toolCardUsed) {
         this.toolCardUsed = toolCardUsed;
     }
 
-    public boolean isToolCardUsed() {
+    public synchronized boolean isToolCardUsed() {
         return toolCardUsed;
     }
 
-    public void setPlayerIndex(int playerIndex) {
+    public synchronized void setPlayerIndex(int playerIndex) {
         this.playerIndex = playerIndex;
     }
 
-    public int getPlayerIndex() {
+    public synchronized int  getPlayerIndex() {
         return playerIndex;
     }
 

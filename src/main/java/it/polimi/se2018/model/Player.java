@@ -68,16 +68,20 @@ public class Player implements Serializable {
     }
 
     public int calculateScore(PubObjCard[] pubObjCard){
+        if(wf==null){
+        }
+        System.out.println(wf);
         score = pubObjCard[0].calculateScore(wf) + pubObjCard[1].calculateScore(wf) + pubObjCard[2].calculateScore(wf);
         for (int i = 0; i<5; i++){
             for (int l = 0;l<4;l++){
                 //fill check with all of the elements inside the window frame
-                if(wf.getDie(l,i).getColor() == privObjCard.getColor()){
-                    score++;
-                }
                 if(wf.getDie(l,i) == null){
                     score--;
                 }
+                else if(wf.getDie(l,i).getColor() == privObjCard.getColor()){
+                    score++;
+                }
+
             }
         }
         score = score + tokens;
@@ -132,5 +136,10 @@ public class Player implements Serializable {
     public void setSwitchingConn(boolean switchingConn) {
         this.switchingConn = switchingConn;
     }
+
+    public PrivObjCard getPrivObjCard() {
+        return privObjCard;
+    }
+
 }
 

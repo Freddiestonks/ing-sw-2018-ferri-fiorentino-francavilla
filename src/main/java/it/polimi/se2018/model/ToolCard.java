@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 public abstract class ToolCard implements Serializable {
     //Attributes
-    private String name;
-    private String description;
-    private int price;
+    private String name = "test";
+    private String description = "test";
+    private int price = 4;
     private int tokens = 0;
     protected static ToolCard pendingToolCard = null;
     protected static Die pendingDie;

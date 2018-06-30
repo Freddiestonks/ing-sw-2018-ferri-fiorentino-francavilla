@@ -43,49 +43,47 @@ public class ClientController extends AbstractController implements Observer {
     }
 
     private void parser(String str) {
-        PlayerAction playerAction = new PlayerAction();
-        String[] string = str.split(SEPARATOR);
-        if(string[0].equalsIgnoreCase(TOOL_CARD)){
-            toolCardParser(playerAction, string);
-        }
-        else if(string[0].equalsIgnoreCase(PLACEMENT)){
-            placementParser(playerAction, string);
-        }
-        else if(string[0].equalsIgnoreCase(HELP)){
-            view.help();
-        }
-        else if(string[0].equalsIgnoreCase("connect")){
-            //TODO: check whether user is already connect
-            if(string[1].equalsIgnoreCase("socket")){
-                networkHandler = new SocketNetworkHandler(string[2]);
-                playerActionInterface = networkHandler.connect(model,view);
-                out.println("ok");
-            }
-            else if(string[1].equalsIgnoreCase("rmi")){
-                networkHandler = new RMINetworkHandler(string[2]);
-                playerActionInterface = networkHandler.connect(model,view);
-                out.println("ok");
-            }
-        }
-        else if(string[0].equalsIgnoreCase("set")){
-            if(string[1].equalsIgnoreCase("username")){
-                playerAction.setUsernameReq(string[2]);
-                out.println(string[2]);
-                performAction(playerAction);
-            }
-            else if(string[1].equalsIgnoreCase("pc")){
-                try {
-                    playerAction.setPatternCard(Integer.parseInt(string[2]));
-                } catch (NumberFormatException nfe){
-                    view.invalidMoveError();
+        try {
+            PlayerAction playerAction = new PlayerAction();
+            String[] string = str.split(SEPARATOR);
+            if (string[0].equalsIgnoreCase(TOOL_CARD)) {
+                toolCardParser(playerAction, string);
+            } else if (string[0].equalsIgnoreCase(PLACEMENT)) {
+                placementParser(playerAction, string);
+            } else if (string[0].equalsIgnoreCase(HELP)) {
+                view.help();
+            } else if (string[0].equalsIgnoreCase("connect")) {
+                //TODO: check whether user is already connected
+                if (string[1].equalsIgnoreCase("socket")) {
+
+                    networkHandler = new SocketNetworkHandler(string[2]);
+                    playerActionInterface = networkHandler.connect(model, view);
+                } else if (string[1].equalsIgnoreCase("rmi")) {
+                    networkHandler = new RMINetworkHandler(string[2]);
+                    playerActionInterface = networkHandler.connect(model, view);
+                    out.println("ok");
                 }
-                performAction(playerAction);
+            } else if (string[0].equalsIgnoreCase("set")) {
+                if (string[1].equalsIgnoreCase("username")) {
+                    playerAction.setUsernameReq(string[2]);
+                    out.println(string[2]);
+                    performAction(playerAction);
+                } else if (string[1].equalsIgnoreCase("pc")) {
+                    try {
+                        playerAction.setPatternCard(Integer.parseInt(string[2]));
+                    } catch (NumberFormatException nfe) {
+                        view.invalidMoveError();
+                    }
+                    performAction(playerAction);
+                }
+            } else if (string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)) {
+                view.showMainScreen();
+            } else if (string[0].equalsIgnoreCase("public")) {
+                view.updatePubOCs(model.getPubOCs());
+            } else {
+                view.invalidMoveError();
             }
-        }
-        else if(string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)){
-            view.showMainScreen();
-        }
-        else {
+        }catch (ArrayIndexOutOfBoundsException iob){
             view.invalidMoveError();
         }
     }
@@ -94,6 +92,7 @@ public class ClientController extends AbstractController implements Observer {
         int i = 1;
         try {
             while (i < read.length) {
+                out.println(read[i]);
                 if (read[i].equalsIgnoreCase(SELECT)) {
                     int element = Integer.parseInt(read[i + 1]);
                     playerAction.addPosDPDie(element);
@@ -189,13 +188,6 @@ public class ClientController extends AbstractController implements Observer {
         return model.getPlayerIndex();
     }
 
-    /*private void updateMainScreen(){
-        mainScreenInfo.setRoundTrack(model.getRoundTrack());
-        mainScreenInfo.setRound(model.getRound());
-        mainScreenInfo.setDraftPool(model.getDraftPool());
-        mainScreenInfo.setBackward(model.isBackward());
-    }*/
-
     private void performAction(PlayerAction playerAction) {
         if(validAction(playerAction)) {
             try {
@@ -208,10 +200,6 @@ public class ClientController extends AbstractController implements Observer {
             view.invalidMoveError();
         }
     }
-
-    /*public void setView(View view) {
-        this.view = view;
-    }*/
 
     public void update() {
         String userInput = view.getUserInput();

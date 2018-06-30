@@ -45,11 +45,6 @@ public class TestCLIView {
         cliView.updatePubOCs(pubObjCards);
     }
     @Test
-    public void testUpdatePrivOCs(){
-        PrivObjCard privObjCard = new PrivObjCard(Color.BLUE);
-        cliView.updatePrivOCs(privObjCard);
-    }
-    @Test
     public void testRT(){
         ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
         for(int i = 0; i < 10; i++) {

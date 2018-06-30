@@ -63,6 +63,21 @@ public class VirtualView implements Observer {
                 offset += 2;
             }
         }
+        else if(model.getOver()){
+            System.out.println("ENDED");
+            ArrayList<Player> leaderBoard= model.getLeaderBoard();
+            int[] score = new int[model.getPlayers().size()];
+            for(int i = 0; i<model.getPlayers().size();i++){
+                score[i] = leaderBoard.get(i).calculateScore(model.getPubOCs());
+            }
+            for(ViewInterface view : views) {
+                try {
+                    view.endGame(leaderBoard,model.getPlayer(model.getTurn()-1),score);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         else {
             MainScreenInfo msi = new MainScreenInfo();
             String turnPlayer = model.getPlayer(model.getTurn() - 1).getUsername();

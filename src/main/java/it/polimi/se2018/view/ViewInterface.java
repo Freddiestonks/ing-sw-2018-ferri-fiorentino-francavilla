@@ -11,7 +11,7 @@ public interface ViewInterface extends Remote {
 
     void updateMainScreen(MainScreenInfo mainScreenInfo) throws IOException;
 
-    void endGame(Player[] leaderboard,Player player,int[] score) throws IOException;
+    void endGame(ArrayList<Player> leaderboard,Player player,int[] score) throws IOException;
 
     void updatePlayerLobby(ArrayList<String> usernames) throws IOException;
 

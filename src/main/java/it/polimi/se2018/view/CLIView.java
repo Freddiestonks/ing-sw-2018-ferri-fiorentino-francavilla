@@ -72,7 +72,7 @@ public class CLIView extends View {
             out.println("You are in the backward order of this round");
         }
         else {
-            out.println("You are in the afterward order of the round");
+            out.println("You are in the forward order of the round");
         }
     }
 
@@ -86,8 +86,8 @@ public class CLIView extends View {
         updateOrder(backward);
         updateTurnPlayer(turnPlayer);
     }
-    @Override
     public synchronized void updatePrivOCs(PrivObjCard privObjCard){
+        //TODO Understand why privOC is null
         clearScreen();
         String[] string = new String[PRIV_OC_SIZE];
         for (int i = 0; i < PRIV_OC_SIZE; i++) {
@@ -99,11 +99,10 @@ public class CLIView extends View {
         out.println();
         string[0] = "Private Objective";
         layoutFormatter(string, PRIV_OC_SIZE);
-        string[0] = "Shades " + privObjCard.getColor().toString().toLowerCase();
+        string[0] = "Shades " + privObjCard;
         layoutFormatter(string, PRIV_OC_SIZE);
         string[0] = "You score as many points as the values of the shades on all of the " + privObjCard + " dice";
         layoutFormatter(string, PRIV_OC_SIZE);
-        out.print(CURSOR);
     }
 
     public synchronized void updatePubOCs(PubObjCard[] pubObjCards) {
@@ -219,6 +218,8 @@ public class CLIView extends View {
         String turnPlayer = mainScreenInfo.getTurnPlayer();
         ArrayList<Die> draftPool = mainScreenInfo.getDraftPool();
         ArrayList<ArrayList<Die>> roundTrack = mainScreenInfo.getRoundTrack();
+        updatePrivOCs(player.getPrivObjCard());
+        out.println();
         updateInfo(player.getTokens(),round,backward,turnPlayer);
         out.println();
         updateDP(draftPool);
@@ -238,19 +239,19 @@ public class CLIView extends View {
         }
     }*/
 
-    public void endGame(Player[] leaderboard,Player player,int[] score) {
+    public void endGame(ArrayList<Player> leaderboard,Player player,int[] score) {
         clearScreen();
         out.println("Match is over here is the Leaderboard:\n");
-        for(int i = 0; i<leaderboard.length;i++){
-            out.println("#"+i+" - " + leaderboard[i].getUsername() + "Points: " + score[i]+ "\n\n");
+        for(int i = 0; i<leaderboard.size();i++){
+            out.println("#"+i+" - " + leaderboard.get(i).getUsername() + "Points: " + score[i]+ "\n\n");
         }
-        if(Objects.equals(player.getUsername(), leaderboard[0].getUsername())){
+        if(Objects.equals(player.getUsername(), leaderboard.get(0).getUsername())){
             out.println("Congratulations you won, good Job!");
         }
-        else if(Objects.equals(player.getUsername(), leaderboard[1].getUsername())){
+        else if(Objects.equals(player.getUsername(), leaderboard.get(1).getUsername())){
             out.println("You came out second");
         }
-        else if(Objects.equals(player.getUsername(), leaderboard[2].getUsername())){
+        else if(Objects.equals(player.getUsername(), leaderboard.get(2).getUsername())){
             out.println("You came out third");
         }
         else{
@@ -358,6 +359,36 @@ public class CLIView extends View {
             }
             out.print(SPACE);
 
+        }
+        out.println();
+        for(int i =0;i<pc.size();i++){
+            String prefix= pc.get(i).getNameF();
+            out.print(prefix);
+            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+                out.print(" ");
+            }
+            out.print(SPACE);
+            prefix = pc.get(i).getNameB();
+            out.print(prefix);
+            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+                out.print(" ");
+            }
+            out.print(SPACE);
+        }
+        out.println();
+        for(int i =0;i<pc.size();i++){
+            String prefix= "Level : " + pc.get(i).getLevelF();
+            out.print(prefix);
+            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+                out.print(" ");
+            }
+            out.print(SPACE);
+            prefix = "Level : " + pc.get(i).getLevelB();
+            out.print(prefix);
+            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+                out.print(" ");
+            }
+            out.print(SPACE);
         }
         out.println();
         for(int i = 0; i< ROW_SIZE; i++){

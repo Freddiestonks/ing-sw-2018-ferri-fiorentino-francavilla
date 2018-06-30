@@ -48,7 +48,7 @@ public class SocketView implements ViewInterface {
         writer.flush();
     }
 
-    public void endGame(Player[] leaderboard, Player player, int[] score) throws IOException {
+    public void endGame(ArrayList<Player> leaderboard, Player player, int[] score) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
         writer.write(VIEW + GAP + END_GAME + "\n");
         String json = gson.toJson(leaderboard);

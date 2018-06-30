@@ -28,8 +28,9 @@ public class PubOCShadeSet extends PubObjCard {
      * */
     private void updateCheck(int row , int col, WindowFrame wf){
         //UpdateCheck is used to fill the "Check" vector with how many times each color appears on a line
+        if(wf.getDie(row, col)!=null){
         int value = wf.getDie(row,col).getValue() - 1;
-        check.set(value,check.get(value) + 1);
+        check.set(value,check.get(value) + 1);}
     }
     /**
      * This method is used to calculate the score of a specific player throughout his WindowFrame

@@ -25,6 +25,7 @@ public class Model extends Observable implements ModelInterface {
     private ArrayList<Player> players = new ArrayList<>();
     private int round = 1;
     private int turn = 1;
+    private boolean over = false;
     private boolean backward = false;
     private int numPlayers = 0;
     private DiceBag diceBag = DiceBag.instance();
@@ -121,6 +122,7 @@ public class Model extends Observable implements ModelInterface {
     public void updateTurn() {
         if(round == 10 && backward && turn == 1) {
             calculateScore();
+            over = true;
             return;
         }
         if(!backward && (turn == numPlayers)) {
@@ -345,6 +347,7 @@ public class Model extends Observable implements ModelInterface {
      * */
     public void calculateScore(){
         leaderBoard = players;
+        System.out.println(pubOCs);
         for (int i = 1; i<numPlayers;i++){
             for (int j=0; j < i;j++){
                 if(leaderBoard.get(i).calculateScore(pubOCs) > leaderBoard.get(j).calculateScore(pubOCs)){
@@ -457,7 +460,11 @@ public class Model extends Observable implements ModelInterface {
     }
 
     public void setPubOCs(PubObjCard[] pubOCs) {
+
         this.pubOCs = pubOCs.clone();
+        System.out.println(pubOCs[0]);
+        System.out.println(pubOCs[1]);
+        System.out.println(pubOCs[2]);
     }
 
     public PatternCard[] getPatternCards() {
@@ -583,12 +590,16 @@ public class Model extends Observable implements ModelInterface {
                 localModel.setToolCards(toolCards);
                 localModel.setToolCardUsed(toolCardUsed);
                 localModel.setState(started, lobbyGathering);
+                localModel.setPlayerIndex(playerIndex);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             playerIndex++;
         }
         notifyObservers();
+    }
+    public boolean getOver(){
+        return over;
     }
 
     public boolean isStarted(){

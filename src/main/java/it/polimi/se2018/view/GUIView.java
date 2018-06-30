@@ -65,7 +65,7 @@ public class GUIView extends View {
 
     }
 
-    public void endGame(Player[] leaderboard, Player player, int[] score) {
+    public void endGame(ArrayList<Player> leaderboard, Player player, int[] score) {
 
     }
 

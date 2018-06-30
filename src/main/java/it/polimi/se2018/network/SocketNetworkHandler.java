@@ -21,7 +21,8 @@ public class SocketNetworkHandler extends NetworkHandler {
         try {
             socket = new Socket(host, PORT);
         } catch (IOException e) {
-            e.printStackTrace();
+           //TODO REMOVE THIS
+           e.printStackTrace();
         }
         socketReceiver = new SocketReceiver(socket);
         socketReceiver.setLocalModel(localModel);

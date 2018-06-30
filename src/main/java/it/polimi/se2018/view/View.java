@@ -45,7 +45,7 @@ public abstract class View extends Observable implements ViewInterface {
 
     public abstract void updateMainScreen(MainScreenInfo mainScreenInfo);
 
-    public abstract void endGame(Player[] leaderboard, Player player, int[] score);
+    public abstract void endGame(ArrayList<Player> leaderboard, Player player, int[] score);
 
     public abstract void updateToolCards(ToolCard[] toolCards);
 

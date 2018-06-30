@@ -47,9 +47,9 @@ public class PubOCColorDet extends PubObjCard {
      * */
     private void updateCheck(int row , int col, WindowFrame wf){
         //UpdateCheck is used to fill the "Check" vector with how many times each color appears on a line
-
+        if(wf.getDie(row,col)!=null){
         Color color = wf.getDie(row,col).getColor();
-        check.set(color.ordinal(),check.get(color.ordinal()) + 1);
+        check.set(color.ordinal(),check.get(color.ordinal()) + 1);}
 
     }
     /**
@@ -120,14 +120,17 @@ public class PubOCColorDet extends PubObjCard {
      * */
     private int getScoreDiag(WindowFrame wf){
         //Start from dice (0,0) (top-left)
+        System.out.println("CALCULATED");
         int score = 0;
         for (int i=0; i<4;i++){
             for (int l=0;l<5;l++){
-                if((i-1)>=0&&(l -1)>=0&&(wf.getDie(i, l).getColor()==wf.getDie(i-1, l -1).getColor())||(
-                        (i-1)>=0&&(l +1)<5&&(wf.getDie(i, l).getColor()==wf.getDie(i-1, l +1).getColor()))||
-                        ((i+1)<4&&(l -1)>=0&&(wf.getDie(i, l).getColor()==wf.getDie(i+1, l -1).getColor()))||
-                        ((i+1)<4&&(l +1)<5&&(wf.getDie(i, l).getColor()==wf.getDie(i+1, l +1).getColor()))){
-                    score++;
+                if(wf.getDie(i,l)!=null) {
+                    if ((i - 1) >= 0 && (l - 1) >= 0 && (wf.getDie(i, l).getColor().equals(wf.getDie(i - 1, l - 1).getColor())) || (
+                            (i - 1) >= 0 && (l + 1) < 5 && (wf.getDie(i, l).getColor().equals(wf.getDie(i - 1, l + 1).getColor()))) ||
+                            ((i + 1) < 4 && (l - 1) >= 0 && (wf.getDie(i, l).getColor().equals(wf.getDie(i + 1, l - 1).getColor()))) ||
+                            ((i + 1) < 4 && (l + 1) < 5 && (wf.getDie(i, l).getColor().equals(wf.getDie(i + 1, l + 1).getColor())))) {
+                        score++;
+                    }
                 }
             }
         }

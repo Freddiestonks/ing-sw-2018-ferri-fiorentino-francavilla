@@ -135,13 +135,17 @@ public class SocketReceiver extends Thread {
                         view.updateMainScreen(msi);
                     }
                     else if(message.substring(length).equals(SocketView.END_GAME)) {
+                        ArrayList<Player> leaderBoard = new ArrayList<>();
                         message = is.readLine();
                         Player[] leaderboard = gson.fromJson(message, Player[].class);
+                        for(int i = 0;i<leaderboard.length;i++){
+                            leaderBoard.add(leaderboard[i]);
+                        }
                         message = is.readLine();
                         Player player = gson.fromJson(message, Player.class);
                         message = is.readLine();
                         int[] score = gson.fromJson(message, int[].class);
-                        view.endGame(leaderboard, player, score);
+                        view.endGame(leaderBoard, player, score);
                     }
                     else if(message.substring(length).equals(SocketView.LOBBY)) {
                         message = is.readLine();
