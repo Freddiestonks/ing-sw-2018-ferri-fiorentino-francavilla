@@ -381,6 +381,11 @@ public class Model extends Observable implements ModelInterface {
         return players.size();
     }
 
+    /**
+     * This method is used to return the leader-board of the game.
+     *
+     * @return an Arraylist on players that represents the leader-board.
+     */
     public ArrayList<Player> getLeaderBoard() {
         return leaderBoard;
     }
@@ -436,6 +441,12 @@ public class Model extends Observable implements ModelInterface {
         //TODO: reset other game elements
     }
 
+    /**
+     * This method is used to check if a player is still connected to the game.
+     *
+     * @param i is the number of the player ti be checked.
+     * @return a boolean value representing the check result.
+     */
     public boolean checkConnection(int i) {
         boolean check = true;
         try {
@@ -456,14 +467,29 @@ public class Model extends Observable implements ModelInterface {
         return pubOCs.clone();
     }
 
+    /**
+     * This method is used to set the public cards will be used during the game.
+     *
+     * @param pubOCs is the set of public card to be set.
+     */
     public void setPubOCs(PubObjCard[] pubOCs) {
         this.pubOCs = pubOCs.clone();
     }
 
+    /**
+     * Thsi method provides the PatternCards used into the match.
+     *
+     * @return an array of Pattercards.
+     */
     public PatternCard[] getPatternCards() {
         return patCards.clone();
     }
 
+    /**
+     * This method is used to set array of Patterncards will be used into the game.
+     *
+     * @param patCards is the array of Patterncards to use
+     */
     public void setPatternCards(PatternCard[] patCards) {
         this.patCards = patCards.clone();
         notifyObservers();
@@ -500,6 +526,9 @@ public class Model extends Observable implements ModelInterface {
         return rt;
     }
 
+    /**
+     * This method is used to set-up the player for the first time, assigning him a private card.
+     */
     public void playersSetup() {
         ArrayList<Color> availableColors = new ArrayList<>(Arrays.asList(Color.values()));
         Random random = new Random();
@@ -510,14 +539,30 @@ public class Model extends Observable implements ModelInterface {
         }
     }
 
+    /**
+     * This method checks if the game is still in the lobby phase.
+     *
+     * @return a boolean value representing the check result.
+     */
     public boolean isLobbyGathering() {
         return lobbyGathering;
     }
 
+    /**
+     * This method set the lobby status.
+     *
+     * @param lobbyGathering is the boolean value that represent the lobby status
+     */
     public void setLobbyGathering(boolean lobbyGathering) {
         this.lobbyGathering = lobbyGathering;
     }
 
+    /**
+     * This method is used to set in the Local Model.
+     *
+     * @param playerIndex is the player ordinal number in the set of players
+     * @param wf is the WindowsFrame to be set.
+     */
     public void setWindowFrame(int playerIndex, WindowFrame wf) {
         players.get(playerIndex).setWinFrame(wf);
         try {
@@ -527,15 +572,35 @@ public class Model extends Observable implements ModelInterface {
         }
     }
 
+    /**
+     * This methid provide the WindowsFrame of a specific player.
+     *
+     * @param playerIndex is the player ordinal number in the set of players
+     * @return a WindowFrame instance
+     */
     public WindowFrame getWindowFrame(int playerIndex) {
         return players.get(playerIndex).getWindowFrame();
     }
 
+    /**
+     * This is used to check if for a given player, is assigned to him a WindowFrame.
+     *
+     * @param playerIndex is the player ordinal number in the set of players
+     * @return a boolean value representing the check result.
+     */
     public boolean playerHasChosenPC(int playerIndex) {
         WindowFrame wf = players.get(playerIndex).getWindowFrame();
         return (wf != null);
     }
 
+    /**
+     * This method is used to place a single die in a player's WindowFrame
+     *
+     * @param playerIndex is the player ordinal number in the set of players
+     * @param die The die passed to be positioned.
+     * @param row The row of the wanted positioning place.
+     * @param col The column of the wanted positioning place.
+     */
     public void placeWFDie(int playerIndex, Die die, int row, int col) {
         //TODO: ?? playerIndex == this.turn
         Player player = getPlayer(playerIndex);
@@ -550,6 +615,12 @@ public class Model extends Observable implements ModelInterface {
         notifyObservers();
     }
 
+    /**
+     * This method is used to execute a player move.
+     *
+     * @param playerIndex is the player ordinal number in the set of players
+     * @param pa is the player action instance
+     */
     public void performToolCard(int playerIndex, PlayerAction pa) {
         //TODO: ?? playerIndex == this.turn
         ToolCard toolCard = getToolCard(pa.getIdToolCard());
@@ -564,10 +635,18 @@ public class Model extends Observable implements ModelInterface {
         notifyObservers();
     }
 
+    /**
+     * This methid is used to check if is used a Toolcard.
+     *
+     * @return a boolean representing the check result.
+     */
     public boolean isToolCardUsed() {
         return toolCardUsed;
     }
 
+    /**
+     * This method starts the match.
+     */
     public void startMatch() {
         started = true;
         rollDraftPool();
@@ -591,6 +670,11 @@ public class Model extends Observable implements ModelInterface {
         notifyObservers();
     }
 
+    /**
+     * This method checks if the match is started.
+     *
+     * @return a boolean representing the check result.
+     */
     public boolean isStarted(){
         return started;
     }

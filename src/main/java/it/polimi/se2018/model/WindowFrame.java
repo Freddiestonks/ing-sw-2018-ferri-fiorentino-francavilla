@@ -35,6 +35,11 @@ public class WindowFrame implements Serializable {
         }
     }
 
+    /**
+     * This method is used to clone the WindowFrame
+     *
+     * @param wf is the WindowFrame instance to be cloned.
+     */
     public WindowFrame(WindowFrame wf) {
         // create a copy of the selected WindowFrame
         this.pc = wf.pc;
@@ -347,18 +352,30 @@ public class WindowFrame implements Serializable {
     /**
      * This method is used to show up a die in an inserted position.
      *
-     * @param row
-     * @param col
-     * @return
+     * @param row The row of the wanted positioning place.
+     * @param col The column of the wanted positioning place.
+     * @return a Die instance, that's the one placed on the frame.
      */
     public Die getDie(int row, int col){
         return placements[row][col];
     }
 
+    /**
+     * This method is used to provide the Cell of the wanted WindowFrame.
+     *
+     * @param row The row of the wanted positioning place.
+     * @param col The column of the wanted positioning place.
+     * @return a Cell instance, relative to the selected position.
+     */
     public Cell getPCCell(int row, int col){
         return pc.getCell(wcFace, row, col);
     }
 
+    /**
+     * This method provides the set of placements of the player
+     *
+     * @return the matrix instance of the placements' set.
+     */
     public Die[][] getPlacements() {
         return placements;
     }

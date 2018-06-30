@@ -93,42 +93,94 @@ public class Player implements Serializable {
         this.connected = connected;
     }
 
+    /**
+     * Thsi method is usd to check if the player is connected.
+     *
+     * @return a boolean value representing the check
+     */
     public boolean isConnected() {
         return connected;
     }
 
+    /**
+     * This method provide The number of tokens available for the player.
+     *
+     * @return an integer value representing the value
+     */
     public int getTokens(){
         return tokens;
     }
 
+    /**
+     * This mehod is used to set the token's value
+     *
+     * @param newValue is the value to be inserted in the corresponding attribute
+     */
     public void setTokens(int newValue){
         tokens = newValue;
     }
 
+    /**
+     * This method is used to provide the name of the player.
+     *
+     * @return a string instane rereting the player name.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * This method is used to provide a die on the Windowframe of the player.
+     *
+     * @param row The row of the wanted positioning place.
+     * @param col The column of the wanted positioning place.
+     * @return a die instance corresponding to the wanted position
+     */
     public Die getWinFrameDie(int row, int col){
         return this.wf.getDie(row,col);
     }
 
+    /**
+     * This method provides the player's WindowFrame.
+     *
+     * @return a Windowframe instance.
+     */
     public WindowFrame getWindowFrame(){
         return this.wf;
     }
 
+    /**
+     * This method set the 'skip' attribute
+     *
+     * @param skip the boolean value to be set.
+     */
     public void setSkip(boolean skip) {
         this.skip = skip;
     }
 
+    /**
+     * This method provide the 'skip' value.
+     *
+     * @return a boolean instance representing the skip value
+     */
     public boolean isSkip() {
         return skip;
     }
 
+    /**
+     * This method provide the possible switch decision.
+     *
+     * @return a boolean representing the relative selection
+     */
     public boolean isSwitchingConn() {
         return switchingConn;
     }
 
+    /**
+     * This method is used to set the selection related to the switch of the connection.
+     *
+     * @param switchingConn is the boolean value representing the switch
+     */
     public void setSwitchingConn(boolean switchingConn) {
         this.switchingConn = switchingConn;
     }

@@ -35,6 +35,11 @@ public class ColorCell extends Cell{
         return (die.getColor() == color);
     }
 
+    /**
+     * Is the to string implementation.
+     *
+     * @return a string instance.
+     */
     @Override
     public String toString(){
         return "-" + color.toString().substring(0,1) + "-";
