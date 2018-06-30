@@ -18,7 +18,8 @@ public class ResourceLoader {
     /**
      * This method is used to translate a string to a "Color"
      * @param string this is the readInput string and it will be translated into a "Color"
-     * */
+     * @return a color instance.
+     */
     private Color colorTranslator(String string) {
         //This method is used to translate the "Colors" in the JSON file from english to a Color, ignore
         //all blank spaces and change letters to uppercase so that the process of adding cards
@@ -30,8 +31,8 @@ public class ResourceLoader {
      * This method is used to retrieve a int from a JSON object
      * @param jsonObject this is the JSON object that will be parsed
      * @param string this is the element that is looked for in the file
-     * */
-
+     * @return an integer value
+     */
     private int jIntGetter(JsonObject jsonObject, String string) {
         //returns a int from a JSON object's parameter, use a different method so that in case of updates it is easier
         //to change all of the methods quickly
@@ -42,8 +43,8 @@ public class ResourceLoader {
      * This method is used to retrieve a String from a JSON object
      * @param jsonObject this is the JSON object that will be parsed
      * @param string this is the element that is looked for in the file
-     * */
-
+     * @return a string instance.
+     */
     private String jStringGetter(JsonObject jsonObject, String string) {
         //returns a String from a JSON object's parameter, use a different method so that in case of updates it is easier
         //to change all of the methods quickly
@@ -51,10 +52,13 @@ public class ResourceLoader {
     }
 
     /**
+     *
      * This method is used to fill a Cell object with the elements found on the JSON file
      * @param cellArray this is the matrix of cells that need to be filled
      * @param cells this is the array in the JSON file containing all of the cells that need to be updated
-     * */
+     * @return a matrix of cell values
+     * @throws ResourceLoaderException
+     */
     private Cell[][] jCellFiller(Cell[][] cellArray, JsonArray cells) throws ResourceLoaderException {
         //this method is used to generate a ShadeCell or a ColorCell on the correct space with the correct value/color
         for(int j = 0; j < cells.size(); j++){
@@ -137,7 +141,9 @@ public class ResourceLoader {
     /**
      * This method is used to load a PatternCard from the JSON file with a specific id
      * @param id this is the id of the wanted PatternCard
-     * */
+     * @return a PatternCard instance
+     * @throws ResourceLoaderException
+     */
     public PatternCard loadPC(int id) throws ResourceLoaderException {
         // loadPC will load a pattern card from file written in JSON where cards are kept in a specific order
         // their position can be used as an "ID"
@@ -185,9 +191,10 @@ public class ResourceLoader {
 
     /**
      * This method is used to load a Public Objective Card
-     *
      * @param id this is the id of the wanted Public Objective Card
-     * */
+     * @return a PublicObjCard instance.
+     * @throws ResourceLoaderException
+     */
     public PubObjCard loadPubOC(int id) throws ResourceLoaderException {
         PubObjCard pubObjCard = null;
         JsonParser jsonParser = new JsonParser();

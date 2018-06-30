@@ -76,6 +76,11 @@ public class Die implements Serializable {
         }
     }
 
+    /**
+     * This method is classic ToString description of a Die instance.
+     *
+     * @return a String instance of the description.
+     */
     @Override
     public String toString(){
         return value + " " + color.toString().substring(0,1);

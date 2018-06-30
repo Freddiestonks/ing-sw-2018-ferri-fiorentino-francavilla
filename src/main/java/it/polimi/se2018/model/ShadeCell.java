@@ -47,6 +47,12 @@ public class ShadeCell extends Cell {
     public boolean placeableShade(Die die) {
         return die.getValue() == shade;
     }
+
+    /**
+     * Is the to string implementation.
+     *
+     * @return a string instance.
+     */
     @Override
     public String toString(){
         return "-" + shade + "-";
