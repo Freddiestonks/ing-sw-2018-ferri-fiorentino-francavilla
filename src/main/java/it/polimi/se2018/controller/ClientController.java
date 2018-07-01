@@ -19,10 +19,11 @@ public class ClientController extends AbstractController implements Observer {
     //attributes
     private LocalModel model;
     private View view;
-    private PlayerActionInterface playerActionInterface;
+    private PlayerActionInterface playerActionInterface = new PlayerAction();
     //private PlayerAction playerAction = new PlayerAction();
     private MainScreenInfo mainScreenInfo;
     private NetworkHandler networkHandler;
+    private String username = null;
     private static final String PLACE = "place";
     private static final String WINDOW_FRAME = "windowframe";
     private static final String ROUND_TRACK = "roundtrack";
@@ -53,18 +54,33 @@ public class ClientController extends AbstractController implements Observer {
             } else if (string[0].equalsIgnoreCase(HELP)) {
                 view.help();
             } else if (string[0].equalsIgnoreCase("connect")) {
-                //TODO: check whether user is already connected
                 if (string[1].equalsIgnoreCase("socket")) {
-
+                    playerAction.setSwitchConnReq(true);
+                    performAction(playerAction);
                     networkHandler = new SocketNetworkHandler(string[2]);
-                    playerActionInterface = networkHandler.connect(model, view);
+
                 } else if (string[1].equalsIgnoreCase("rmi")) {
+                    playerAction.setSwitchConnReq(true);
+                    performAction(playerAction);
                     networkHandler = new RMINetworkHandler(string[2]);
-                    playerActionInterface = networkHandler.connect(model, view);
-                    out.println("ok");
                 }
+                else {
+                    view.invalidMoveError();
+                    return;
+                }
+                try {
+                    playerActionInterface = networkHandler.connect(model, view);
+                } catch (IOException e) {
+                    view.connectionError();
+                }
+                if(this.username != null) {
+                    playerAction.setUsernameReq(this.username);
+                    performAction(playerAction);
+                }
+                out.println("ok");
             } else if (string[0].equalsIgnoreCase("set")) {
                 if (string[1].equalsIgnoreCase("username")) {
+                    this.username = string[2];
                     playerAction.setUsernameReq(string[2]);
                     out.println(string[2]);
                     performAction(playerAction);
@@ -76,14 +92,22 @@ public class ClientController extends AbstractController implements Observer {
                     }
                     performAction(playerAction);
                 }
-            } else if (string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)) {
-                view.showMainScreen();
-            } else if (string[0].equalsIgnoreCase("public")) {
-                view.updatePubOCs(model.getPubOCs());
+                else {
+                    view.invalidMoveError();
+                }
+            } else if (string[0].equalsIgnoreCase("skip")) {
+                playerAction.setSkipTurn(true);
+                performAction(playerAction);
+            } else if(model.isStarted()) {
+                if (string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)) {
+                    view.showMainScreen();
+                } else if (string[0].equalsIgnoreCase("public")) {
+                    view.updatePubOCs(model.getPubOCs());
+                }
             } else {
                 view.invalidMoveError();
             }
-        }catch (ArrayIndexOutOfBoundsException iob){
+        } catch (ArrayIndexOutOfBoundsException iob){
             view.invalidMoveError();
         }
     }

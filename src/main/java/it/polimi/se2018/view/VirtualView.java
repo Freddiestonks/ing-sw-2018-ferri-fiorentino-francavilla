@@ -33,22 +33,37 @@ public class VirtualView implements Observer {
         return views.get(i);
     }
 
-    public void update() {System.out.println("VIEW");
+    public void update() {
+        System.out.println("begin views update");
         if(model.isLobbyGathering()) {
-            System.out.println("LOBBY VIEW");
             ArrayList<String> usernames = new ArrayList<>();
             for(int i = 0; i < model.getNumPlayers(); i++) {
                 usernames.add(model.getPlayer(i).getUsername());
             }
-            System.out.println("1");
             for(ViewInterface view : views) {
                 try {
                     view.updatePlayerLobby(usernames);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
-            System.out.println("2");
+        }
+        else if(model.isOver()){
+            /*ArrayList<Player> leaderBoard= model.getLeaderBoard();
+            int[] score = new int[model.getPlayers().size()];
+            for(int i = 0; i<model.getPlayers().size();i++){
+                score[i] = leaderBoard.get(i).calculateScore(model.getPubOCs());
+            }*/
+            ArrayList<Player> leaderBoard = model.getLeaderBoard();
+            int playerIndex = 0;
+            for(ViewInterface view : views) {
+                try {
+                    view.endGame(leaderBoard, model.getPlayer(playerIndex));
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                }
+                playerIndex++;
+            }
         }
         else if(!model.isStarted()) {
             ArrayList<PatternCard> patternCards = new ArrayList<>(Arrays.asList(model.getPatternCards()));
@@ -58,24 +73,9 @@ public class VirtualView implements Observer {
                 try {
                     view.patternCardGenerator(playerPCs);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
                 offset += 2;
-            }
-        }
-        else if(model.getOver()){
-            System.out.println("ENDED");
-            ArrayList<Player> leaderBoard= model.getLeaderBoard();
-            int[] score = new int[model.getPlayers().size()];
-            for(int i = 0; i<model.getPlayers().size();i++){
-                score[i] = leaderBoard.get(i).calculateScore(model.getPubOCs());
-            }
-            for(ViewInterface view : views) {
-                try {
-                    view.endGame(leaderBoard,model.getPlayer(model.getTurn()-1),score);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
         else {
@@ -91,16 +91,17 @@ public class VirtualView implements Observer {
                 ArrayList<Player> opponents = model.getPlayers();
                 Player player = opponents.remove(playerIndex);
                 msi.setPlayer(player);
+                msi.setPrivObjCard(player.getPrivObjCard());
                 msi.setOpponents(opponents);
                 try {
                     view.updateMainScreen(msi);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
                 playerIndex++;
             }
         }
-        System.out.println("END VIEW");
+        System.out.println("end views update");
     }
 
     public boolean checkConnection(int i) {

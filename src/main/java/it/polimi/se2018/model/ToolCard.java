@@ -1,106 +1,44 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.PlayerAction;
+import it.polimi.se2018.model.tceffects.AbstractTCEffect;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
- * This method implementing serializable interface, is the superclass for all the Tool-cards utilized
- * in the entire application.
+ * This is the Tool Card class
  *
  * @author Federico Ferri
  * @author Alessio Fiorentino
  * @author Simone Francavilla
  */
 
-public abstract class ToolCard implements Serializable {
+public class ToolCard implements Serializable {
     //Attributes
-    private String name = "test";
-    private String description = "test";
-    private int price = 4;
+    private String name;
+    private String description;
     private int tokens = 0;
-    protected static ToolCard pendingToolCard = null;
-    protected static Die pendingDie;
+    private static ToolCard pendingToolCard = null;
+    private static Die pendingDie;
+    private ArrayList<AbstractTCEffect> effects;
     //Methods
 
     /**
      * This is the constructor of the class.
      *
-     * @param name that means the name of a specific ToolCard
-     * @param description is the effect of the Toolcard
-     * @param price is a special characteristic of each Toolcard
+     * @param name that means the name of a specific Tool Card
+     * @param description is the effect of the Tool Card
+     * @param effects the set of effects related to the Tool Card
      */
-    public ToolCard(String name, String description, int price){
+    public ToolCard(String name, String description, ArrayList<AbstractTCEffect> effects) {
         this.name = name;
         this.description = description;
-        this.price = price;
+        this.effects = new ArrayList<>(effects);
     }
 
     /**
-     * this method is used to set a specific value for the tokens.
-     *
-     * @param tokens is the value to be set up
-     */
-    public void putTokens(int tokens){
-        this.tokens += tokens;
-    }
-
-    /**
-     * This method is used to get the value of tokens' Toolcard
-     *
-     * @return an integer value representing tokens.
-     */
-    public int getTokens() {
-        return tokens;
-    }
-
-    /**
-     * This method executes the effect of the Toolcard.
-     *
-     * @param model is the model of the match.
-     * @param wf is the Windowframe of the player that uses the Toolcard.
-     * @param pa is the playeraction that contains the move selections for the player.
-     */
-    public abstract void performAction(Model model, WindowFrame wf, PlayerAction pa);
-
-    /**
-     * This method is used to validate the move of the player.
-     *
-     * @param model is the model of the match.
-     * @param wf is the Windowframe of the player that uses the Toolcard.
-     * @param pa is the playeraction that contains the move selections for the player.
-     * @return a boolean value representing the result of the check.
-     */
-    public abstract boolean validAction(ModelInterface model, WindowFrame wf, PlayerAction pa);
-
-    /**
-     * This method is used to ask if a specific Toolcard is in a pending status.
-     *
-     * @return a boolean value representing the result of the control.
-     */
-    public static boolean isPendingAction() {
-        return (pendingToolCard != null);
-    }
-
-    /**
-     * This method is used to provide the Toolcard defined in a pending status.
-     *
-     * @return a Toolcard instance.
-     */
-    public static ToolCard getPendingToolCard() {
-        return pendingToolCard;
-    }
-
-    /**
-     * This method is used to rest the attribute resenting the pending status of a Toolcard.
-     */
-    public static void resetPendingAction() {
-        pendingToolCard.pendingDie = null;
-        pendingToolCard = null;
-    }
-
-    /**
-     * This method provides the effects of a ToolCard.-
+     * This method provides the effects of a Tool Card.
      *
      * @return a string representing the effect
      */
@@ -109,12 +47,110 @@ public abstract class ToolCard implements Serializable {
     }
 
     /**
-     * This method is used to provide teh name of a Toolcard.
+     * This method is used to provide teh name of a Tool Card.
      *
-     * @return a string representing the Toolcard's name.
+     * @return a string representing the Tool Card's name.
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * this method is used to add a specific value to the tokens.
+     *
+     * @param tokens is the value to add up
+     */
+    public void putTokens(int tokens){
+        this.tokens += tokens;
+    }
+
+    /**
+     * This method is used to calculate the price of a Tool Card
+     *
+     * @return an integer value representing tokens.
+     */
+    public int getPrice() {
+        return ((tokens == 0)? 1: 2);
+    }
+
+    /**
+     * This method executes the effect of the Tool Card.
+     *
+     * @param model is the model of the match.
+     * @param wf is the Window Frame of the player that uses the Tool Card.
+     * @param pa is the Player Action that contains the move selections for the player.
+     */
+    public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
+        if(!isPendingAction()) {
+            for(AbstractTCEffect effect : effects) {
+                effect.performAction(model, wf, pa);
+                if(!effect.isSingleAction()) {
+                    pendingToolCard = this;
+                }
+            }
+        }
+        else {
+            for(AbstractTCEffect effect : effects) {
+                effect.performAction(model, wf, pa);
+            }
+            resetPendingAction();
+        }
+    }
+
+    /**
+     * This method is used to validate the move of the player.
+     *
+     * @param model is the model of the match.
+     * @param wf is the Window Frame of the player that uses the Tool Card.
+     * @param pa is the Player Action that contains the move selections for the player.
+     * @return a boolean value representing the result of the check.
+     */
+    public boolean validAction(ModelInterface model, WindowFrame wf, PlayerAction pa) {
+        for(AbstractTCEffect effect : effects) {
+            if(!effect.validAction(model, wf, pa)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This method is used to ask if a specific Tool Card is in a pending status.
+     *
+     * @return a boolean value representing the result of the control.
+     */
+    public static boolean isPendingAction() {
+        return (pendingToolCard != null);
+    }
+
+    /**
+     * This method is used to provide the Tool Card defined in a pending status.
+     *
+     * @return a Tool Card instance.
+     */
+    public static ToolCard getPendingToolCard() {
+        return pendingToolCard;
+    }
+
+    /**
+     * This method is used to provide the die related at the pending Tool Card.
+     *
+     * @return a Die instance.
+     */
+    public static Die getPendingDie() {
+        return pendingDie;
+    }
+
+    public static void setPendingDie(Die die) {
+        pendingDie = die;
+    }
+
+    /**
+     * This method is used to rest the attribute resetting the pending status of a Tool Card.
+     */
+    public static void resetPendingAction() {
+        pendingDie = null;
+        pendingToolCard = null;
     }
 }
 

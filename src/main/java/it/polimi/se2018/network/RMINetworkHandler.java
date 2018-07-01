@@ -9,6 +9,7 @@ import it.polimi.se2018.view.ViewInterface;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -20,22 +21,26 @@ public class RMINetworkHandler extends NetworkHandler {
         super(host);
     }
 
-    public PlayerActionInterface connect(LocalModel localModel, View view) {
+    public PlayerActionInterface connect(LocalModel localModel, View view) throws IOException {
         ClientGathererInterface clientGatherer;
         LocalModelInterface localModelInterface;
         ViewInterface viewInterface;
         PlayerActionInterface playerActionInterface = null;
+        try {
+            UnicastRemoteObject.unexportObject(localModel, false);
+            UnicastRemoteObject.unexportObject(view, false);
+        } catch (NoSuchObjectException e) {
+            //e.printStackTrace();
+        }
         try {
             clientGatherer = (ClientGathererInterface)Naming.lookup("//" + host + ":" + PORT + "/Server");
             localModelInterface = (LocalModelInterface)UnicastRemoteObject.exportObject(localModel, 0);
             viewInterface = (ViewInterface)UnicastRemoteObject.exportObject(view, 0);
             playerActionInterface = clientGatherer.connectRMI(localModelInterface, viewInterface);
         } catch (NotBoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return playerActionInterface;
     }

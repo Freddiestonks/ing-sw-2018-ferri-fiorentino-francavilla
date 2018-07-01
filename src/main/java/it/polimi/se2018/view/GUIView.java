@@ -5,6 +5,7 @@ import it.polimi.se2018.model.*;
 import java.util.ArrayList;
 
 public class GUIView extends View {
+
     public void updateWaitingRoom(boolean starting) {
 
     }
@@ -65,7 +66,7 @@ public class GUIView extends View {
 
     }
 
-    public void endGame(ArrayList<Player> leaderboard, Player player, int[] score) {
+    public void endGame(ArrayList<Player> leaderBoard, Player player) {
 
     }
 
@@ -98,6 +99,10 @@ public class GUIView extends View {
     }
 
     public void patternCardGenerator(ArrayList<PatternCard> pc) {
+
+    }
+
+    public void enteringError(boolean lobbyGathering) {
 
     }
 

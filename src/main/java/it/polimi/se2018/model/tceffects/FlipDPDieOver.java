@@ -1,12 +1,12 @@
-package it.polimi.se2018.model.toolcards;
+package it.polimi.se2018.model.tceffects;
 
 import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.model.*;
 
-public class ToolCard10 extends ToolCard {
+public class FlipDPDieOver extends AbstractTCEffect {
 
-    public ToolCard10(String name, String description, int price) {
-        super(name, description, price);
+    public FlipDPDieOver() {
+        singleAction = true;
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa){
@@ -23,6 +23,8 @@ public class ToolCard10 extends ToolCard {
         // create a copy of the die
         Die die = new Die(model.getDraftPoolDie(pa.getPosDPDie().get(0)));
         die.setValue(7 - die.getValue());
-        return wf.checkRestrictions(die, pa.getPlaceDPDie().get(0)[0], pa.getPlaceDPDie().get(0)[1]);
+        int row = pa.getPlaceDPDie().get(0)[0];
+        int col = pa.getPlaceDPDie().get(0)[1];
+        return wf.checkRestrictions(die, row, col);
     }
 }

@@ -330,10 +330,11 @@ public class WindowFrame implements Serializable {
      */
     public Die removeDie(int row, int col) {
         Die die = placements[row][col];
-        placements[row][col] = null;
-        numDice--;
+        if(placements[row][col] != null) {
+            placements[row][col] = null;
+            numDice--;
+        }
         return die;
-        //TODO: to implement a control for the whole deleted matrix situation.
     }
 
     public boolean getWCFace(){

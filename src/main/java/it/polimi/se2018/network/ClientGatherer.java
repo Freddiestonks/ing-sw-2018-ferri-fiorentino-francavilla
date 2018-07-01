@@ -2,10 +2,8 @@ package it.polimi.se2018.network;
 
 import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.controller.PlayerActionInterface;
-import it.polimi.se2018.controller.ServerController;
 import it.polimi.se2018.model.LocalModelInterface;
 import it.polimi.se2018.view.ViewInterface;
-import it.polimi.se2018.utils.Timer;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,15 +17,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ClientGatherer extends Thread implements Iterable<ClientInfo>, ClientGathererInterface {
+    private Object lock;
     private ServerSocket serverSocket;
     private ArrayList<ClientInfo> preLobby = new ArrayList<>();
     private ArrayList<SocketReceiver> socketReceivers = new ArrayList<>();
-    private Timer timer = new Timer();
 
     private static int SOCKET_PORT = 1111;
     private static int RMI_PORT = 1099;
 
-    public ClientGatherer() {
+    public ClientGatherer(Object lock) {
+        this.lock = lock;
         try {
             serverSocket = new ServerSocket(SOCKET_PORT);
         } catch (IOException e) {
@@ -47,8 +46,8 @@ public class ClientGatherer extends Thread implements Iterable<ClientInfo>, Clie
 
     public PlayerActionInterface connectRMI(LocalModelInterface localModel, ViewInterface view) {
         PlayerActionInterface paInterface = null;
-        synchronized (ServerController.LOCK) {
-            PlayerAction pa = new PlayerAction(ServerController.LOCK);
+        synchronized (lock) {
+            PlayerAction pa = new PlayerAction(lock);
             try {
                 paInterface = (PlayerActionInterface) UnicastRemoteObject.exportObject(pa, 0);
             } catch (RemoteException e) {
@@ -72,13 +71,13 @@ public class ClientGatherer extends Thread implements Iterable<ClientInfo>, Clie
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            PlayerAction pa = new PlayerAction(ServerController.LOCK);
+            PlayerAction pa = new PlayerAction(lock);
             SocketReceiver socketReceiver = new SocketReceiver(socket);
             socketReceiver.setPlayerAction(pa);
             socketReceiver.start();
             SocketLocalModel localModel = new SocketLocalModel(socket);
             SocketView view = new SocketView(socket);
-            synchronized (ServerController.LOCK) {
+            synchronized (lock) {
                 preLobby.add(new ClientInfo(localModel, view, pa));
             }
             Iterator<SocketReceiver> iterator = socketReceivers.iterator();

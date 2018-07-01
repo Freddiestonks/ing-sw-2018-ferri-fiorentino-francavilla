@@ -6,8 +6,9 @@ import java.util.ArrayList;
 
 public class LocalModel implements LocalModelInterface, ModelInterface {
     private boolean started = false;
-    private boolean lobbyGathering = false;
+    private boolean lobbyGathering = true;
     private WindowFrame windowFrame;
+    private int tokens = 0;
     private int round = 1;
     private int turn = 1;
     private boolean backward = false;
@@ -32,9 +33,9 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
         return started;
     }
 
-    /*public boolean isLobbyGathering() {
+    public synchronized boolean isLobbyGathering() {
         return lobbyGathering;
-    }*/
+    }
 
     public synchronized WindowFrame getWindowFrame(int playerIndex) {
         return windowFrame;
@@ -46,6 +47,11 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
 
     public synchronized boolean playerHasChosenPC(int playerIndex) {
         return (windowFrame != null);
+    }
+
+    public synchronized boolean playerCanUseToolCard(int playerIndex, int idToolCard) {
+        ToolCard toolCard = toolCards[idToolCard];
+        return (!toolCardUsed && (tokens >= toolCard.getPrice()));
     }
 
     public synchronized void updateTurn(int round, int turn, boolean backward) {
@@ -68,10 +74,6 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
 
     public synchronized void setDraftPool(ArrayList<Die> draftPool) {
         this.draftPool = new ArrayList<>(draftPool);
-    }
-
-    public synchronized ArrayList<Die> getDraftPool() {
-        return new ArrayList<>(draftPool);
     }
 
     public synchronized Die getDraftPoolDie(int pos) {
@@ -129,15 +131,15 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
         this.toolCardUsed = toolCardUsed;
     }
 
-    public synchronized boolean isToolCardUsed() {
-        return toolCardUsed;
+    public synchronized void setTokens(int tokens) {
+        this.tokens = tokens;
     }
 
     public synchronized void setPlayerIndex(int playerIndex) {
         this.playerIndex = playerIndex;
     }
 
-    public synchronized int  getPlayerIndex() {
+    public synchronized int getPlayerIndex() {
         return playerIndex;
     }
 

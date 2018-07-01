@@ -1,19 +1,19 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.model.toolcards.*;
 import it.polimi.se2018.network.ClientGatherer;
 import it.polimi.se2018.network.ClientInfo;
 import it.polimi.se2018.utils.Timer;
 import it.polimi.se2018.view.VirtualView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
 public class ServerController extends AbstractController {
     //Attributes
-    public static final Object LOCK = new Object();
+    private final Object lock = new Object();
     private Model model;
     private VirtualView view;
     private ClientGatherer clientGatherer;
@@ -29,30 +29,33 @@ public class ServerController extends AbstractController {
         super(model);
         this.model = model;
         this.view = view;
-        clientGatherer = new ClientGatherer();
+        clientGatherer = new ClientGatherer(this.lock);
         lobbyTimeout = resourceLoader.loadLobbyTimeout();
         turnTimeout = resourceLoader.loadTurnTimeout();
     }
 
-    private void listenPlayerActions() throws InterruptedException {
-        Timer turnTimer = new Timer(turnTimeout, LOCK);
+    private void waitForPlayerActions() throws InterruptedException {
+        Timer turnTimer = new Timer(turnTimeout, lock);
         turnTimer.start();
-        while(!model.isLobbyGathering()) {
+        while(!model.isOver()) {
+            System.out.println("match begin WAIT");
             while(!updatedPlayerActions()
                && emptyPreLobby()
                && !turnTimer.isTimeout()) {
-                synchronized (LOCK) {
-                    LOCK.wait();
+                synchronized (lock) {
+                    lock.wait();
                 }
             }
+            System.out.println("match end WAIT");
             if(turnTimer.isTimeout()) {
+                System.out.println("TIMEOUT");
                 if(model.isStarted()) {
                     model.updateTurn();
                 }
                 else {
                     for(int i = 0; i < model.getNumPlayers(); i++) {
                         if(!model.playerHasChosenPC(i)) {
-                            System.out.println("NO PC: " + i);
+                            System.out.println("Not selected PC: " + i);
                             PatternCard pc = model.getPatternCards()[2 * i];
                             Player player = model.getPlayer(i);
                             player.setWinFrame(new WindowFrame(pc, true));
@@ -60,7 +63,7 @@ public class ServerController extends AbstractController {
                     }
                     model.startMatch();
                 }
-                turnTimer = new Timer(turnTimeout, LOCK);
+                turnTimer = new Timer(turnTimeout, lock);
                 turnTimer.start();
             }
             for(PlayerAction pa : playerActions) {
@@ -69,7 +72,7 @@ public class ServerController extends AbstractController {
                         performAction(pa);
                         if((playerActions.indexOf(pa) + 1 == model.getTurn())
                            && !pa.isSwitchConnReq()) {
-                            turnTimer = new Timer(turnTimeout, LOCK);
+                            turnTimer = new Timer(turnTimeout, lock);
                             turnTimer.start();
                         }
                     }
@@ -78,6 +81,7 @@ public class ServerController extends AbstractController {
             }
             gatherPlayers();
         }
+        System.out.println("match ended");
     }
 
     private boolean updatedPlayerActions() {
@@ -90,26 +94,27 @@ public class ServerController extends AbstractController {
     }
 
     private void gatherPlayers() throws InterruptedException {
-        synchronized (LOCK) {
-            Timer lobbyTimer = new Timer(lobbyTimeout, LOCK);
+        System.out.println("begin gathering");
+        synchronized (lock) {
+            Timer lobbyTimer = new Timer(lobbyTimeout, lock);
             do {
-                System.out.println("1 WAIT");
+                System.out.println("lobby begin WAIT");
                 while(model.isLobbyGathering()
                         && emptyPreLobby()
                         && !lobbyTimer.isTimeout()) {
-                    LOCK.wait();
+                    lock.wait();
                 }
-                System.out.println("2 WAIT");
+                System.out.println("lobby end WAIT");
                 // check if other players are still connected by clientinfo
-                System.out.println("check +");
+                System.out.println("begin check");
                 checkConnections();
-                System.out.println("check -");
+                System.out.println("end check");
                 if(lobbyTimer.isTimeout()) {
                     if(model.getNumPlayers() >= 2) {
                         model.setLobbyGathering(false);
                     }
                     else {
-                        lobbyTimer = new Timer(lobbyTimeout, LOCK);
+                        lobbyTimer = new Timer(lobbyTimeout, lock);
                     }
                 }
                 // read prelobby clients
@@ -137,7 +142,7 @@ public class ServerController extends AbstractController {
                             playerActions.add(pa);
                             //clientGatherer.remove(clientInfo);
                             model.addPlayer(username, clientInfo.getLocalModel());
-                            System.out.println(username + "joined the game");
+                            System.out.println(username + " joined the game");
                             iterator.remove();
                             //if there are exactly 2 players start the lobbyTimer
                             if(model.getNumPlayers() == 2) {
@@ -149,20 +154,27 @@ public class ServerController extends AbstractController {
                         }
                         else if(!available
                            && (!model.getPlayer(i).isConnected() || model.getPlayer(i).isSwitchingConn())) {
-                            System.out.println("REINSERTED");
-                            model.reinsertPlayer(i, clientInfo.getLocalModel());
+                            System.out.println(model.getPlayer(i).getUsername() + " REINSERTED");
                             view.reinsertClient(i, clientInfo.getView());
                             playerActions.set(i, pa);
+                            model.reinsertPlayer(i, clientInfo.getLocalModel());
                             iterator.remove();
                         }
-                        System.out.println("+");
+                        else {
+                            try {
+                                clientInfo.getView().enteringError(model.isLobbyGathering());
+                            } catch (IOException e) {
+                                //e.printStackTrace();
+                            }
+                        }
+                        //System.out.println("+");
                         pa.clear();
-                        System.out.println("-");
+                        //System.out.println("-");
                     }
                 }
             } while(model.isLobbyGathering());
         }
-        System.out.println("END LOBBY");
+        System.out.println("end gathering");
     }
 
     private void checkConnections() {
@@ -182,6 +194,7 @@ public class ServerController extends AbstractController {
                     model.removePlayer(i);
                     i++;
                 }
+                System.out.println(player.getUsername() + " disconnected");
             }
             else {
                 i++;
@@ -206,7 +219,7 @@ public class ServerController extends AbstractController {
         ToolCard[] toolCards = new ToolCard[3];
         int numPCs = resourceLoader.loadNumPCs();
         int numPubOcs = resourceLoader.loadNumPubOCs();
-        int numToolCards = 12;
+        int numToolCards = resourceLoader.loadNumToolCards();
         ArrayList<Integer> pcIds = new ArrayList<>();
         ArrayList<Integer> pubOCIds = new ArrayList<>();
         ArrayList<Integer> toolCardIds = new ArrayList<>();
@@ -223,56 +236,20 @@ public class ServerController extends AbstractController {
         for(int i = 0; i < numPlayer * 2; i++) {
             int num = random.nextInt(pcIds.size());
             int id = pcIds.remove(num);
-            System.out.println("PC:"+ id);
+            System.out.println("pattern card id:" + id);
             patternCards[i] = resourceLoader.loadPC(id);
         }
         for(int i = 0; i < 3; i++) {
             int num = random.nextInt(pubOCIds.size());
             int id = pubOCIds.remove(num);
+            System.out.println("pubOC id:" + id);
             pubObjCards[i] = resourceLoader.loadPubOC(id);
         }
         for(int i = 0; i < 3; i++) {
             int num = random.nextInt(toolCardIds.size());
             int id = toolCardIds.remove(num);
-            //TODO: load tool card description from file
-            switch(id) {
-                case 0:
-                    toolCards[i] = new ToolCard1("name", "description", 2);
-                    break;
-                case 1:
-                    toolCards[i] = new ToolCard2("name", "description", 2);
-                    break;
-                case 2:
-                    toolCards[i] = new ToolCard3("name", "description", 2);
-                    break;
-                case 3:
-                    toolCards[i] = new ToolCard4("name", "description", 2);
-                    break;
-                case 4:
-                    toolCards[i] = new ToolCard5("name", "description", 2);
-                    break;
-                case 5:
-                    toolCards[i] = new ToolCard6("name", "description", 2);
-                    break;
-                case 6:
-                    toolCards[i] = new ToolCard7("name", "description", 2);
-                    break;
-                case 7:
-                    toolCards[i] = new ToolCard8("name", "description", 2);
-                    break;
-                case 8:
-                    toolCards[i] = new ToolCard9("name", "description", 2);
-                    break;
-                case 9:
-                    toolCards[i] = new ToolCard10("name", "description", 2);
-                    break;
-                case 10:
-                    toolCards[i] = new ToolCard11("name", "description", 2);
-                    break;
-                case 11:
-                    toolCards[i] = new ToolCard12("name", "description", 2);
-                    break;
-            }
+            System.out.println("tool card id:" + id);
+            toolCards[i] = resourceLoader.loadToolCard(id);
         }
         model.setPatternCards(patternCards);
         model.setPubOCs(pubObjCards);
@@ -285,9 +262,9 @@ public class ServerController extends AbstractController {
     }
 
     private void performAction(PlayerAction pa) {
+        int playerIndex = playerActions.indexOf(pa);
         if(!model.isLobbyGathering() && !model.isStarted()) {
-            int playerIndex = playerActions.indexOf(pa);
-            int index = pa.getPatternCard() / 2 + 2 * playerActions.indexOf(pa);
+            int index = pa.getPatternCard() / 2 + 2 * playerIndex;
             boolean wcFace = (pa.getPatternCard() % 2 == 0);
             PatternCard pc = model.getPatternCards()[index];
             model.setWindowFrame(playerIndex, new WindowFrame(pc, wcFace));
@@ -297,21 +274,21 @@ public class ServerController extends AbstractController {
             }
         }
         else if(pa.isSwitchConnReq()) {
-            int playerIndex = playerActions.indexOf(pa);
             Player player = model.getPlayer(playerIndex);
             player.setSwitchingConn(true);
         }
         else if(model.isStarted()) {
-            if((pa.getIdToolCard() > 0)
+            if(pa.isSkipTurn()) {
+                model.updateTurn();
+            }
+            else if((pa.getIdToolCard() > 0)
                || ToolCard.isPendingAction()) {
-                int playerIndex = playerActions.indexOf(pa);
                 model.performToolCard(playerIndex, pa);
             }
             else {
                 // regular turn without choosing a tool card
                 Die die = model.removeDraftPoolDie(pa.getPosDPDie().get(0));
                 int[] place = pa.getPlaceDPDie().get(0);
-                int playerIndex = playerActions.indexOf(pa);
                 model.placeWFDie(playerIndex, die, place[0], place[1]);
             }
         }
@@ -325,7 +302,8 @@ public class ServerController extends AbstractController {
             model.addObserver(virtualView);
             serverController.gatherPlayers();
             serverController.gameSetup();
-            serverController.listenPlayerActions();
+            serverController.waitForPlayerActions();
+            model.reset();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ResourceLoaderException e) {

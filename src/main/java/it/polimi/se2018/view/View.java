@@ -45,7 +45,7 @@ public abstract class View extends Observable implements ViewInterface {
 
     public abstract void updateMainScreen(MainScreenInfo mainScreenInfo);
 
-    public abstract void endGame(ArrayList<Player> leaderboard, Player player, int[] score);
+    public abstract void endGame(ArrayList<Player> leaderBoard, Player player);
 
     public abstract void updateToolCards(ToolCard[] toolCards);
 
@@ -58,6 +58,8 @@ public abstract class View extends Observable implements ViewInterface {
     public abstract void updatePlayerLobby(ArrayList<String> usernames);
 
     public abstract void patternCardGenerator(ArrayList<PatternCard> pc);
+
+    public abstract void enteringError(boolean lobbyGathering);
 
     public abstract void startView();
 }

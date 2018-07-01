@@ -18,7 +18,7 @@ public class Player implements Serializable {
     private WindowFrame wf = null;
     private int tokens;
     private transient PrivObjCard privObjCard;
-    private transient int score = 0;
+    private int score = 0;
     private boolean connected = true;
     private transient boolean skip = false;
     private transient boolean switchingConn = false;
@@ -65,6 +65,10 @@ public class Player implements Serializable {
             this.tokens -= tokens;
         }
         else throw new IllegalArgumentException();
+    }
+
+    public int getScore() {
+        return score;
     }
 
     public int calculateScore(PubObjCard[] pubObjCard){

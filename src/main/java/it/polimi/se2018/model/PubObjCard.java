@@ -11,7 +11,6 @@ public abstract class PubObjCard implements Serializable {
     public PubObjCard(String desc, String name) {
         description = desc;
         cardName = name;
-
     }
 
     public String getDesc() {

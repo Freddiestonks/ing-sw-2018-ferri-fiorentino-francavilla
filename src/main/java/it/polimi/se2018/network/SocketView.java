@@ -3,6 +3,8 @@ package it.polimi.se2018.network;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.tceffects.AbstractTCEffect;
+import it.polimi.se2018.utils.JsonAdapter;
 import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.ViewInterface;
 
@@ -22,13 +24,14 @@ public class SocketView implements ViewInterface {
     public static final String END_GAME = "ENDGAME";
     public static final String LOBBY = "LOBBY";
     public static final String PC = "PC";
+    public static final String ENTER_ERROR = "ENTERERROR";
 
     public SocketView(Socket socket) {
         this.socket = socket;
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Cell.class, new JsonAdapter<Cell>());
         gsonBuilder.registerTypeAdapter(PubObjCard.class, new JsonAdapter<PubObjCard>());
-        gsonBuilder.registerTypeAdapter(ToolCard.class, new JsonAdapter<ToolCard>());
+        gsonBuilder.registerTypeAdapter(AbstractTCEffect.class, new JsonAdapter<AbstractTCEffect>());
         this.gson = gsonBuilder.create();
     }
 
@@ -48,14 +51,12 @@ public class SocketView implements ViewInterface {
         writer.flush();
     }
 
-    public void endGame(ArrayList<Player> leaderboard, Player player, int[] score) throws IOException {
+    public void endGame(ArrayList<Player> leaderBoard, Player player) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
         writer.write(VIEW + GAP + END_GAME + "\n");
-        String json = gson.toJson(leaderboard);
+        String json = gson.toJson(leaderBoard);
         writer.write(json + "\n");
         json = gson.toJson(player);
-        writer.write(json + "\n");
-        json = gson.toJson(score);
         writer.write(json + "\n");
         writer.flush();
     }
@@ -72,7 +73,14 @@ public class SocketView implements ViewInterface {
         OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
         String json = gson.toJson(pc);
         writer.write(VIEW + GAP + PC + "\n");
-        System.out.println(json);
+        writer.write(json + "\n");
+        writer.flush();
+    }
+
+    public void enteringError(boolean lobbyGathering) throws IOException {
+        OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
+        String json = gson.toJson(lobbyGathering);
+        writer.write(VIEW + GAP + ENTER_ERROR + "\n");
         writer.write(json + "\n");
         writer.flush();
     }

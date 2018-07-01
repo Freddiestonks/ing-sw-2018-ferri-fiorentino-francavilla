@@ -7,6 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.controller.PlayerActionInterface;
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.tceffects.AbstractTCEffect;
+import it.polimi.se2018.utils.JsonAdapter;
 import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.View;
 import it.polimi.se2018.view.ViewInterface;
@@ -32,7 +34,7 @@ public class SocketReceiver extends Thread {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Cell.class, new JsonAdapter<Cell>());
         gsonBuilder.registerTypeAdapter(PubObjCard.class, new JsonAdapter<PubObjCard>());
-        gsonBuilder.registerTypeAdapter(ToolCard.class, new JsonAdapter<ToolCard>());
+        gsonBuilder.registerTypeAdapter(AbstractTCEffect.class, new JsonAdapter<AbstractTCEffect>());
         this.gson = gsonBuilder.create();
     }
 
@@ -52,7 +54,7 @@ public class SocketReceiver extends Thread {
         try {
             socket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         interrupt();
     }
@@ -73,7 +75,6 @@ public class SocketReceiver extends Thread {
                         message = is.readLine();
                         boolean lobbyGathering = gson.fromJson(message, boolean.class);
                         localModel.setState(started, lobbyGathering);
-
                     }
                     else if(message.substring(length).equals(SocketLocalModel.WF)) {
                         message = is.readLine();
@@ -116,6 +117,11 @@ public class SocketReceiver extends Thread {
                         boolean toolCardUsed = gson.fromJson(message, boolean.class);
                         localModel.setToolCardUsed(toolCardUsed);
                     }
+                    else if(message.substring(length).equals(SocketLocalModel.TOKENS)) {
+                        message = is.readLine();
+                        int tokens = gson.fromJson(message, int.class);
+                        localModel.setTokens(tokens);
+                    }
                     else if(message.substring(length).equals(SocketLocalModel.PLAYER_INDEX)) {
                         message = is.readLine();
                         int playerIndex = gson.fromJson(message, int.class);
@@ -135,17 +141,12 @@ public class SocketReceiver extends Thread {
                         view.updateMainScreen(msi);
                     }
                     else if(message.substring(length).equals(SocketView.END_GAME)) {
-                        ArrayList<Player> leaderBoard = new ArrayList<>();
                         message = is.readLine();
-                        Player[] leaderboard = gson.fromJson(message, Player[].class);
-                        for(int i = 0;i<leaderboard.length;i++){
-                            leaderBoard.add(leaderboard[i]);
-                        }
+                        Type type = new TypeToken<ArrayList<Player>>(){}.getType();
+                        ArrayList<Player> leaderBoard = gson.fromJson(message, type);
                         message = is.readLine();
                         Player player = gson.fromJson(message, Player.class);
-                        message = is.readLine();
-                        int[] score = gson.fromJson(message, int[].class);
-                        view.endGame(leaderBoard, player, score);
+                        view.endGame(leaderBoard, player);
                     }
                     else if(message.substring(length).equals(SocketView.LOBBY)) {
                         message = is.readLine();
@@ -160,6 +161,11 @@ public class SocketReceiver extends Thread {
                         ArrayList<PatternCard> patternCards = gson.fromJson(message, type);
                         view.patternCardGenerator(patternCards);
                     }
+                    else if(message.substring(length).equals(SocketView.ENTER_ERROR)) {
+                        message = is.readLine();
+                        boolean lobbyGathering = gson.fromJson(message, boolean.class);
+                        view.enteringError(lobbyGathering);
+                    }
                 }
                 else if(message.equals(SocketPlayerAction.PLAYER_ACTION)) {
                     message = is.readLine();
@@ -169,7 +175,7 @@ public class SocketReceiver extends Thread {
             }
         } catch (IOException | JsonSyntaxException e) {
             dismiss();
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 }

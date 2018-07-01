@@ -8,6 +8,7 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
     private String usernameReq = null;
     private boolean switchConnReq = false;
     private int patternCard = 0;
+    private boolean skipTurn = false;
     private ArrayList<Integer> newDieValue = new ArrayList<>();
     private ArrayList<Integer> posDPDie = new ArrayList<>();
     private ArrayList<int[]> posRTDie = new ArrayList<>();
@@ -37,6 +38,7 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
                 this.usernameReq = pa.usernameReq;
                 this.switchConnReq = pa.switchConnReq;
                 this.patternCard = pa.patternCard;
+                this.skipTurn = pa.skipTurn;
                 this.newDieValue = pa.getNewDieValue();
                 this.posDPDie = pa.getPosDPDie();
                 this.posRTDie = pa.getPosRTDie();
@@ -78,6 +80,14 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
 
     public int getPatternCard() {
         return patternCard;
+    }
+
+    public void setSkipTurn(boolean skipTurn) {
+        this.skipTurn = skipTurn;
+    }
+
+    public boolean isSkipTurn() {
+        return skipTurn;
     }
 
     public void addPosDPDie(int pos) {
@@ -143,6 +153,7 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
             this.usernameReq = null;
             this.switchConnReq = false;
             this.patternCard = 0;
+            this.skipTurn = false;
             this.newDieValue.clear();
             this.posDPDie.clear();
             this.posRTDie.clear();

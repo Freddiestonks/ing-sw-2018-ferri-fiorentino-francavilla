@@ -1,12 +1,12 @@
-package it.polimi.se2018.model.toolcards;
+package it.polimi.se2018.model.tceffects;
 
 import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.model.*;
 
-public class ToolCard8 extends ToolCard {
+public class DoubleTurn extends AbstractTCEffect {
 
-    public ToolCard8(String name, String description, int price) {
-        super(name, description, price);
+    public DoubleTurn() {
+        singleAction = true;
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {

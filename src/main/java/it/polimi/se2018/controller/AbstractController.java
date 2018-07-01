@@ -27,7 +27,10 @@ public abstract class AbstractController {
 
     protected boolean validAction(PlayerAction pa) {
         int playerIndex = getPlayerIndex(pa);
-        if(!modelInterface.isStarted()) {
+        if(pa.isSwitchConnReq()) {
+            return true;
+        }
+        if(!modelInterface.isStarted() && !modelInterface.isLobbyGathering()) {
             if(!(pa.getPatternCard() >= 0 && pa.getPatternCard() <= 3)) {
                 return false;
             }
@@ -36,7 +39,10 @@ public abstract class AbstractController {
         if(playerIndex + 1 != modelInterface.getTurn()) {
             return false;
         }
-        if (!(pa.getIdToolCard()>=0 && pa.getIdToolCard()<=12)){
+        if(pa.isSkipTurn()) {
+            return true;
+        }
+        if(!(pa.getIdToolCard()>=0 && pa.getIdToolCard()<=12)){
             return false;
         }
         for(int dieFace : pa.getNewDieValue()){
@@ -83,7 +89,8 @@ public abstract class AbstractController {
         }
         if(modelInterface.isStarted()) {
             WindowFrame wf = modelInterface.getWindowFrame(playerIndex);
-            if((pa.getIdToolCard() > 0) && !modelInterface.isToolCardUsed()) {
+            if((pa.getIdToolCard() > 0)
+               && modelInterface.playerCanUseToolCard(playerIndex, pa.getIdToolCard())) {
                 // turn using tool card
                 ToolCard toolCard = modelInterface.getToolCard(pa.getIdToolCard());
                 return toolCard.validAction(modelInterface, wf, pa);

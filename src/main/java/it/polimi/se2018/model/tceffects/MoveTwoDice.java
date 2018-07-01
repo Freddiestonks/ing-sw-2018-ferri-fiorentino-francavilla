@@ -1,12 +1,12 @@
-package it.polimi.se2018.model.toolcards;
+package it.polimi.se2018.model.tceffects;
 
 import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.model.*;
 
-public class ToolCard4 extends ToolCard {
+public class MoveTwoDice extends AbstractTCEffect {
 
-    public ToolCard4(String name, String description, int price) {
-        super(name, description, price);
+    public MoveTwoDice() {
+        singleAction = true;
     }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {

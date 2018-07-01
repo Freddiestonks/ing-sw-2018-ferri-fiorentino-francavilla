@@ -3,6 +3,8 @@ package it.polimi.se2018.network;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.tceffects.AbstractTCEffect;
+import it.polimi.se2018.utils.JsonAdapter;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -23,6 +25,7 @@ public class SocketLocalModel implements LocalModelInterface {
     public static final String PUBOCS = "PUBOCS";
     public static final String TC = "TC";
     public static final String TC_USED = "TC_USED";
+    public static final String TOKENS = "TOKENS";
     public static final String PLAYER_INDEX = "PLAYERINDEX";
 
     public SocketLocalModel(Socket socket) {
@@ -30,7 +33,7 @@ public class SocketLocalModel implements LocalModelInterface {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Cell.class, new JsonAdapter<Cell>());
         gsonBuilder.registerTypeAdapter(PubObjCard.class, new JsonAdapter<PubObjCard>());
-        gsonBuilder.registerTypeAdapter(ToolCard.class, new JsonAdapter<ToolCard>());
+        gsonBuilder.registerTypeAdapter(AbstractTCEffect.class, new JsonAdapter<AbstractTCEffect>());
         this.gson = gsonBuilder.create();
     }
 
@@ -100,6 +103,14 @@ public class SocketLocalModel implements LocalModelInterface {
         OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
         String json = gson.toJson(toolCardUsed);
         writer.write(LOCAL_MODEL + GAP + TC_USED + "\n");
+        writer.write(json + "\n");
+        writer.flush();
+    }
+
+    public void setTokens(int tokens) throws IOException {
+        OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
+        String json = gson.toJson(tokens);
+        writer.write(LOCAL_MODEL + GAP + TOKENS + "\n");
         writer.write(json + "\n");
         writer.flush();
     }

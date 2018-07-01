@@ -1,6 +1,8 @@
 package it.polimi.se2018.model;
 
-public class PrivObjCard {
+import java.io.Serializable;
+
+public class PrivObjCard implements Serializable {
     //Attributes
     private Color color;
 
@@ -14,7 +16,7 @@ public class PrivObjCard {
     }
     @Override
     public String toString(){
-        return color.toString().substring(0,1).toUpperCase();
+        return color.toString().toLowerCase();
     }
 
 }

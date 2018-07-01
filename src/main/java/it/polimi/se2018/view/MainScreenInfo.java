@@ -2,6 +2,7 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Player;
+import it.polimi.se2018.model.PrivObjCard;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class MainScreenInfo implements Serializable {
     private boolean backward;
     private ArrayList<Die> draftPool;
     private ArrayList<ArrayList<Die>> roundTrack;
+    private PrivObjCard privObjCard;
 
     public MainScreenInfo() {
 
@@ -75,4 +77,11 @@ public class MainScreenInfo implements Serializable {
         this.roundTrack = new ArrayList<>(roundTrack);
     }
 
+    public PrivObjCard getPrivObjCard() {
+        return privObjCard;
+    }
+
+    public void setPrivObjCard(PrivObjCard privObjCard) {
+        this.privObjCard = privObjCard;
+    }
 }

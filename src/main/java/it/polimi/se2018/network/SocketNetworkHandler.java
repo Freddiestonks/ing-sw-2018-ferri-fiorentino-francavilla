@@ -10,20 +10,17 @@ import java.net.Socket;
 public class SocketNetworkHandler extends NetworkHandler {
 
     private final int PORT = 1111;
-    private SocketReceiver socketReceiver;
+    private SocketReceiver socketReceiver = null;
 
     public SocketNetworkHandler(String host) {
         super(host);
     }
 
-    public PlayerActionInterface connect(LocalModel localModel, View view) {
-        Socket socket = null;
-        try {
-            socket = new Socket(host, PORT);
-        } catch (IOException e) {
-           //TODO REMOVE THIS
-           e.printStackTrace();
+    public PlayerActionInterface connect(LocalModel localModel, View view) throws IOException {
+        if(socketReceiver != null) {
+            socketReceiver.dismiss();
         }
+        Socket socket = new Socket(host, PORT);
         socketReceiver = new SocketReceiver(socket);
         socketReceiver.setLocalModel(localModel);
         socketReceiver.setView(view);

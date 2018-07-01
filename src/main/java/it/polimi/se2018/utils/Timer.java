@@ -5,10 +5,6 @@ public class Timer extends Thread {
     private int time;
     private Object lock;
 
-    public Timer() {
-        this(0, new Object());
-    }
-
     public Timer(int time, Object lock) {
         if(lock == null) {
             throw new NullPointerException();
@@ -20,9 +16,10 @@ public class Timer extends Thread {
         this.lock = lock;
     }
 
-    public void reset() {
-        interrupt();
-        timeout = false;
+    public boolean isTimeout() {
+        synchronized (lock) {
+            return timeout;
+        }
     }
 
     @Override
@@ -38,12 +35,6 @@ public class Timer extends Thread {
         synchronized (lock) {
             timeout = true;
             lock.notifyAll();
-        }
-    }
-
-    public boolean isTimeout() {
-        synchronized (lock) {
-            return timeout;
         }
     }
 }

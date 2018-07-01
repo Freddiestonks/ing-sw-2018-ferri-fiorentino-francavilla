@@ -1,8 +1,8 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.*;
+
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 
 import static java.lang.System.out;
@@ -139,9 +139,14 @@ public class CLIView extends View {
         out.println();
         String offline = "(OFFLINE)";
         WindowFrame[] wf = new  WindowFrame[opponents.size()];
-        for(int i = 0;i<opponents.size();i++) {
+        for (int i = 0; i < opponents.size(); i++) {
             if(!opponents.get(i).isConnected()){
                 out.print(offline);
+            }
+            else {
+                for (int j = 0; j < offline.length(); j++) {
+                    out.print(" ");
+                }
             }
             for (int j = 0; j < (24 - offline.length()); j++){
                 out.print(" ");
@@ -205,7 +210,9 @@ public class CLIView extends View {
     }
 
     public synchronized void showMainScreen() {
-        updateMainScreen(this.mainScreenInfo);
+        if(this.mainScreenInfo != null) {
+            updateMainScreen(this.mainScreenInfo);
+        }
     }
 
     public synchronized void updateMainScreen(MainScreenInfo mainScreenInfo) {
@@ -218,7 +225,8 @@ public class CLIView extends View {
         String turnPlayer = mainScreenInfo.getTurnPlayer();
         ArrayList<Die> draftPool = mainScreenInfo.getDraftPool();
         ArrayList<ArrayList<Die>> roundTrack = mainScreenInfo.getRoundTrack();
-        updatePrivOCs(player.getPrivObjCard());
+        PrivObjCard privObjCard = mainScreenInfo.getPrivObjCard();
+        updatePrivOCs(privObjCard);
         out.println();
         updateInfo(player.getTokens(),round,backward,turnPlayer);
         out.println();
@@ -239,28 +247,28 @@ public class CLIView extends View {
         }
     }*/
 
-    public void endGame(ArrayList<Player> leaderboard,Player player,int[] score) {
+    public void endGame(ArrayList<Player> leaderBoard, Player player) {
         clearScreen();
         out.println("Match is over here is the Leaderboard:\n");
-        for(int i = 0; i<leaderboard.size();i++){
-            out.println("#"+i+" - " + leaderboard.get(i).getUsername() + "Points: " + score[i]+ "\n\n");
+        for(int i = 0; i < leaderBoard.size(); i++){
+            Player currentPlayer = leaderBoard.get(i);
+            out.println("#" + (i + 1) + " - " + currentPlayer.getUsername() + " Points: " + currentPlayer.getScore() + "\n\n");
         }
-        if(Objects.equals(player.getUsername(), leaderboard.get(0).getUsername())){
+        if(player.getUsername().equals(leaderBoard.get(0).getUsername())) {
             out.println("Congratulations you won, good Job!");
         }
-        else if(Objects.equals(player.getUsername(), leaderboard.get(1).getUsername())){
+        else if(player.getUsername().equals(leaderBoard.get(1).getUsername())) {
             out.println("You came out second");
         }
-        else if(Objects.equals(player.getUsername(), leaderboard.get(2).getUsername())){
+        else if(player.getUsername().equals(leaderBoard.get(2).getUsername())) {
             out.println("You came out third");
         }
-        else{
-            out.println("You came out fourth");
+        else {
+            out.println("You came out fourth\n");
         }
         out.print(CURSOR);
     }
 
-    //TODO TEST AFTER TOOLCARDS ARE DONE
     public synchronized void updateToolCards(ToolCard[] toolCards) {
         clearScreen();
         String[] names = new String[toolCards.length];
@@ -311,6 +319,7 @@ public class CLIView extends View {
         out.println("   placement");
         out.println("       select [element] = select from draftpool element #[element] ");
         out.println("       place [row][col] = place die selected from draftpool on the cell[row][col] of the window frame");
+        out.println("   skip = skip your turn");
     }
 
     public synchronized void updatePlayerLobby(ArrayList<String> usernames) {
@@ -406,6 +415,16 @@ public class CLIView extends View {
             out.println();
         }
         out.println();
+        out.print(CURSOR);
+    }
+
+    public synchronized void enteringError(boolean lobbyGathering) {
+        if(lobbyGathering) {
+            out.println("\nYour username has already taken, please choose another one");
+        }
+        else {
+            out.println("\nSorry, the match has already started");
+        }
         out.print(CURSOR);
     }
 

@@ -1,14 +1,15 @@
-package it.polimi.se2018.model.toolcards;
+package it.polimi.se2018.model.tceffects;
 
 import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.model.Model;
 import it.polimi.se2018.model.ModelInterface;
-import it.polimi.se2018.model.ToolCard;
 import it.polimi.se2018.model.WindowFrame;
 
-public class ToolCard7 extends ToolCard {
+public class RollDraftPool extends AbstractTCEffect {
 
-    public ToolCard7(String name, String description, int price) { super(name, description, price);}
+    public RollDraftPool() {
+        singleAction = true;
+    }
 
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
         for(int i = 0; i < model.getDraftPoolSize(); i++) {

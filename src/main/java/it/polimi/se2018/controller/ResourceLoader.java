@@ -1,19 +1,29 @@
 package it.polimi.se2018.controller;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.tceffects.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ResourceLoader {
 
+    private final JsonParser jsonParser;
+
     private static final String CONFIG_PATH = "src/main/json/config.json";
     private static final String PCS_PATH = "src/main/json/patternCards.json";
     private static final String PUBOCS_PATH = "src/main/json/publicCards.json";
+    private static final String TOOL_CARDS_PATH = "src/main/json/toolCards.json";
+
+    public ResourceLoader() {
+        jsonParser = new JsonParser();
+    }
 
     /**
      * This method is used to translate a string to a "Color"
@@ -85,7 +95,6 @@ public class ResourceLoader {
     }
 
     public int loadLobbyTimeout() throws ResourceLoaderException {
-        JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject;
         try {
             //The Json file is then transferred to an object
@@ -98,7 +107,6 @@ public class ResourceLoader {
     }
 
     public int loadTurnTimeout() throws ResourceLoaderException {
-        JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject;
         try {
             //The Json file is then transferred to an object
@@ -111,7 +119,6 @@ public class ResourceLoader {
     }
 
     public int loadNumPCs() throws ResourceLoaderException {
-        JsonParser jsonParser = new JsonParser();
         Object object;
         try {
             object = jsonParser.parse(new FileReader(PCS_PATH));
@@ -125,7 +132,6 @@ public class ResourceLoader {
     }
 
     public int loadNumPubOCs() throws ResourceLoaderException {
-        JsonParser jsonParser = new JsonParser();
         Object object;
         try {
             object = jsonParser.parse(new FileReader(PUBOCS_PATH));
@@ -138,6 +144,19 @@ public class ResourceLoader {
         return publicCards.size();
     }
 
+    public int loadNumToolCards() throws ResourceLoaderException {
+        Object object;
+        try {
+            object = jsonParser.parse(new FileReader(TOOL_CARDS_PATH));
+        } catch (FileNotFoundException e) {
+            throw new ResourceLoaderException();
+        }
+        JsonObject jsonObject = (JsonObject)object;
+        //transform the Object to an array of "tool cards"
+        JsonArray publicCards = (JsonArray)jsonObject.get("toolCards");
+        return publicCards.size();
+    }
+
     /**
      * This method is used to load a PatternCard from the JSON file with a specific id
      * @param id this is the id of the wanted PatternCard
@@ -147,9 +166,8 @@ public class ResourceLoader {
     public PatternCard loadPC(int id) throws ResourceLoaderException {
         // loadPC will load a pattern card from file written in JSON where cards are kept in a specific order
         // their position can be used as an "ID"
-        PatternCard patternCard = null;
+        PatternCard patternCard;
         //parse the json file
-        JsonParser jsonParser = new JsonParser();
         try {
             //The Json file is then transferred to an object
             Object object = jsonParser.parse(new FileReader(PCS_PATH));
@@ -166,8 +184,8 @@ public class ResourceLoader {
             //create first a matrix of "normal cells"
             Cell[][] cellF = new Cell[4][5];
             Cell[][] cellB = new Cell[4][5];
-            for (int i = 0; i<4;i++){
-                for (int j = 0;j<5;j++){
+            for (int i = 0; i < 4; i++){
+                for (int j = 0; j < 5; j++){
                     cellF[i][j] = new Cell();
                     cellB[i][j] = new Cell();
                 }
@@ -197,17 +215,16 @@ public class ResourceLoader {
      */
     public PubObjCard loadPubOC(int id) throws ResourceLoaderException {
         PubObjCard pubObjCard = null;
-        JsonParser jsonParser = new JsonParser();
         try {
             Object object = jsonParser.parse(new FileReader(PUBOCS_PATH));
             JsonObject jsonObject = (JsonObject) object;
             JsonArray publicCards = (JsonArray) jsonObject.get("publicCards");
             jsonObject = (JsonObject) publicCards.get(id);
-            String type = jsonObject.get("type").getAsString();
-            String name = jsonObject.get("name").getAsString();
-            String description = jsonObject.get("description").getAsString();
-            int multiplier = jsonObject.get("multiplier").getAsInt();
-            String subtype = jsonObject.get("subtype").getAsString();
+            String type = jStringGetter(jsonObject, "type");
+            String name = jStringGetter(jsonObject, "name");
+            String description = jStringGetter(jsonObject, "description");
+            int multiplier = jIntGetter(jsonObject, "multiplier");
+            String subtype = jStringGetter(jsonObject, "subtype");
             if (type.equals("color")) {
                 switch (subtype) {
                     case "row":
@@ -254,5 +271,69 @@ public class ResourceLoader {
             throw new ResourceLoaderException();
         }
         return pubObjCard;
+    }
+
+    public ToolCard loadToolCard(int id) throws ResourceLoaderException {
+        ToolCard toolCard;
+        String name;
+        String description;
+        ArrayList<AbstractTCEffect> effects = new ArrayList<>();
+        JsonArray jsonArray;
+        try {
+            Object object;
+            object = jsonParser.parse(new FileReader(TOOL_CARDS_PATH));
+            JsonObject jsonObject = (JsonObject) object;
+            JsonArray toolCards = (JsonArray) jsonObject.get("toolCards");
+            jsonObject = (JsonObject) toolCards.get(id);
+            name = jStringGetter(jsonObject, "name");
+            description = jStringGetter(jsonObject, "description");
+            jsonArray = (JsonArray) jsonObject.get("effects");
+        } catch (FileNotFoundException e) {
+            throw new ResourceLoaderException();
+        }
+        for(JsonElement effect : jsonArray) {
+            switch (effect.getAsString()) {
+                case "addOrSubDPDie":
+                    effects.add(new AddOrSubDPDie());
+                    break;
+                case "moveDieIgnoringColor":
+                    effects.add(new MoveDieIgnoringColor());
+                    break;
+                case "moveDieIgnoringValue":
+                    effects.add(new MoveDieIgnoringValue());
+                    break;
+                case "moveTwoDice":
+                    effects.add(new MoveTwoDice());
+                    break;
+                case "swapDPAndRTDice":
+                    effects.add(new SwapDPAndRTDice());
+                    break;
+                case "rollDPDie":
+                    effects.add(new RollDPDie());
+                    break;
+                case "rollDraftPool":
+                    effects.add(new RollDraftPool());
+                    break;
+                case "doubleTurn":
+                    effects.add(new DoubleTurn());
+                    break;
+                case "notAdjPlace":
+                    effects.add(new NotAdjPlace());
+                    break;
+                case "flipDPDieOver":
+                    effects.add(new FlipDPDieOver());
+                    break;
+                case "diceBagPlace":
+                    effects.add(new DiceBagPlace());
+                    break;
+                case "moveDiceAsRTDieColor":
+                    effects.add(new MoveDiceAsRTDieColor());
+                    break;
+                default:
+                    throw new ResourceLoaderException();
+            }
+        }
+        toolCard = new ToolCard(name, description, effects);
+        return toolCard;
     }
 }

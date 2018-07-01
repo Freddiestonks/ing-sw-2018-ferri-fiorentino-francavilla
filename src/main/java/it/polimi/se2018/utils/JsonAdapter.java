@@ -1,4 +1,4 @@
-package it.polimi.se2018.network;
+package it.polimi.se2018.utils;
 
 import com.google.gson.*;
 

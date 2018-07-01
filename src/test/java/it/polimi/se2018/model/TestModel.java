@@ -21,7 +21,7 @@ public class TestModel {
     }
 
     @Test
-    public void testUpdatingTurn() throws InvalidTurnException, MaxNumPlayersException {
+    public void testUpdatingTurn() throws MaxNumPlayersException {
         //tests if the end of the match is respected and if the order of some casual turn are respected too.
         Model modelExample = Model.instance();
         modelExample.addPlayer("Alessio", new LocalModel());

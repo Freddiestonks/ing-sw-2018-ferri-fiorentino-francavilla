@@ -2,31 +2,29 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.controller.PlayerAction;
 import it.polimi.se2018.controller.ResourceLoader;
-import it.polimi.se2018.model.toolcards.*;
 import org.junit.After;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
 
-public class TestToolcards {
+public class TestToolCards {
     @Test
     public void TestT1(){
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard1 t1 = new ToolCard1("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t1 = resourceLoader.loadToolCard(0);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
         pa.addPosDPDie(0);
         pa.addPosDPDie(2);
-        pa.addNewDieValue(2);
+        pa.addNewDieValue(5);
         pa.addPlaceWFDie(0, 0);
-        pa.addPlaceDPDie(1, 2);
+        pa.addPlaceDPDie(0, 1);
         Die d1 = new Die(Color.YELLOW);
-        d1.setValue(2);
-        d1.setValue(3);
+        d1.setValue(4);
         model.addDraftPoolDie(d1);
         if(t1.validAction(model,wf,pa))
             t1.performAction(model,wf,pa);
@@ -42,8 +40,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard2 t2 = new ToolCard2("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t2 = resourceLoader.loadToolCard(1);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
@@ -72,8 +70,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard3 t3 = new ToolCard3("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t3 = resourceLoader.loadToolCard(2);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
@@ -99,8 +97,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard4 t4 = new ToolCard4("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t4 = resourceLoader.loadToolCard(3);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
@@ -129,8 +127,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard5 t5 = new ToolCard5("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t5 = resourceLoader.loadToolCard(4);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
@@ -154,8 +152,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard6 t6 = new ToolCard6("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t6 = resourceLoader.loadToolCard(5);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
@@ -184,8 +182,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard7 t7 = new ToolCard7("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t7 = resourceLoader.loadToolCard(6);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         model.updateTurn();
@@ -206,8 +204,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard8 t8 = new ToolCard8("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t8 = resourceLoader.loadToolCard(7);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
@@ -236,8 +234,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard9 t9 = new ToolCard9("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t9 = resourceLoader.loadToolCard(8);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
@@ -266,8 +264,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard10 t10 = new ToolCard10("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t10 = resourceLoader.loadToolCard(9);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
@@ -296,8 +294,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard11 t11 = new ToolCard11("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t11 = resourceLoader.loadToolCard(10);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
@@ -322,8 +320,8 @@ public class TestToolcards {
         Model model = Model.instance();
         model.addPlayer("A", new LocalModel());
         model.addPlayer("B", new LocalModel());
-        ToolCard12 t12 = new ToolCard12("caso","casos",2);
         ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard t12 = resourceLoader.loadToolCard(11);
         PatternCard testPC = resourceLoader.loadPC(1);
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
