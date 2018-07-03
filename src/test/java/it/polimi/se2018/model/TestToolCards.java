@@ -171,6 +171,14 @@ public class TestToolCards {
             t6.performAction(model,wf,pa);
         }
         else fail();
+        pa.clear();
+        Die die = ToolCard.getPendingDie();
+        die.setValue(6);
+        pa.addPlaceDPDie(0, 1);
+        if(t6.validAction(model,wf,pa)){
+            t6.performAction(model,wf,pa);
+        }
+        else fail();
     }
     @After
     public void reset6() {
@@ -305,6 +313,13 @@ public class TestToolCards {
         pa.addPosDPDie(1);
         pa.addPlaceDPDie(0,1);
         pa.addPlaceDPDie(0,1);
+        if(t11.validAction(model,wf,pa)){
+            t11.performAction(model,wf,pa);
+        }
+        else fail();
+        pa.clear();
+        pa.addNewDieValue(1);
+        pa.addPlaceDPDie(0, 1);
         if(t11.validAction(model,wf,pa)){
             t11.performAction(model,wf,pa);
         }

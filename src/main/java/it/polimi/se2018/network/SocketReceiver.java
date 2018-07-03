@@ -157,9 +157,8 @@ public class SocketReceiver extends Thread {
                     else if(message.substring(length).equals(SocketView.PC)) {
                         message = is.readLine();
                         Type type = new TypeToken<ArrayList<PatternCard>>(){}.getType();
-                        System.out.println(message);
                         ArrayList<PatternCard> patternCards = gson.fromJson(message, type);
-                        view.patternCardGenerator(patternCards);
+                        view.patternCardChooser(patternCards);
                     }
                     else if(message.substring(length).equals(SocketView.ENTER_ERROR)) {
                         message = is.readLine();

@@ -35,7 +35,7 @@ public abstract class View extends Observable implements ViewInterface {
 
     public abstract void updatePrivOCs(PrivObjCard privObjCard);
 
-    public abstract void updatePubOCs(PubObjCard pubObjCards[]);
+    public abstract void showPubOCs(PubObjCard pubObjCards[]);
 
     public abstract void updateOpponentsWF(ArrayList<Player> opponents);
 
@@ -47,7 +47,7 @@ public abstract class View extends Observable implements ViewInterface {
 
     public abstract void endGame(ArrayList<Player> leaderBoard, Player player);
 
-    public abstract void updateToolCards(ToolCard[] toolCards);
+    public abstract void showToolCards(ToolCard[] toolCards);
 
     public abstract void connectionError();
 
@@ -57,7 +57,7 @@ public abstract class View extends Observable implements ViewInterface {
 
     public abstract void updatePlayerLobby(ArrayList<String> usernames);
 
-    public abstract void patternCardGenerator(ArrayList<PatternCard> pc);
+    public abstract void patternCardChooser(ArrayList<PatternCard> pc);
 
     public abstract void enteringError(boolean lobbyGathering);
 

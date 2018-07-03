@@ -9,7 +9,6 @@ import java.util.Random;
 
 public class TestCLIView {
     CLIView cliView = new CLIView();
-    Model model = Model.instance();
     @Test
     public void testUpdateDP(){
         ArrayList<Die> die = new ArrayList<>();
@@ -31,7 +30,7 @@ public class TestCLIView {
         pubObjCards[1] = resourceLoader.loadPubOC(1);
         pubObjCards[2] = resourceLoader.loadPubOC(2);
         */
-        int numPubOcs = 10; // TODO: ?? from file
+        int numPubOcs = resourceLoader.loadNumPubOCs();
         ArrayList<Integer> pubOCIds = new ArrayList<>();
         for(int i = 0; i < numPubOcs; i++) {
             pubOCIds.add(i);
@@ -42,7 +41,7 @@ public class TestCLIView {
             int id = pubOCIds.remove(num);
             pubObjCards[i] = resourceLoader.loadPubOC(id);
         }
-        cliView.updatePubOCs(pubObjCards);
+        cliView.showPubOCs(pubObjCards);
     }
     @Test
     public void testRT(){
@@ -136,9 +135,25 @@ public class TestCLIView {
     public void testPatternCard(){
         ArrayList<PatternCard> patternCard = new ArrayList<>();
         ResourceLoader resourceLoader = new ResourceLoader();
-        PatternCard testPC = resourceLoader.loadPC(0);
         patternCard.add(resourceLoader.loadPC(0));
         patternCard.add(resourceLoader.loadPC(1));
-        cliView.patternCardGenerator(patternCard);
+        cliView.patternCardChooser(patternCard);
+    }
+    @Test
+    public void testShowToolCards(){
+        ResourceLoader resourceLoader = new ResourceLoader();
+        ToolCard[] toolCards = new ToolCard[3];
+        int numToolCards = resourceLoader.loadNumToolCards();
+        ArrayList<Integer> tcIds = new ArrayList<>();
+        for(int i = 0; i < numToolCards; i++) {
+            tcIds.add(i);
+        }
+        Random random = new Random();
+        for(int i = 0; i < 3; i++) {
+            int num = random.nextInt(tcIds.size());
+            int id = tcIds.remove(num);
+            toolCards[i] = resourceLoader.loadToolCard(id);
+        }
+        cliView.showToolCards(toolCards);
     }
 }

@@ -42,7 +42,7 @@ public abstract class AbstractController {
         if(pa.isSkipTurn()) {
             return true;
         }
-        if(!(pa.getIdToolCard()>=0 && pa.getIdToolCard()<=12)){
+        if(!(pa.getIdToolCard()>=0 && pa.getIdToolCard()<=3)){
             return false;
         }
         for(int dieFace : pa.getNewDieValue()){

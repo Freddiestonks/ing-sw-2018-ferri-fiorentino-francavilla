@@ -69,7 +69,7 @@ public class SocketView implements ViewInterface {
         writer.flush();
     }
 
-    public void patternCardGenerator(ArrayList<PatternCard> pc) throws IOException {
+    public void patternCardChooser(ArrayList<PatternCard> pc) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
         String json = gson.toJson(pc);
         writer.write(VIEW + GAP + PC + "\n");

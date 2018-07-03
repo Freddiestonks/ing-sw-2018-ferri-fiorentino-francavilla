@@ -6,23 +6,15 @@ public abstract class PubObjCard implements Serializable {
     private String description;
     private String cardName;
     protected int points;
-    private boolean used = false;
 
-    public PubObjCard(String desc, String name) {
-        description = desc;
-        cardName = name;
+    public PubObjCard(String desc, String name, int points) {
+        this.description = desc;
+        this.cardName = name;
+        this.points = points;
     }
 
     public String getDesc() {
         return description;
-    }
-
-    public void use() {
-        used = true;
-    }
-
-    public boolean isUsed() {
-        return used;
     }
 
     public abstract int calculateScore(WindowFrame wf);

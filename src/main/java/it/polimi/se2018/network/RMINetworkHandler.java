@@ -15,13 +15,12 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RMINetworkHandler extends NetworkHandler {
 
-    private final int PORT = 1099;
-
     public RMINetworkHandler(String host) {
         super(host);
     }
 
     public PlayerActionInterface connect(LocalModel localModel, View view) throws IOException {
+        int port = ClientGatherer.RMI_PORT;
         ClientGathererInterface clientGatherer;
         LocalModelInterface localModelInterface;
         ViewInterface viewInterface;
@@ -33,7 +32,7 @@ public class RMINetworkHandler extends NetworkHandler {
             //e.printStackTrace();
         }
         try {
-            clientGatherer = (ClientGathererInterface)Naming.lookup("//" + host + ":" + PORT + "/Server");
+            clientGatherer = (ClientGathererInterface)Naming.lookup("//" + host + ":" + port + "/Server");
             localModelInterface = (LocalModelInterface)UnicastRemoteObject.exportObject(localModel, 0);
             viewInterface = (ViewInterface)UnicastRemoteObject.exportObject(view, 0);
             playerActionInterface = clientGatherer.connectRMI(localModelInterface, viewInterface);

@@ -17,9 +17,9 @@ public class Player implements Serializable {
     private String username;
     private WindowFrame wf = null;
     private int tokens;
-    private transient PrivObjCard privObjCard;
     private int score = 0;
-    private boolean connected = true;
+    private transient PrivObjCard privObjCard;
+    private transient boolean connected = true;
     private transient boolean skip = false;
     private transient boolean switchingConn = false;
 
@@ -48,7 +48,7 @@ public class Player implements Serializable {
     /**
      * This method is used to sets the Private card associated to the player.
      *
-     * @param privOC is the Private card passed by caller
+     * @param privOC is the set of Private Objective Cards
      */
     public void setPrivOC(PrivObjCard privOC){
         this.privObjCard = privOC;
@@ -67,22 +67,29 @@ public class Player implements Serializable {
         else throw new IllegalArgumentException();
     }
 
+    /**
+     * This method return the calculated score.
+     *
+     * @return the calculated score.
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * This method is used to calculate the player's score with the Public Objective Cards selected.
+     *
+     * @param pubObjCard is the set of Public Objective Cards.
+     * @return the calculated score.
+     */
     public int calculateScore(PubObjCard[] pubObjCard){
-        if(wf==null){
-        }
-        System.out.println(wf);
         score = pubObjCard[0].calculateScore(wf) + pubObjCard[1].calculateScore(wf) + pubObjCard[2].calculateScore(wf);
-        for (int i = 0; i<5; i++){
-            for (int l = 0;l<4;l++){
-                //fill check with all of the elements inside the window frame
-                if(wf.getDie(l,i) == null){
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 4; j++){
+                if(wf.getDie(j, i) == null){
                     score--;
                 }
-                else if(wf.getDie(l,i).getColor() == privObjCard.getColor()){
+                else if(wf.getDie(j, i).getColor() == privObjCard.getColor()){
                     score++;
                 }
 
@@ -119,33 +126,14 @@ public class Player implements Serializable {
         return tokens;
     }
 
-    /**
-     * This mehod is used to set the token's value
-     *
-     * @param newValue is the value to be inserted in the corresponding attribute
-     */
-    public void setTokens(int newValue){
-        tokens = newValue;
-    }
 
     /**
      * This method is used to provide the name of the player.
      *
-     * @return a string instane rereting the player name.
+     * @return a string representing the player name.
      */
     public String getUsername() {
         return username;
-    }
-
-    /**
-     * This method is used to provide a die on the Windowframe of the player.
-     *
-     * @param row The row of the wanted positioning place.
-     * @param col The column of the wanted positioning place.
-     * @return a die instance corresponding to the wanted position
-     */
-    public Die getWinFrameDie(int row, int col){
-        return this.wf.getDie(row,col);
     }
 
     /**
@@ -158,7 +146,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * This method set the 'skip' attribute
+     * This method set the player to skip his next turn
      *
      * @param skip the boolean value to be set.
      */
@@ -167,7 +155,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * This method provide the 'skip' value.
+     * This method determine if the player must skip his turn
      *
      * @return a boolean instance representing the skip value
      */

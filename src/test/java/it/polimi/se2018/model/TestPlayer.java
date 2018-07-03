@@ -1,14 +1,8 @@
 package it.polimi.se2018.model;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import it.polimi.se2018.controller.ResourceLoader;
-import it.polimi.se2018.controller.ResourceLoaderException;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.Random;
 
 import static org.junit.Assert.fail;
@@ -19,22 +13,17 @@ public class TestPlayer {
         Player player = new Player("Peppino");
         PrivObjCard privObjCard = new PrivObjCard(Color.BLUE);
         player.setPrivOC(privObjCard);
-        Random rand = new Random();
-        PubObjCard[] pubObjCard = new PubObjCard[3];
+        PubObjCard[] pubObjCards = new PubObjCard[3];
         ResourceLoader resourceLoader = new ResourceLoader();
-        PatternCard testPC = null;
-        try {
-            testPC = resourceLoader.loadPC(0);
-        } catch (ResourceLoaderException e) {
-            e.printStackTrace();
-        }
+        Random rand = new Random();
+        PatternCard testPC;
+        testPC = resourceLoader.loadPC(0);
         WindowFrame wf = new WindowFrame(testPC,true);
         final int privPoints = 4;
         final int emptySpaces = 0;
-        final int tokens = 20;
+        final int tokens = 5;
         int[] result = new int[10];
         player.setWinFrame(wf);
-        player.setTokens(20);
 
         result[0] = 12;
         result[1] = 10;
@@ -95,74 +84,17 @@ public class TestPlayer {
             }
         }
 
-        for (int a = 0; a<3;a++) {
+        for (int a = 0; a < 3; a++) {
             int id = rand.nextInt(9);
-            String path = "src/main/json/publicCards.json";
-            JsonParser jsonParser = new JsonParser();
-
-            try {
-                Object object = jsonParser.parse(new FileReader(path));
-                JsonObject jsonObject = (JsonObject) object;
-                JsonArray patternCards = (JsonArray) jsonObject.get("publicCards");
-                jsonObject = (JsonObject) patternCards.get(id);
-                String type = jsonObject.get("type").getAsString();
-                String name = jsonObject.get("name").getAsString();
-                String description = jsonObject.get("description").getAsString();
-                int multiplier = jsonObject.get("multiplier").getAsInt();
-                String subtype = jsonObject.get("subtype").getAsString();
-                if (type.equals("color")) {
-                    switch (subtype) {
-                        case "row":
-                            pubObjCard[a] = new PubOCColorDet(description, name, true, false, false, multiplier);
-                            break;
-                        case "col":
-                            pubObjCard[a] = new PubOCColorDet(description, name, false, true, false, multiplier);
-                            break;
-                        case "diagonals":
-                            pubObjCard[a] = new PubOCColorDet(description, name, false, false, true, multiplier);
-                            break;
-                        case "set":
-                            boolean[] colors = new boolean[5];
-                            JsonArray jsonArray = jsonObject.get("values").getAsJsonArray();
-                            for (int i = 0; i < 5; i++) {
-                                colors[i] = jsonArray.get(i).getAsBoolean();
-                            }
-                            pubObjCard[a] = new PubOCColorSet(description, name, colors, multiplier);
-                            break;
-                        default:
-                            throw new IllegalArgumentException();
-                    }
-                } else if (type.equals("shade")) {
-                    switch (subtype) {
-                        case "row":
-                            pubObjCard[a] = new PubOCShadeDet(description, name, true, true, multiplier);
-                            break;
-                        case "col":
-                            pubObjCard[a] = new PubOCShadeDet(description, name, false, true, multiplier);
-                            break;
-                        case "set":
-                            boolean[] shades = new boolean[6];
-                            JsonArray jsonArray = jsonObject.get("values").getAsJsonArray();
-                            for (int i = 0; i < 6; i++) {
-                                shades[i] = jsonArray.get(i).getAsBoolean();
-                            }
-                            pubObjCard[a] = new PubOCShadeSet(description, name, shades, multiplier);
-                            break;
-                    }
-                }
-
-            } catch (FileNotFoundException ignored) {
-            }
-            if ((pubObjCard[a].calculateScore(wf) != result[id])) {
+            pubObjCards[a] = resourceLoader.loadPubOC(id);
+            if ((pubObjCards[a].calculateScore(wf) != result[id])) {
 
                 fail();
             }
         }
-        if(player.calculateScore(pubObjCard) != (pubObjCard[0].calculateScore(wf) + pubObjCard[1].calculateScore(wf)+
-                pubObjCard[2].calculateScore(wf) + privPoints - emptySpaces + tokens)){
+        if(player.calculateScore(pubObjCards) != (pubObjCards[0].calculateScore(wf) + pubObjCards[1].calculateScore(wf)+
+                pubObjCards[2].calculateScore(wf) + privPoints - emptySpaces + tokens)){
             fail();
         }
-
-
     }
 }

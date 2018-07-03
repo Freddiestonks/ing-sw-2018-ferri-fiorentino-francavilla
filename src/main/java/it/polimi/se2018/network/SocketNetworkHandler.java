@@ -9,7 +9,6 @@ import java.net.Socket;
 
 public class SocketNetworkHandler extends NetworkHandler {
 
-    private final int PORT = 1111;
     private SocketReceiver socketReceiver = null;
 
     public SocketNetworkHandler(String host) {
@@ -17,10 +16,11 @@ public class SocketNetworkHandler extends NetworkHandler {
     }
 
     public PlayerActionInterface connect(LocalModel localModel, View view) throws IOException {
+        int port = ClientGatherer.SOCKET_PORT;
         if(socketReceiver != null) {
             socketReceiver.dismiss();
         }
-        Socket socket = new Socket(host, PORT);
+        Socket socket = new Socket(host, port);
         socketReceiver = new SocketReceiver(socket);
         socketReceiver.setLocalModel(localModel);
         socketReceiver.setView(view);

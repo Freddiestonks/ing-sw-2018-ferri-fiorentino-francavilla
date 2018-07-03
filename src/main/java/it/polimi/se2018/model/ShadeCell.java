@@ -12,7 +12,6 @@ public class ShadeCell extends Cell {
 
     //Methods
 
-
     /**
      * This method is the constructor of the class that instantiate a singe 'Cell' object by passing his color.
      *
@@ -28,15 +27,6 @@ public class ShadeCell extends Cell {
     }
 
     /**
-     * This method returns the type of shade associated to a specific cell.
-     *
-     * @return simply an int value that is the shade of the cell.
-     */
-    public int getShade(){
-        return shade;
-    }
-
-    /**
      * This method is used to control if a cell is accessible for the passed die,
      * so if the cell is represented by the same color.
      *
@@ -48,11 +38,6 @@ public class ShadeCell extends Cell {
         return die.getValue() == shade;
     }
 
-    /**
-     * Is the to string implementation.
-     *
-     * @return a string instance.
-     */
     @Override
     public String toString(){
         return "-" + shade + "-";

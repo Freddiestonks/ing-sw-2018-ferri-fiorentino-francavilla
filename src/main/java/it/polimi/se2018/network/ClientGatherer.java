@@ -18,12 +18,12 @@ import java.util.Iterator;
 
 public class ClientGatherer extends Thread implements Iterable<ClientInfo>, ClientGathererInterface {
     private Object lock;
-    private ServerSocket serverSocket;
+    private ServerSocket serverSocket = null;
     private ArrayList<ClientInfo> preLobby = new ArrayList<>();
     private ArrayList<SocketReceiver> socketReceivers = new ArrayList<>();
 
-    private static int SOCKET_PORT = 1111;
-    private static int RMI_PORT = 1099;
+    public static final int SOCKET_PORT = 1111;
+    public static final int RMI_PORT = 1099;
 
     public ClientGatherer(Object lock) {
         this.lock = lock;
@@ -69,7 +69,7 @@ public class ClientGatherer extends Thread implements Iterable<ClientInfo>, Clie
             try {
                 socket = serverSocket.accept();
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             PlayerAction pa = new PlayerAction(lock);
             SocketReceiver socketReceiver = new SocketReceiver(socket);

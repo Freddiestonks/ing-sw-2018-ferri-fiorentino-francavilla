@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class PubOCColorSet extends PubObjCard {
     //attributes
-    private ArrayList<Integer> check = new ArrayList<>(0);
-    private boolean[] activeColors = new boolean[5];
+    private ArrayList<Integer> check = new ArrayList<>();
+    private boolean[] activeColors;
 
     //methods
     /**
@@ -15,13 +15,12 @@ public class PubOCColorSet extends PubObjCard {
      * @param color indicates which of the colors are wanted to complete a set
      * @param score this indicates how many points each set gives to the player
      * */
-    public PubOCColorSet(String desc,String name,boolean[] color,int score){
-        super(desc,name);
-        if(!color[0]&&!color[1]&&!color[2]&&!color[3]&&!color[4]){
+    public PubOCColorSet(String desc, String name, boolean[] color, int score){
+        super(desc, name, score);
+        if(!color[0] && !color[1] && !color[2] && !color[3] && !color[4]){
             throw new IllegalArgumentException();
         }
-        points = score;
-        activeColors = color;
+        activeColors = color.clone();
     }
     /**
      * This method is used to update the ArrayList that is counting the colors
@@ -31,36 +30,38 @@ public class PubOCColorSet extends PubObjCard {
      * */
     private void updateCheck(int row , int col, WindowFrame wf){
         //UpdateCheck is used to fill the "Check" vector with how many times each color appears on a line
-        if(wf.getDie(row, col)!=null){
-        Color color = wf.getDie(row,col).getColor();
-        check.set(color.ordinal(),check.get(color.ordinal()) + 1);}
+        if(wf.getDie(row, col) != null){
+            Color color = wf.getDie(row,col).getColor();
+            check.set(color.ordinal(), check.get(color.ordinal()) + 1);
+        }
     }
+
     /**
      * This method is used to calculate the score of a specific player throughout his WindowFrame
      *
-     * @param wf It is used to pass the Player's WireFrame on which the with dice are on
+     * @param wf is the Player's Window Frame on which the with dice are on
      * @return score this method returns the score that a player made with the public card
      * */
     public int calculateScore(WindowFrame wf){
-        for (int i = 0; i<5; i++){
-            //I added 5 elements initialized to 0 to the ArrayList ( as many elements as the colors)
+        for (int i = 0; i < 5; i++){
+            //add 5 elements initialized to 0 to the ArrayList (as many elements as the colors)
             check.add(0);
         }
-        for (int i = 0; i<5; i++){
-            for (int l = 0;l<4;l++){
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 4; j++){
                 //fill check with all of the elements inside the window frame
-                updateCheck(l,i,wf);
+                updateCheck(j, i, wf);
             }
         }
-        //i look for the color that appeared the least(because it is going to be equal to the number of sets of colors)
+        //look for the color that appeared the least(because it is going to be equal to the number of sets of colors)
         int min = 21;
-        for (int j=0; j<5;j++){
+        for (int j = 0; j <5 ; j++){
             if(check.get(j) < min && activeColors[j]){
                 min = check.get(j);
             }
-            //i update the score it is equal to the number of sets times 4
+            //update the score it is equal to the number of sets times 4
         }
-
         check.clear();
-        return min*points; }
+        return min * points;
+    }
 }

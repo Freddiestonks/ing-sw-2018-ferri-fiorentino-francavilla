@@ -7,21 +7,16 @@ import it.polimi.se2018.network.SocketNetworkHandler;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.CLIView;
 import it.polimi.se2018.view.GUIView;
-import it.polimi.se2018.view.MainScreenInfo;
 import it.polimi.se2018.view.View;
 
 import java.io.IOException;
 import java.util.Scanner;
-
-import static java.lang.System.out;
 
 public class ClientController extends AbstractController implements Observer {
     //attributes
     private LocalModel model;
     private View view;
     private PlayerActionInterface playerActionInterface = new PlayerAction();
-    //private PlayerAction playerAction = new PlayerAction();
-    private MainScreenInfo mainScreenInfo;
     private NetworkHandler networkHandler;
     private String username = null;
     private static final String PLACE = "place";
@@ -77,12 +72,10 @@ public class ClientController extends AbstractController implements Observer {
                     playerAction.setUsernameReq(this.username);
                     performAction(playerAction);
                 }
-                out.println("ok");
             } else if (string[0].equalsIgnoreCase("set")) {
                 if (string[1].equalsIgnoreCase("username")) {
                     this.username = string[2];
                     playerAction.setUsernameReq(string[2]);
-                    out.println(string[2]);
                     performAction(playerAction);
                 } else if (string[1].equalsIgnoreCase("pc")) {
                     try {
@@ -102,7 +95,7 @@ public class ClientController extends AbstractController implements Observer {
                 if (string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)) {
                     view.showMainScreen();
                 } else if (string[0].equalsIgnoreCase("public")) {
-                    view.updatePubOCs(model.getPubOCs());
+                    view.showPubOCs(model.getPubOCs());
                 }
             } else {
                 view.invalidMoveError();
@@ -116,7 +109,6 @@ public class ClientController extends AbstractController implements Observer {
         int i = 1;
         try {
             while (i < read.length) {
-                out.println(read[i]);
                 if (read[i].equalsIgnoreCase(SELECT)) {
                     int element = Integer.parseInt(read[i + 1]);
                     playerAction.addPosDPDie(element);
@@ -143,11 +135,11 @@ public class ClientController extends AbstractController implements Observer {
             case "1":
             case "2":
             case "3":
-                //ToolCard toolCard = model.getToolCards()[2];
+                playerAction.setIdToolCard(Integer.parseInt(string[1]));
                 performToolCard(playerAction, string);
                 break;
             case "show":
-                view.updateToolCards(model.getToolCards());
+                view.showToolCards(model.getToolCards());
                 break;
             default:
                 view.invalidMoveError();
@@ -157,7 +149,6 @@ public class ClientController extends AbstractController implements Observer {
 
     private void performToolCard(PlayerAction playerAction, String[] read) {
         try {
-            playerAction.setIdToolCard(Integer.parseInt(read[2]));
             int i = 2;
             while(i < read.length) {
                 if (read[i].equalsIgnoreCase(NEW_VALUE)) {
@@ -183,6 +174,10 @@ public class ClientController extends AbstractController implements Observer {
                         playerAction.addPlaceWFDie(row, col);
                         i += 4;
                     }
+                    else {
+                        view.invalidMoveError();
+                        return;
+                    }
                 }
                 else if (read[i].equalsIgnoreCase(PLACE)) {
                     if (read[i + 1].equalsIgnoreCase(DRAFT_POOL)) {
@@ -196,6 +191,10 @@ public class ClientController extends AbstractController implements Observer {
                         int col = Integer.parseInt(read[i + 3]);
                         playerAction.addPlaceNewWFDie(row, col);
                         i += 4;
+                    }
+                    else {
+                        view.invalidMoveError();
+                        return;
                     }
                 } else {
                     view.invalidMoveError();
@@ -234,7 +233,7 @@ public class ClientController extends AbstractController implements Observer {
         View view = null;
         Scanner user_input = new Scanner(System.in);
         boolean correct = false;
-        out.println("Welcome to Sagrada\nHow would you like to play? (CLI/GUI)");
+        System.out.println("Welcome to Sagrada\nHow would you like to play? (CLI/GUI)");
         while (!correct){
             String input = user_input.next().toLowerCase();
             switch (input) {
@@ -247,7 +246,7 @@ public class ClientController extends AbstractController implements Observer {
                     correct = true;
                     break;
                 default:
-                    out.println("Please insert a valid command (GUI or CLI)");
+                    System.out.println("Please insert a valid command (GUI or CLI)");
                     break;
             }
         }

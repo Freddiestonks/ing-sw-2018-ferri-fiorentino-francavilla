@@ -7,12 +7,11 @@ package it.polimi.se2018.model;
  * @author Alessio Fiorentino
  * @author Simone Francavilla
  */
-public class ColorCell extends Cell{
+public class ColorCell extends Cell {
     //Attributes
     private Color color;
 
     //Methods
-
 
     /**
      * This method is the constructor of the class that instantiate a singe 'Cell' object by passing his color.
@@ -35,11 +34,6 @@ public class ColorCell extends Cell{
         return (die.getColor() == color);
     }
 
-    /**
-     * Is the to string implementation.
-     *
-     * @return a string instance.
-     */
     @Override
     public String toString(){
         return "-" + color.toString().substring(0,1) + "-";

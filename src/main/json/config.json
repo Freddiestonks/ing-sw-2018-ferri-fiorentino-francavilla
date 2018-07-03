@@ -1,4 +1,4 @@
 {
-  "lobbyTimeout": 5,
-  "turnTimeout": 60
+  "lobbyTimeout": 10,
+  "turnTimeout": 120
 }

@@ -16,7 +16,6 @@ public class PubOCShadeDet extends PubObjCard {
     //attributes
     private boolean rows;
     private boolean col;
-    private ArrayList<Integer> check = new ArrayList<>(0);
 
     //methods
     /**
@@ -27,12 +26,11 @@ public class PubOCShadeDet extends PubObjCard {
      * @param row triggers on or off the public card that calculates the score of different shades by row
      * @param column triggers on or off the public card that calculates the score of different shades by column
      * */
-    public PubOCShadeDet(String desc,String name,boolean row,boolean column, int multiplier) {
-        super(desc,name);
+    public PubOCShadeDet(String desc, String name, boolean row, boolean column, int multiplier) {
+        super(desc, name, multiplier);
         points = multiplier;
         rows = row;
         col = column;
-
     }
     /**
      * This method is used to update the ArrayList that is counting the shades
@@ -40,28 +38,30 @@ public class PubOCShadeDet extends PubObjCard {
      * @param col this is the column of the analyzed cell
      * @param wf this is the WindowFrame on which the counting is happening
      * */
-    private void updateCheck(int row , int col, WindowFrame wf){
+    private void updateCheck(ArrayList<Integer> check, int row , int col, WindowFrame wf){
         //UpdateCheck is used to fill the "Check" vector with how many times each shade appears on a line
-        if(wf.getDie(row, col)!=null){
-        int value = wf.getDie(row,col).getValue() - 1;
-        check.set(value,check.get(value) + 1);}
-
+        if(wf.getDie(row, col) != null){
+            int value = wf.getDie(row,col).getValue() - 1;
+            check.set(value, check.get(value) + 1);
+        }
     }
+
     /**
      * This method calculates how many rows have no repetition of shades
      * @param wf This is the WindowFrame on which is the calculation is needed
      * @return Returns the number of rows with no repetition of shade
      * */
     private int getScoreRows(WindowFrame wf){
+        ArrayList<Integer> check = new ArrayList<>();
         int score = 0;
-        for (int i = 0; i<6; i++){
+        for (int i = 0; i < 6; i++){
             //added 6 elements initialized to 0 to the ArrayList
             check.add(0);
         }
-        for (int i = 0; i< 4; i++){
-            for(int j = 0; j<5; j++){
+        for (int i = 0; i < 4; i++){
+            for(int j = 0; j < 5; j++){
                 //run the method to see how many times a certain shade appears on a single row
-                updateCheck(i,j,wf);
+                updateCheck(check, i, j, wf);
             }
             if(check.get(0) <= 1 && check.get(1) <= 1 && check.get(2) <= 1 &&
                     check.get(3) <= 1 && check.get(4) <= 1 && check.get(5)<=1
@@ -69,21 +69,21 @@ public class PubOCShadeDet extends PubObjCard {
                 //if in one row each shade came out once then we can add 5 points to the score
                 score = score + 5;
             }
-            for(int l = 0; l<6;l++){
+            for(int j = 0; j < 6; j++){
                 //reset the elements of the ArrayList to 0
-                check.set(l, 0);
+                check.set(j, 0);
             }
         }
         check.clear();
-
-        return  score;
+        return score;
     }
     /**
      * This method calculates how many columns have no repetition of shades
-     * @param wf This is the WindowFrame on which is the calculation is needed
+     * @param wf This is the Window Frame on which is the calculation is needed
      * @return Returns the number of column with no repetition of shades
      * */
     private int getScoreCol(WindowFrame wf){
+        ArrayList<Integer> check = new ArrayList<>();
         int score = 0;
         for (int i = 0; i < 6; i++) {
             //add 6 elements initialized to 0 to the arraylist
@@ -92,7 +92,7 @@ public class PubOCShadeDet extends PubObjCard {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
                 //run the method to see how many times a certain shade appears on a single column
-                updateCheck(j, i, wf);
+                updateCheck(check, j, i, wf);
             }
             if (check.get(0) <= 1 && check.get(1) <= 1 && check.get(2) <= 1 &&
                     check.get(3) <= 1 && check.get(4) <= 1 && check.get(5) <= 1
@@ -101,7 +101,6 @@ public class PubOCShadeDet extends PubObjCard {
                 // then we can add 4 points to the score
                 score = score + 4;
             }
-
         }
         check.clear();
         return score;
@@ -124,7 +123,6 @@ public class PubOCShadeDet extends PubObjCard {
             //IF true it will count on how many columns each dice shade  is different from the others
             score = score + getScoreCol(wf);
         }
-
         return score;
     }
 }

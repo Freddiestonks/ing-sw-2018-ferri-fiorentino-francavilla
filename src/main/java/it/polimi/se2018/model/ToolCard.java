@@ -91,7 +91,9 @@ public class ToolCard implements Serializable {
         }
         else {
             for(AbstractTCEffect effect : effects) {
-                effect.performAction(model, wf, pa);
+                if(!effect.isSingleAction()) {
+                    effect.performAction(model, wf, pa);
+                }
             }
             resetPendingAction();
         }
@@ -107,7 +109,8 @@ public class ToolCard implements Serializable {
      */
     public boolean validAction(ModelInterface model, WindowFrame wf, PlayerAction pa) {
         for(AbstractTCEffect effect : effects) {
-            if(!effect.validAction(model, wf, pa)) {
+            if((!effect.isSingleAction() || !ToolCard.isPendingAction())
+               && !effect.validAction(model, wf, pa)) {
                 return false;
             }
         }
@@ -141,6 +144,11 @@ public class ToolCard implements Serializable {
         return pendingDie;
     }
 
+    /**
+     * This method is used to save a die for a pending action.
+     *
+     * @param die is the die to save for the pending action.
+     */
     public static void setPendingDie(Die die) {
         pendingDie = die;
     }

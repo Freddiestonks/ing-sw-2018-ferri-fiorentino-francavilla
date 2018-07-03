@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * This class is the core of the Model, it generates all of the needed class for the application to work properly
@@ -18,7 +19,7 @@ import java.util.Random;
  * */
 public class Model extends Observable implements ModelInterface {
     //Attributes
-    private static final Model instance = new Model();
+    private static Model instance = null;
     private ArrayList<LocalModelInterface> localModels = new ArrayList<>();
     private boolean lobbyGathering = true;
     private boolean started = false;
@@ -38,6 +39,8 @@ public class Model extends Observable implements ModelInterface {
     private PatternCard[] patCards = null;
     private ArrayList<Player> leaderBoard = new ArrayList<>();
 
+    public static final Logger LOGGER = Logger.getLogger(Model.class.getName());
+
     //Methods
     /**
      * This is the constructor method for the model, it will initialize the whole roundTrack
@@ -53,7 +56,10 @@ public class Model extends Observable implements ModelInterface {
      *
      * @return a Model reference to the singleton.
      */
-    public static Model instance(){
+    public static Model instance() {
+        if(instance == null) {
+            instance = new Model();
+        }
         return instance;
     }
 
@@ -89,7 +95,7 @@ public class Model extends Observable implements ModelInterface {
                 connectedPlayers++;
             }
         }
-        System.out.println("connected players: " + connectedPlayers);
+        LOGGER.fine("connected players: " + connectedPlayers);
         if(connectedPlayers == 1) {
             over = true;
             calculateScore();
@@ -208,6 +214,7 @@ public class Model extends Observable implements ModelInterface {
         for(LocalModelInterface localModel : localModels) {
             try {
                 localModel.setDraftPool(draftPool);
+                localModel.setRoundTrack(roundTrack);
             } catch (IOException e) {
                 //e.printStackTrace();
             }
@@ -348,7 +355,7 @@ public class Model extends Observable implements ModelInterface {
      * This is the method used to calculate the overall score of the game, it will order the players by score in the Leader Board.
      * */
     private void calculateScore() {
-        System.out.println("begin calculate score");
+        LOGGER.fine("begin calculate score");
         int connectedPlayers = 0;
         int playerIndex = 0;
         for(int i = 0; i < numPlayers; i++) {
@@ -358,13 +365,13 @@ public class Model extends Observable implements ModelInterface {
             }
         }
         if(connectedPlayers == 1) {
-            System.out.println("one player remained");
+            LOGGER.fine("one player remained");
             leaderBoard.add(players.get(playerIndex));
         }
         else {
             leaderBoard = new ArrayList<>(players);
         }
-        for (int i = 1; i < leaderBoard.size(); i++) {
+        for (int i = 0; i < leaderBoard.size(); i++) {
             leaderBoard.get(i).calculateScore(pubOCs);
             for (int j = 0; j < i; j++) {
                 if(leaderBoard.get(i).getScore() > leaderBoard.get(j).getScore()){
@@ -375,7 +382,7 @@ public class Model extends Observable implements ModelInterface {
                 }
             }
         }
-        System.out.println("end calculate score");
+        LOGGER.fine("end calculate score");
         notifyObservers();
     }
 
@@ -445,15 +452,22 @@ public class Model extends Observable implements ModelInterface {
         diceBag.reset();
         draftPool.clear();
         roundTrack.clear();
+        leaderBoard.clear();
         for(int i = 0; i < 10; i++) {
             roundTrack.add(new ArrayList<>());
         }
+        patCards = null;
+        toolCards = null;
+        pubOCs = null;
+        lobbyGathering = true;
+        started = false;
+        over = false;
         round = 1;
         turn = 1;
         backward = false;
         numPlayers = 0;
+        toolCardUsed = false;
         ToolCard.resetPendingAction();
-        //TODO: reset other game elements
     }
 
     /**
@@ -480,9 +494,9 @@ public class Model extends Observable implements ModelInterface {
      */
     public void setPubOCs(PubObjCard[] pubOCs) {
         this.pubOCs = pubOCs.clone();
-        //System.out.println(pubOCs[0]);
-        //System.out.println(pubOCs[1]);
-        //System.out.println(pubOCs[2]);
+        //LOGGER.fine(pubOCs[0]);
+        //LOGGER.fine(pubOCs[1]);
+        //LOGGER.fine(pubOCs[2]);
     }
 
     /**
@@ -545,7 +559,7 @@ public class Model extends Observable implements ModelInterface {
             int num = random.nextInt(availableColors.size());
             Color color = availableColors.remove(num);
             player.setPrivOC(new PrivObjCard(color));
-            System.out.println("Color: "+color);
+            LOGGER.fine("privoc color: "+color);
         }
     }
 
@@ -640,7 +654,7 @@ public class Model extends Observable implements ModelInterface {
      * This method is used to execute a player move.
      *
      * @param playerIndex is the player ordinal number in the set of players
-     * @param pa is the player action instance
+     * @param pa is the Player Action instance
      */
     public void performToolCard(int playerIndex, PlayerAction pa) {
         ToolCard toolCard = getToolCard(pa.getIdToolCard());
@@ -659,9 +673,8 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This method is used to check if is used a Tool Card.
+     * This method is used to update the remote Local Models.
      *
-     * @return a boolean representing the check result.
      */
     private void updateLocalModel(int playerIndex) {
         LocalModelInterface localModel = localModels.get(playerIndex);

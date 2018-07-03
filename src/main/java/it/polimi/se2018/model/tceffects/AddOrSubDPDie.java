@@ -30,7 +30,7 @@ public class AddOrSubDPDie extends AbstractTCEffect {
         }
         die.setValue(newValue);
         int row = pa.getPlaceDPDie().get(0)[0];
-        int col = pa.getPlaceDPDie().get(0)[1]; System.out.println("3");
+        int col = pa.getPlaceDPDie().get(0)[1];
         return wf.checkRestrictions(die, row, col);
     }
 }

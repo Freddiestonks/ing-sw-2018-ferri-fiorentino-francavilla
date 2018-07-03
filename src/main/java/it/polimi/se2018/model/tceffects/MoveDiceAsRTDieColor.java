@@ -5,6 +5,7 @@ import it.polimi.se2018.model.*;
 
 public class MoveDiceAsRTDieColor extends MoveTwoDice {
 
+    @Override
     public boolean validAction(ModelInterface model, WindowFrame wf, PlayerAction pa) {
         if(!super.validAction(model, wf, pa)) {
             return false;

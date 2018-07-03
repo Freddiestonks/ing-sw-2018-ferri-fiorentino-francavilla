@@ -42,7 +42,7 @@ public class GUIView extends View {
 
     }
 
-    public void updatePubOCs(PubObjCard[] pubObjCards) {
+    public void showPubOCs(PubObjCard[] pubObjCards) {
 
     }
 
@@ -70,7 +70,7 @@ public class GUIView extends View {
 
     }
 
-    public void updateToolCards(ToolCard[] toolCards) {
+    public void showToolCards(ToolCard[] toolCards) {
 
     }
 
@@ -98,7 +98,7 @@ public class GUIView extends View {
 
     }
 
-    public void patternCardGenerator(ArrayList<PatternCard> pc) {
+    public void patternCardChooser(ArrayList<PatternCard> pc) {
 
     }
 

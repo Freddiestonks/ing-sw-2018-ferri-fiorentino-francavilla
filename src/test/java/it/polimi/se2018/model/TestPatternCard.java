@@ -79,13 +79,5 @@ public class TestPatternCard {
         if(!(pc.getNameB().equals("casissimo"))){
             fail();
         }
-
-        if(!(pc.getFront() == m1)){
-            fail();
-        }
-
-        if(!(pc.getBack() == m2)){
-            fail();
-        }
     }
 }

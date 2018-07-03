@@ -17,7 +17,6 @@ public class PubOCColorDet extends PubObjCard {
     private boolean rows;
     private boolean col;
     private boolean diagonals;
-    private ArrayList<Integer> check = new ArrayList<>(0);
     //methods
     /**
 
@@ -29,12 +28,11 @@ public class PubOCColorDet extends PubObjCard {
      * @param diagonal triggers on or off the public card that calculates the score of different colors by diagonals
      *
      * */
-    public PubOCColorDet(String desc,String name,boolean row, boolean column,boolean diagonal,int multiplier) {
-        super(desc,name);
+    public PubOCColorDet(String desc, String name, boolean row, boolean column, boolean diagonal, int multiplier) {
+        super(desc, name, multiplier);
         rows = row;
         col = column;
         diagonals = diagonal;
-        points = multiplier;
     }
 
     /**
@@ -45,11 +43,12 @@ public class PubOCColorDet extends PubObjCard {
      * @param wf here the WindowFrame of the specific Player is sent to the method, in this way we can
      *           find out how the dice are placed onto the WindowFrame
      * */
-    private void updateCheck(int row , int col, WindowFrame wf){
+    private void updateCheck(ArrayList<Integer> check, int row, int col, WindowFrame wf){
         //UpdateCheck is used to fill the "Check" vector with how many times each color appears on a line
-        if(wf.getDie(row,col)!=null){
-        Color color = wf.getDie(row,col).getColor();
-        check.set(color.ordinal(),check.get(color.ordinal()) + 1);}
+        if(wf.getDie(row, col) != null){
+            Color color = wf.getDie(row,col).getColor();
+            check.set(color.ordinal(), check.get(color.ordinal()) + 1);
+        }
 
     }
     /**
@@ -58,27 +57,26 @@ public class PubOCColorDet extends PubObjCard {
      * @return  Returns the number of rows with no repetition of color
      * */
     private int getScoreRows(WindowFrame wf){
+        ArrayList<Integer> check = new ArrayList<>();
         int score = 0;
-        for (int i = 0; i<5; i++){
+        for (int i = 0; i < 5; i++){
             //add 5 elements initialized to 0 to the ArrayList
             check.add(0);
         }
-        for (int i = 0; i< 4; i++){
-            for(int j = 0; j<5; j++){
+        for (int i = 0; i < 4; i++){
+            for(int j = 0; j < 5; j++){
                 //run the method to see how many times a certain color appears on a single row
-                updateCheck(i,j,wf);
+                updateCheck(check, i, j, wf);
             }
             if(check.get(0) == 1 && check.get(1) == 1 && check.get(2) == 1 && check.get(3) == 1 && check.get(4) == 1){
                 //if in one row each color came out once then we can add 6 points to the score
                 score++;
             }
-            for(int l = 0; l<5;l++){
+            for(int j = 0; j < 5; j++){
                 //reset the elements of the ArrayList to 0
-                check.set(l, 0);
+                check.set(j, 0);
             }
         }
-        //deconstruct the ArrayList
-        check.clear();
         return score;
     }
     /**
@@ -87,15 +85,16 @@ public class PubOCColorDet extends PubObjCard {
      * @return Returns the number of column with no repetition of color
      * */
     private int getScoreCol(WindowFrame wf){
+        ArrayList<Integer> check = new ArrayList<>();
         int score = 0;
         for (int i = 0; i<5; i++){
             //add 5 elements initialized to 0 to the ArrayList
             check.add(0);
         }
-        for (int i = 0; i< 5; i++) {
+        for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
                 //run the method to see how many times a certain color appears on a single column
-                updateCheck(j, i, wf);
+                updateCheck(check, j, i, wf);
             }
             if (check.get(0) <= 1 && check.get(1) <= 1 && check.get(2) <= 1 &&
                     check.get(3) <= 1 && check.get(4) <= 1
@@ -104,9 +103,9 @@ public class PubOCColorDet extends PubObjCard {
                 // then we can add 5 points to the score
                 score++;
             }
-            for (int l = 0; l<5; l++){
+            for (int j = 0; j < 5; j++){
                 //reset the 5 elements to 0 in the ArrayList
-                check.set(l,0);
+                check.set(j, 0);
             }
         }
         //deconstruct the ArrayList
@@ -120,23 +119,22 @@ public class PubOCColorDet extends PubObjCard {
      * */
     private int getScoreDiag(WindowFrame wf){
         //Start from dice (0,0) (top-left)
-        System.out.println("CALCULATED");
         int score = 0;
-        for (int i=0; i<4;i++){
-            for (int l=0;l<5;l++){
-                if(wf.getDie(i,l)!=null) {
-                    if ((i - 1) >= 0 && (l - 1) >= 0 && (wf.getDie(i, l).getColor().equals(wf.getDie(i - 1, l - 1).getColor())) || (
-                            (i - 1) >= 0 && (l + 1) < 5 && (wf.getDie(i, l).getColor().equals(wf.getDie(i - 1, l + 1).getColor()))) ||
-                            ((i + 1) < 4 && (l - 1) >= 0 && (wf.getDie(i, l).getColor().equals(wf.getDie(i + 1, l - 1).getColor()))) ||
-                            ((i + 1) < 4 && (l + 1) < 5 && (wf.getDie(i, l).getColor().equals(wf.getDie(i + 1, l + 1).getColor())))) {
+        for (int i = 0; i < 4; i++){
+            for (int j = 0; j < 5; j++){
+                if(wf.getDie(i, j) != null) {
+                    if ((i - 1) >= 0 && (j - 1) >= 0 && (wf.getDie(i, j).getColor().equals(wf.getDie(i - 1, j - 1).getColor())) || (
+                            (i - 1) >= 0 && (j + 1) < 5 && (wf.getDie(i, j).getColor().equals(wf.getDie(i - 1, j + 1).getColor()))) ||
+                            ((i + 1) < 4 && (j - 1) >= 0 && (wf.getDie(i, j).getColor().equals(wf.getDie(i + 1, j - 1).getColor()))) ||
+                            ((i + 1) < 4 && (j + 1) < 5 && (wf.getDie(i, j).getColor().equals(wf.getDie(i + 1, j + 1).getColor())))) {
                         score++;
                     }
                 }
             }
         }
-
         return score;
     }
+
     /**
      * This method is used to calculate the score of a specific player throughout his WindowFrame
      * inside it there are if statements that can be triggered on or off by the attributes of the class
@@ -147,22 +145,20 @@ public class PubOCColorDet extends PubObjCard {
     public int calculateScore(WindowFrame wf) {
         //calculateScore is used to calculate the current score of the player
         int score;
-
         if (rows){
             //IF true it will count on how many rows each dice color is different from the others
-            score = getScoreRows(wf)*points;
+            score = getScoreRows(wf) * points;
         }
         else if (col){
             //IF true it will count on how many columns each dice color is different from the others
-            score = getScoreCol(wf)*points;
+            score = getScoreCol(wf) * points;
         }
         else if(diagonals){
-            score = getScoreDiag(wf)*points;
+            score = getScoreDiag(wf) * points;
         }
         else {
             throw new IllegalArgumentException();
         }
-
         return score;
     }
 

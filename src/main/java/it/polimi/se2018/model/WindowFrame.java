@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 public class WindowFrame implements Serializable {
     //Attributes
-    private PatternCard pc = null;
+    private PatternCard pc;
     private boolean wcFace; //true for front
     private Die[][] placements = new Die[4][5];
     private int numDice = 0;
@@ -28,8 +28,8 @@ public class WindowFrame implements Serializable {
     public WindowFrame(PatternCard pc, boolean wcFace) {
         this.pc = pc;
         this.wcFace = wcFace;
-        for(int i=0; i<4; i++) {
-            for(int j=0; j<5; j++){
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 5; j++){
                 placements[i][j] = null;
             }
         }
@@ -49,10 +49,6 @@ public class WindowFrame implements Serializable {
         for(int i = 0; i < 4; i++) {
             this.placements[i] = wf.placements[i].clone();
         }
-    }
-
-    public PatternCard getPc(){
-        return pc;
     }
 
     /**
@@ -92,95 +88,15 @@ public class WindowFrame implements Serializable {
             throw new IllegalArgumentException();
         }
         boolean touching = false;
-        switch(col){
-            case 0:
-                switch(row){
-                    case 0:
-                        if (placements[row][col + 1] != null ||
-                                placements[row + 1][col] != null ||
-                                placements[row + 1][col + 1] != null) {
-                            touching = true;
-                        }
-                        break;
-                    case 3:
-                        if (placements[row][col + 1] != null ||
-                                placements[row - 1][col] != null ||
-                                placements[row - 1][col + 1] != null){
-                            touching = true;
-                        }
-                        break;
-                    default:
-                        if (placements[row][col + 1] != null ||
-                                placements[row - 1][col] != null ||
-                                placements[row + 1][col] != null ||
-                                placements[row + 1][col + 1] != null ||
-                                placements[row - 1][col + 1] != null) {
-                            touching = true;
-                        }
-                        break;
-                }
-                break;
-            case 4:
-                switch(row){
-                    case 0:
-                        if (placements[row][col - 1] != null ||
-                                placements[row + 1][col] != null ||
-                                placements[row + 1][col - 1] != null) {
-                            touching = true;
-                        }
-                        break;
-                    case 3:
-                        if (placements[row][col - 1] != null ||
-                                placements[row - 1][col] != null ||
-                                placements[row - 1][col - 1] != null) {
-                            touching = true;
-                        }
-                        break;
-                    default:
-                        if (placements[row][col - 1] != null ||
-                                placements[row - 1][col] != null ||
-                                placements[row + 1][col] != null ||
-                                placements[row + 1][col - 1] != null ||
-                                placements[row - 1][col - 1] != null) {
-                            touching = true;
-                        }
-                        break;
-                }
-                break;
-            default:
-                switch(row){
-                    case 0:
-                        if (placements[row][col - 1] != null ||
-                                placements[row][col + 1] != null ||
-                                placements[row + 1][col] != null ||
-                                placements[row + 1][col + 1] != null ||
-                                placements[row + 1][col - 1] != null) {
-                            touching = true;
-                        }
-                        break;
-                    case 3:
-                        if (placements[row][col - 1] != null ||
-                                placements[row][col + 1] != null ||
-                                placements[row - 1][col] != null ||
-                                placements[row - 1][col - 1] != null ||
-                                placements[row + 1][col - 1] != null) {
-                            touching = true;
-                        }
-                        break;
-                    default:
-                        if (placements[row][col - 1] != null ||
-                                placements[row][col + 1] != null ||
-                                placements[row - 1][col] != null ||
-                                placements[row + 1][col] != null ||
-                                placements[row + 1][col - 1] != null ||
-                                placements[row + 1][col + 1] != null ||
-                                placements[row - 1][col - 1] != null ||
-                                placements[row - 1][col + 1] != null) {
-                            touching = true;
-                        }
-                        break;
-                }
-                break;
+        if (((col - 1 >= 0) && (placements[row][col - 1] != null))
+           || ((col + 1 < 5) && (placements[row][col + 1] != null))
+           || ((row - 1 >= 0) && (placements[row - 1][col] != null))
+           || ((row + 1 < 4) && (placements[row + 1][col] != null))
+           || ((row + 1 < 4) && (col - 1 >= 0) && (placements[row + 1][col - 1] != null))
+           || ((row + 1 < 4) && (col + 1 < 5) && (placements[row + 1][col + 1] != null))
+           || ((row - 1 >= 0) && (col - 1 >= 0) && (placements[row - 1][col - 1] != null))
+           || ((row - 1 >= 0) && (col + 1 < 5) && (placements[row - 1][col + 1] != null))) {
+            touching = true;
         }
         return touching;
     }
@@ -204,88 +120,13 @@ public class WindowFrame implements Serializable {
             if (row == 0 || row == 3 || col == 0 || col == 4)
                 crossCheck = true;
         }
-        //controls if row-col position is placeable for the die.
         else {
-            //controls if orthogonal rules are respected.
-            switch (col) {
-                case 0:
-                    switch (row) {
-                        case 0:
-                            if(orthogonalDieCheck(die,row,col+1) &&
-                                    orthogonalDieCheck(die,row+1,col)){
-                                crossCheck = true;
-                            }
-                            break;
-
-                        case 3:
-                            if (orthogonalDieCheck(die,row,col+1) &&
-                                    orthogonalDieCheck(die,row-1,col)) {
-                                crossCheck = true;
-                            }
-                            break;
-
-                        default:
-                            if (orthogonalDieCheck(die,row,col+1) &&
-                                    orthogonalDieCheck(die,row-1,col) &&
-                                    orthogonalDieCheck(die,row+1,col)) {
-                                crossCheck = true;
-                            }
-                            break;
-                    }
-                    break;
-                case 4:
-                    switch (row) {
-                        case 0:
-                            if (orthogonalDieCheck(die,row,col-1) &&
-                                    orthogonalDieCheck(die,row+1,col)) {
-                                crossCheck = true;
-                            }
-                            break;
-
-                        case 3:
-                            if (orthogonalDieCheck(die,row,col-1) &&
-                                    orthogonalDieCheck(die,row-1,col)) {
-                                crossCheck = true;
-                            }
-                            break;
-
-                        default:
-                            if (orthogonalDieCheck(die,row,col-1) &&
-                                    orthogonalDieCheck(die,row-1,col) &&
-                                    orthogonalDieCheck(die,row+1,col)) {
-                                crossCheck = true;
-                            }
-                            break;
-                    }
-                    break;
-                default:
-                    switch (row) {
-                        case 0:
-                            if (orthogonalDieCheck(die,row,col-1) &&
-                                    orthogonalDieCheck(die,row,col+1) &&
-                                    orthogonalDieCheck(die,row+1,col)) {
-                                crossCheck = true;
-                            }
-                            break;
-
-                        case 3:
-                            if (orthogonalDieCheck(die,row,col-1) &&
-                                    orthogonalDieCheck(die,row,col+1) &&
-                                    orthogonalDieCheck(die,row-1,col)) {
-                                crossCheck = true;
-                            }
-                            break;
-
-                        default:
-                            if (orthogonalDieCheck(die,row,col-1) &&
-                                    orthogonalDieCheck(die,row,col+1) &&
-                                    orthogonalDieCheck(die,row-1,col) &&
-                                    orthogonalDieCheck(die,row+1,col)) {
-                                crossCheck = true;
-                            }
-                            break;
-                    }
-                    break;
+            //control if orthogonal rules are respected.
+            if (((col - 1 < 0) || orthogonalDieCheck(die, row,col - 1))
+            && ((col + 1 > 4) || orthogonalDieCheck(die, row,col + 1))
+            && ((row - 1 < 0) || orthogonalDieCheck(die,row - 1, col))
+            && ((row + 1 > 3) || orthogonalDieCheck(die,row + 1, col))) {
+                crossCheck = true;
             }
         }
         return crossCheck;
@@ -335,10 +176,6 @@ public class WindowFrame implements Serializable {
             numDice--;
         }
         return die;
-    }
-
-    public boolean getWCFace(){
-        return wcFace;
     }
 
     /**

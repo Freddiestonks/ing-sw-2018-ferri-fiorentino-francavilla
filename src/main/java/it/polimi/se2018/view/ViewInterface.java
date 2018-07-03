@@ -15,7 +15,7 @@ public interface ViewInterface extends Remote {
 
     void updatePlayerLobby(ArrayList<String> usernames) throws IOException;
 
-    void patternCardGenerator(ArrayList<PatternCard> pc) throws IOException;
+    void patternCardChooser(ArrayList<PatternCard> pc) throws IOException;
 
     void enteringError(boolean lobbyGathering) throws IOException;
 

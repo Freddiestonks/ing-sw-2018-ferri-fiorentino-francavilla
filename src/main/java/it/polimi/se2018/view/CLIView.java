@@ -54,7 +54,7 @@ public class CLIView extends View {
 
     public synchronized void updateDP(ArrayList<Die> draftPool) {
         out.println("DraftPool:");
-        for (int i = 0; i<draftPool.size();i++){
+        for (int i = 0; i < draftPool.size(); i++){
             out.println(i + " : " + draftPool.get(i));
         }
     }
@@ -86,12 +86,11 @@ public class CLIView extends View {
         updateOrder(backward);
         updateTurnPlayer(turnPlayer);
     }
-    public synchronized void updatePrivOCs(PrivObjCard privObjCard){
-        //TODO Understand why privOC is null
+    public synchronized void updatePrivOCs(PrivObjCard privObjCard) {
         clearScreen();
         String[] string = new String[PRIV_OC_SIZE];
         for (int i = 0; i < PRIV_OC_SIZE; i++) {
-            for (int z = 0; z < CARD_WIDTH +4; z++) {
+            for (int z = 0; z < CARD_WIDTH + 4; z++) {
                 out.print("-");
             }
             out.print(SPACE);
@@ -105,30 +104,30 @@ public class CLIView extends View {
         layoutFormatter(string, PRIV_OC_SIZE);
     }
 
-    public synchronized void updatePubOCs(PubObjCard[] pubObjCards) {
+    public synchronized void showPubOCs(PubObjCard[] pubObjCards) {
         clearScreen();
         int pubOCSize = pubObjCards.length;
         for (int i = 0; i < pubOCSize; i++) {
-            for (int z = 0; z < CARD_WIDTH +4; z++) {
+            for (int z = 0; z < CARD_WIDTH + 4; z++) {
                 out.print("-");
             }
             out.print(SPACE);
         }
         out.println();
         String[] pOCs = new String[pubOCSize];
-        for(int i=0;i<pubOCSize;i++) {
+        for(int i = 0; i < pubOCSize; i++) {
             pOCs[i] = PUBLIC_OBJ_STRING;
         }
         layoutFormatter(pOCs,pubOCSize);
-        for(int i=0;i<pubOCSize;i++) {
+        for(int i = 0; i < pubOCSize; i++) {
             pOCs[i] = pubObjCards[i].getCardName();
         }
         layoutFormatter(pOCs,pubOCSize);
-        for(int i=0;i<pubOCSize;i++) {
+        for(int i = 0; i < pubOCSize; i++) {
             pOCs[i] = pubObjCards[i].getDesc();
         }
         layoutFormatter(pOCs,pubOCSize);
-        for(int i=0;i<pubOCSize;i++) {
+        for(int i = 0; i < pubOCSize; i++) {
             pOCs[i] = "Points: " + pubObjCards[i].getPoints();
         }
         layoutFormatter(pOCs,pubOCSize);
@@ -166,7 +165,7 @@ public class CLIView extends View {
             out.print("       ");
         }
         out.println("\n");
-        for(int i = 0;i<opponents.size();i++){
+        for(int i = 0; i < opponents.size(); i++){
             wf[i] = opponents.get(i).getWindowFrame();
         }
         windowFrameGenerator(wf);
@@ -186,7 +185,7 @@ public class CLIView extends View {
                 max = roundTrack.get(i).size();
             }
         }
-        out.println("Roundtrack:");
+        out.println("RoundTrack:");
         for(int i = 0; i < 9; i++) {
             out.print("  " + (i + 1) + " | ");
         }
@@ -228,7 +227,7 @@ public class CLIView extends View {
         PrivObjCard privObjCard = mainScreenInfo.getPrivObjCard();
         updatePrivOCs(privObjCard);
         out.println();
-        updateInfo(player.getTokens(),round,backward,turnPlayer);
+        updateInfo(player.getTokens(), round, backward, turnPlayer);
         out.println();
         updateDP(draftPool);
         out.println();
@@ -249,13 +248,13 @@ public class CLIView extends View {
 
     public void endGame(ArrayList<Player> leaderBoard, Player player) {
         clearScreen();
-        out.println("Match is over here is the Leaderboard:\n");
+        out.println("Match is over, here is the Leader Board:\n");
         for(int i = 0; i < leaderBoard.size(); i++){
             Player currentPlayer = leaderBoard.get(i);
             out.println("#" + (i + 1) + " - " + currentPlayer.getUsername() + " Points: " + currentPlayer.getScore() + "\n\n");
         }
         if(player.getUsername().equals(leaderBoard.get(0).getUsername())) {
-            out.println("Congratulations you won, good Job!");
+            out.println("Congratulations you won, good job!");
         }
         else if(player.getUsername().equals(leaderBoard.get(1).getUsername())) {
             out.println("You came out second");
@@ -264,32 +263,41 @@ public class CLIView extends View {
             out.println("You came out third");
         }
         else {
-            out.println("You came out fourth\n");
+            out.println("You came out fourth");
         }
+        out.println();
         out.print(CURSOR);
     }
 
-    public synchronized void updateToolCards(ToolCard[] toolCards) {
+    public synchronized void showToolCards(ToolCard[] toolCards) {
         clearScreen();
         String[] names = new String[toolCards.length];
         String[] description = new String[toolCards.length];
         for (int i = 0; i < toolCards.length; i++) {
-            for (int z = 0; z < CARD_WIDTH +4; z++) {
+            out.print((i + 1) + ":");
+            for (int z = 0; z < CARD_WIDTH + 2; z++) {
+                out.print(" ");
+            }
+            out.print("        ");
+        }
+        out.println();
+        for (int i = 0; i < toolCards.length; i++) {
+            for (int z = 0; z < CARD_WIDTH + 4; z++) {
                 out.print("-");
             }
             out.print("        ");
         }
         out.println();
-        for(int i = 0;i<toolCards.length;i++){
+        for(int i = 0; i < toolCards.length; i++){
            names[i] = toolCards[i].getName();
            description[i] = toolCards[i].getDescription();
         }
-        layoutFormatter(names,toolCards.length);
-        layoutFormatter(description,toolCards.length);
+        layoutFormatter(names, toolCards.length);
+        layoutFormatter(description, toolCards.length);
     }
 
     public synchronized void invalidMoveError(){
-        out.println("ERROR: Invalid Move");
+        out.println("ERROR: Invalid Action");
     }
 
     /*public synchronized void selectionMaker(String[] string){
@@ -335,7 +343,7 @@ public class CLIView extends View {
         out.print(CURSOR);
     }
 
-    /*//TODO PLayer Status
+    /*
     public synchronized void updatePlayerState(Player player) {
         if(player.isConnected()){
             out.println(player.getUsername() + " just disconnected from the game\n");
@@ -351,63 +359,63 @@ public class CLIView extends View {
         out.print(CURSOR);
     }
 
-    public synchronized void patternCardGenerator(ArrayList<PatternCard> pc) {
+    public synchronized void patternCardChooser(ArrayList<PatternCard> pc) {
         clearScreen();
         out.println("Pick a Pattern Card\n");
-        for(int i =0;i<pc.size();i++){
-            String prefix= i*2 + ":";
+        for(int i = 0; i < pc.size(); i++){
+            String prefix = i * 2 + ":";
             out.print(prefix);
-            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+            for(int j = 0; j < (PATTERN_CARD_SIZE - prefix.length()); j++){
                 out.print(" ");
             }
             out.print(SPACE);
-            prefix = i*2+ 1+":";
+            prefix = i * 2 + 1 + ":";
             out.print(prefix);
-            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+            for(int j = 0; j < (PATTERN_CARD_SIZE - prefix.length()); j++){
                 out.print(" ");
             }
             out.print(SPACE);
 
         }
         out.println();
-        for(int i =0;i<pc.size();i++){
-            String prefix= pc.get(i).getNameF();
+        for(int i = 0; i < pc.size(); i++){
+            String prefix = pc.get(i).getNameF();
             out.print(prefix);
-            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+            for(int j = 0; j < (PATTERN_CARD_SIZE - prefix.length()); j++){
                 out.print(" ");
             }
             out.print(SPACE);
             prefix = pc.get(i).getNameB();
             out.print(prefix);
-            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+            for(int j = 0;j < (PATTERN_CARD_SIZE - prefix.length()); j++){
                 out.print(" ");
             }
             out.print(SPACE);
         }
         out.println();
-        for(int i =0;i<pc.size();i++){
+        for(int i = 0; i < pc.size(); i++){
             String prefix= "Level : " + pc.get(i).getLevelF();
             out.print(prefix);
-            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+            for(int j = 0; j < (PATTERN_CARD_SIZE - prefix.length()); j++){
                 out.print(" ");
             }
             out.print(SPACE);
             prefix = "Level : " + pc.get(i).getLevelB();
             out.print(prefix);
-            for(int j=0;j< (PATTERN_CARD_SIZE - prefix.length());j++){
+            for(int j = 0; j < (PATTERN_CARD_SIZE - prefix.length()); j++){
                 out.print(" ");
             }
             out.print(SPACE);
         }
         out.println();
-        for(int i = 0; i< ROW_SIZE; i++){
-            for(int j=0;j<pc.size();j++){
-                for(int k = 0; k< COL_SIZE; k++){
-                    out.print("|"  + pc.get(j).getCell(true,i,k) + "|");
+        for(int i = 0; i < ROW_SIZE; i++){
+            for(int j = 0; j < pc.size(); j++){
+                for(int k = 0; k < COL_SIZE; k++){
+                    out.print("|"  + pc.get(j).getCell(true, i, k) + "|");
                 }
                 out.print(SPACE);
-                for(int k = 0; k< COL_SIZE; k++){
-                    out.print("|"  + pc.get(j).getCell(false,i,k) + "|");
+                for(int k = 0; k < COL_SIZE; k++){
+                    out.print("|"  + pc.get(j).getCell(false, i, k) + "|");
                 }
                 out.print(SPACE);
 
@@ -436,7 +444,7 @@ public class CLIView extends View {
         int[] size = new int[numCards];
         int big = 0;
         for (int i = 0; i < numCards; i++) {
-            size[i] = (string[i].length()-1) / CARD_WIDTH + 1;
+            size[i] = (string[i].length() - 1) / CARD_WIDTH + 1;
         }
 
         for (int i = 0; i < numCards; i++) {
@@ -444,21 +452,21 @@ public class CLIView extends View {
                 big = size[i];
             }
         }
-        big = big% CARD_WIDTH;
-        for(int i = 0;i<big;i++){
-            for(int j = 0;j<numCards;j++){
+        big = big % CARD_WIDTH;
+        for(int i = 0; i < big; i++){
+            for(int j = 0; j < numCards; j++){
                 int spaceSize = 0;
                 if (string[j].length() % CARD_WIDTH != 0) {
                     spaceSize = CARD_WIDTH - string[j].length() % CARD_WIDTH;
                 }
                 out.print("- ");
-                if(i == string[j].length()/ CARD_WIDTH){
-                    out.print(string[j].substring(i * CARD_WIDTH, i * CARD_WIDTH + string[j].length()%(CARD_WIDTH)));
+                if(i == string[j].length() / CARD_WIDTH){
+                    out.print(string[j].substring(i * CARD_WIDTH, i * CARD_WIDTH + string[j].length() % (CARD_WIDTH)));
                     for (int z = 0; z < spaceSize; z++) {
                         out.print(" ");
                     }
                 }
-                else if(i > string[j].length()/ CARD_WIDTH){
+                else if(i > string[j].length() / CARD_WIDTH){
                         for (int z = 0; z < CARD_WIDTH; z++) {
                         out.print(" ");
                     }                }
@@ -471,7 +479,7 @@ public class CLIView extends View {
 
         }
         for (int i = 0; i < numCards; i++) {
-            for (int z = 0; z < CARD_WIDTH +4; z++) {
+            for (int z = 0; z < CARD_WIDTH + 4; z++) {
                 out.print("-");
             }
             out.print("        ");
@@ -481,14 +489,14 @@ public class CLIView extends View {
 
     private void windowFrameGenerator(WindowFrame[] wf){
         for(int i = 0; i< ROW_SIZE; i++){
-            for(int j=0;j<wf.length;j++){
-                for(int k = 0; k< COL_SIZE; k++){
+            for(int j = 0; j < wf.length; j++){
+                for(int k = 0; k < COL_SIZE; k++){
                     Die die = wf[j].getPlacements()[i][k];
                     if(wf[j].getPlacements()[i][k] != null){
                         out.print("|" + die + "|");
                     }
                     else {
-                        out.print("|"  + wf[j].getPCCell(i,k) + "|");
+                        out.print("|"  + wf[j].getPCCell(i, k) + "|");
                     }
                 }
                 out.print("       ");

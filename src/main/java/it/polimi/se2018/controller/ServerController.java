@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class ServerController extends AbstractController {
     //Attributes
     private final Object lock = new Object();
+    private final ResourceLoader resourceLoader = new ResourceLoader();
     private Model model;
     private VirtualView view;
     private ClientGatherer clientGatherer;
@@ -22,23 +24,22 @@ public class ServerController extends AbstractController {
     private int lobbyTimeout;
     private int turnTimeout;
     private int readyPlayers = 0;
-    private ResourceLoader resourceLoader = new ResourceLoader();
+
+    public static final Logger LOGGER = Logger.getLogger(ServerController.class.getName());
 
     //Methods
-    public ServerController(Model model, VirtualView view) throws ResourceLoaderException {
+    public ServerController(Model model, VirtualView view) {
         super(model);
         this.model = model;
         this.view = view;
         clientGatherer = new ClientGatherer(this.lock);
-        lobbyTimeout = resourceLoader.loadLobbyTimeout();
-        turnTimeout = resourceLoader.loadTurnTimeout();
     }
 
     private void waitForPlayerActions() throws InterruptedException {
         Timer turnTimer = new Timer(turnTimeout, lock);
         turnTimer.start();
         while(!model.isOver()) {
-            System.out.println("match begin WAIT");
+            LOGGER.fine("match begin WAIT");
             while(!updatedPlayerActions()
                && emptyPreLobby()
                && !turnTimer.isTimeout()) {
@@ -46,16 +47,16 @@ public class ServerController extends AbstractController {
                     lock.wait();
                 }
             }
-            System.out.println("match end WAIT");
+            LOGGER.fine("match end WAIT");
             if(turnTimer.isTimeout()) {
-                System.out.println("TIMEOUT");
+                LOGGER.fine("TIMEOUT");
                 if(model.isStarted()) {
                     model.updateTurn();
                 }
                 else {
                     for(int i = 0; i < model.getNumPlayers(); i++) {
                         if(!model.playerHasChosenPC(i)) {
-                            System.out.println("Not selected PC: " + i);
+                            LOGGER.fine("Not selected PC: " + i);
                             PatternCard pc = model.getPatternCards()[2 * i];
                             Player player = model.getPlayer(i);
                             player.setWinFrame(new WindowFrame(pc, true));
@@ -81,7 +82,7 @@ public class ServerController extends AbstractController {
             }
             gatherPlayers();
         }
-        System.out.println("match ended");
+        LOGGER.fine("match ended");
     }
 
     private boolean updatedPlayerActions() {
@@ -94,21 +95,25 @@ public class ServerController extends AbstractController {
     }
 
     private void gatherPlayers() throws InterruptedException {
-        System.out.println("begin gathering");
+        LOGGER.fine("begin gathering");
+        if(model.isLobbyGathering()) {
+            lobbyTimeout = resourceLoader.loadLobbyTimeout();
+            turnTimeout = resourceLoader.loadTurnTimeout();
+        }
         synchronized (lock) {
             Timer lobbyTimer = new Timer(lobbyTimeout, lock);
             do {
-                System.out.println("lobby begin WAIT");
+                LOGGER.fine("lobby begin WAIT");
                 while(model.isLobbyGathering()
                         && emptyPreLobby()
                         && !lobbyTimer.isTimeout()) {
                     lock.wait();
                 }
-                System.out.println("lobby end WAIT");
+                LOGGER.fine("lobby end WAIT");
                 // check if other players are still connected by clientinfo
-                System.out.println("begin check");
+                LOGGER.fine("begin check");
                 checkConnections();
-                System.out.println("end check");
+                LOGGER.fine("end check");
                 if(lobbyTimer.isTimeout()) {
                     if(model.getNumPlayers() >= 2) {
                         model.setLobbyGathering(false);
@@ -137,12 +142,12 @@ public class ServerController extends AbstractController {
                         }
                         if(model.isLobbyGathering() && available) {
                             //add client to lobby as players
-                            System.out.println("PLAYER");
+                            LOGGER.fine("PLAYER");
                             view.addClient(clientInfo.getView());
                             playerActions.add(pa);
                             //clientGatherer.remove(clientInfo);
                             model.addPlayer(username, clientInfo.getLocalModel());
-                            System.out.println(username + " joined the game");
+                            LOGGER.fine(username + " joined the game");
                             iterator.remove();
                             //if there are exactly 2 players start the lobbyTimer
                             if(model.getNumPlayers() == 2) {
@@ -154,7 +159,7 @@ public class ServerController extends AbstractController {
                         }
                         else if(!available
                            && (!model.getPlayer(i).isConnected() || model.getPlayer(i).isSwitchingConn())) {
-                            System.out.println(model.getPlayer(i).getUsername() + " REINSERTED");
+                            LOGGER.fine(model.getPlayer(i).getUsername() + " REINSERTED");
                             view.reinsertClient(i, clientInfo.getView());
                             playerActions.set(i, pa);
                             model.reinsertPlayer(i, clientInfo.getLocalModel());
@@ -167,14 +172,14 @@ public class ServerController extends AbstractController {
                                 //e.printStackTrace();
                             }
                         }
-                        //System.out.println("+");
+                        //LOGGER.fine("+");
                         pa.clear();
-                        //System.out.println("-");
+                        //LOGGER.fine("-");
                     }
                 }
             } while(model.isLobbyGathering());
         }
-        System.out.println("end gathering");
+        LOGGER.fine("end gathering");
     }
 
     private void checkConnections() {
@@ -194,7 +199,7 @@ public class ServerController extends AbstractController {
                     model.removePlayer(i);
                     i++;
                 }
-                System.out.println(player.getUsername() + " disconnected");
+                LOGGER.fine(player.getUsername() + " disconnected");
             }
             else {
                 i++;
@@ -236,19 +241,19 @@ public class ServerController extends AbstractController {
         for(int i = 0; i < numPlayer * 2; i++) {
             int num = random.nextInt(pcIds.size());
             int id = pcIds.remove(num);
-            System.out.println("pattern card id:" + id);
+            LOGGER.fine("pattern card id:" + id);
             patternCards[i] = resourceLoader.loadPC(id);
         }
         for(int i = 0; i < 3; i++) {
             int num = random.nextInt(pubOCIds.size());
             int id = pubOCIds.remove(num);
-            System.out.println("pubOC id:" + id);
+            LOGGER.fine("pubOC id:" + id);
             pubObjCards[i] = resourceLoader.loadPubOC(id);
         }
         for(int i = 0; i < 3; i++) {
             int num = random.nextInt(toolCardIds.size());
             int id = toolCardIds.remove(num);
-            System.out.println("tool card id:" + id);
+            LOGGER.fine("tool card id:" + id);
             toolCards[i] = resourceLoader.loadToolCard(id);
         }
         model.setPatternCards(patternCards);
@@ -294,20 +299,31 @@ public class ServerController extends AbstractController {
         }
     }
 
+    private void reset() {
+        LOGGER.fine("begin reset");
+        model.reset();
+        view.reset();
+        playerActions.clear();
+        LOGGER.fine("end reset");
+    }
+
     public static void main(String[] args) {
         Model model = Model.instance();
         VirtualView virtualView = new VirtualView();
+        ServerController serverController = new ServerController(model, virtualView);
+        model.addObserver(virtualView);
+        boolean loop = true;
         try {
-            ServerController serverController = new ServerController(model, virtualView);
-            model.addObserver(virtualView);
-            serverController.gatherPlayers();
-            serverController.gameSetup();
-            serverController.waitForPlayerActions();
-            model.reset();
+            while(loop) {
+                serverController.gatherPlayers();
+                serverController.gameSetup();
+                serverController.waitForPlayerActions();
+                serverController.reset();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ResourceLoaderException e) {
-            System.out.println("ERROR LOADING RESOURCE FILES");
+            LOGGER.fine("ERROR LOADING RESOURCE FILES");
         }
     }
 }

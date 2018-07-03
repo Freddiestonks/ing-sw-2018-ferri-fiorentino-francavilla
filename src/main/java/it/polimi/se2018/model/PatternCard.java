@@ -59,7 +59,6 @@ public class PatternCard implements Serializable {
         }
     }
 
-
     /**
      * This method is used to return the level of the front side of PatternCard.
      *
@@ -94,24 +93,6 @@ public class PatternCard implements Serializable {
      */
     public String getNameB() {
         return nameB;
-    }
-
-    /**
-     * This method return the reference to the whole back-side of the PatterCard.
-     *
-     * @return a cell matrix representing the back-side PatterCard.
-     */
-    public Cell[][] getBack() {
-        return back;
-    }
-
-    /**
-     * This method return the reference to the whole front-side of the PatterCard.
-     *
-     * @return a cell matrix representing the front-side PatterCard.
-     */
-    public Cell[][] getFront() {
-        return front;
     }
 }
 

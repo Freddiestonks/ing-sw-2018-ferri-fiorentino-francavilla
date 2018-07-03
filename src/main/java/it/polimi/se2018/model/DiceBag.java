@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class DiceBag {
     //Attributes
-    final private static DiceBag instance = new DiceBag();
+    private static final DiceBag instance = new DiceBag();
     private ArrayList<Color> availableColors;
     private int[] content = new int[5];
 
