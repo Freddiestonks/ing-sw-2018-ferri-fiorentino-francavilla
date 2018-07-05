@@ -19,16 +19,23 @@ public class ClientController extends AbstractController implements Observer {
     private PlayerActionInterface playerActionInterface = new PlayerAction();
     private NetworkHandler networkHandler;
     private String username = null;
+
+    private static final String CONNECT = "connect";
+    private static final String SET = "set";
+    private static final String PC = "pc";
+    private static final String USER_NAME = "username";
     private static final String PLACE = "place";
     private static final String WINDOW_FRAME = "windowframe";
     private static final String ROUND_TRACK = "roundtrack";
     private static final String DRAFT_POOL = "draftpool";
     private static final String SELECT = "select";
     private static final String TOOL_CARD = "toolcard";
+    private static final String PUBOC = "public";
     private static final String NEW_VALUE = "newvalue";
     private static final String HELP = "help";
     private static final String SEPARATOR = ", ?";
     private static final String PLACEMENT ="placement";
+    private static final String SKIP = "skip";
     private static final String MAIN_SCREEN_INFO = "board";
 
     //Methods
@@ -42,25 +49,17 @@ public class ClientController extends AbstractController implements Observer {
         try {
             PlayerAction playerAction = new PlayerAction();
             String[] string = str.split(SEPARATOR);
-            if(model.isStarted()) {
-                if (string[0].equalsIgnoreCase(TOOL_CARD)) {
-                    toolCardParser(playerAction, string);
-                } else if (string[0].equalsIgnoreCase(PLACEMENT)) {
-                    placementParser(playerAction, string);
-                } else if (string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)) {
-                    view.showMainScreen();
-                } else if (string[0].equalsIgnoreCase("public")) {
-                    view.showPubOCs(model.getPubOCs());
-                }
-            } else if (string[0].equalsIgnoreCase(HELP)) {
+            if (string[0].equalsIgnoreCase(HELP)) {
                 view.help();
-            } else if (string[0].equalsIgnoreCase("connect")) {
+            }
+            else if (string[0].equalsIgnoreCase(CONNECT)) {
                 if (string[1].equalsIgnoreCase("socket")) {
                     playerAction.setSwitchConnReq(true);
                     performAction(playerAction);
                     networkHandler = new SocketNetworkHandler(string[2]);
 
-                } else if (string[1].equalsIgnoreCase("rmi")) {
+                }
+                else if (string[1].equalsIgnoreCase("rmi")) {
                     playerAction.setSwitchConnReq(true);
                     performAction(playerAction);
                     networkHandler = new RMINetworkHandler(string[2]);
@@ -74,31 +73,54 @@ public class ClientController extends AbstractController implements Observer {
                 } catch (IOException e) {
                     view.connectionError();
                 }
-                if(this.username != null) {
+                if (this.username != null) {
                     playerAction.setUsernameReq(this.username);
                     performAction(playerAction);
                 }
-            } else if (string[0].equalsIgnoreCase("set")) {
-                if (string[1].equalsIgnoreCase("username")) {
-                    this.username = string[2];
-                    playerAction.setUsernameReq(string[2]);
+            }
+            else if(model.isStarted()) {
+                if (string[0].equalsIgnoreCase(SKIP)) {
+                    playerAction.setSkipTurn(true);
                     performAction(playerAction);
-                } else if (string[1].equalsIgnoreCase("pc")) {
-                    try {
-                        playerAction.setPatternCard(Integer.parseInt(string[2]));
-                    } catch (NumberFormatException nfe) {
-                        view.invalidMoveError();
-                    }
-                    performAction(playerAction);
+                }
+                else if (string[0].equalsIgnoreCase(TOOL_CARD)) {
+                    toolCardParser(playerAction, string);
+                }
+                else if (string[0].equalsIgnoreCase(PLACEMENT)) {
+                    placementParser(playerAction, string);
+                }
+                else if (string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)) {
+                    view.showMainScreen();
+                }
+                else if (string[0].equalsIgnoreCase(PUBOC)) {
+                    view.showPubOCs(model.getPubOCs());
                 }
                 else {
                     view.invalidMoveError();
                 }
-            } else if (string[0].equalsIgnoreCase("skip")) {
-                playerAction.setSkipTurn(true);
-                performAction(playerAction);
-            } else {
-                view.invalidMoveError();
+            }
+            else {
+                if (string[0].equalsIgnoreCase(SET)) {
+                    if (string[1].equalsIgnoreCase(USER_NAME)) {
+                        this.username = string[2];
+                        playerAction.setUsernameReq(string[2]);
+                        performAction(playerAction);
+                    }
+                    else if (string[1].equalsIgnoreCase(PC)) {
+                        try {
+                            playerAction.setPatternCard(Integer.parseInt(string[2]));
+                        } catch (NumberFormatException nfe) {
+                            view.invalidMoveError();
+                        }
+                        performAction(playerAction);
+                    }
+                    else {
+                        view.invalidMoveError();
+                    }
+                }
+                else {
+                    view.invalidMoveError();
+                }
             }
         } catch (ArrayIndexOutOfBoundsException iob){
             view.invalidMoveError();
