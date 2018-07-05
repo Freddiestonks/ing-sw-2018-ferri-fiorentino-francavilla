@@ -3,6 +3,7 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 
 public abstract class AbstractController {
+    // the common interface used by both client and server in order to validate a player action
     private ModelInterface modelInterface;
 
     public AbstractController(ModelInterface modelInterface) {
@@ -25,6 +26,12 @@ public abstract class AbstractController {
         else return false;
     }
 
+    /**
+     * This method, used by both client and server is used in order to validate a player action.
+     *
+     * @param pa the PlayerAction instance to validate.
+     * @return true if the player action is correct and can be performed.
+     */
     protected boolean validAction(PlayerAction pa) {
         int playerIndex = getPlayerIndex(pa);
         if(pa.isSwitchConnReq()) {
@@ -42,7 +49,7 @@ public abstract class AbstractController {
         if(pa.isSkipTurn()) {
             return true;
         }
-        if(!(pa.getIdToolCard()>=0 && pa.getIdToolCard()<=3)){
+        if(!(pa.getIdToolCard() >= 0 && pa.getIdToolCard() <= 3)){
             return false;
         }
         for(int dieFace : pa.getNewDieValue()){

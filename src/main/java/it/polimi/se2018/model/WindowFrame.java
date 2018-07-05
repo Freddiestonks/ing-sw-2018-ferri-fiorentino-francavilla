@@ -9,8 +9,7 @@ import java.io.Serializable;
  * @author Federico Ferri
  * @author Alessio Fiorentino
  * @author Simone Francavilla
- *
- * */
+ */
 
 public class WindowFrame implements Serializable {
     //Attributes
@@ -23,6 +22,7 @@ public class WindowFrame implements Serializable {
     /**
      * This is the constructor method of the class
      *
+     * @param pc the PatternCard to set to the WindowFrame.
      * @param wcFace if this parameter is true the player chose the front "map" of the PatternCard otherwise it will be the back
      * */
     public WindowFrame(PatternCard pc, boolean wcFace) {
@@ -109,7 +109,7 @@ public class WindowFrame implements Serializable {
      * @param die The die passed to be positioned.
      * @param row The row of the wanted positioning place.
      * @param col The column of the wanted positioning place.
-     * @return
+     * @return true if the rule is met.
      */
     public boolean crossCheck(Die die, int row, int col) {
         //is a bool variable that helps to save the right conditions for die insertion.
@@ -132,6 +132,14 @@ public class WindowFrame implements Serializable {
         return crossCheck;
     }
 
+    /**
+     * This method checks whether all the placement rules are met
+     *
+     * @param die the die to be placed.
+     * @param row the row position.
+     * @param col the column position.
+     * @return true if the rules are met.
+     */
     public boolean checkRestrictions(Die die, int row, int col) {
         //check all the placement restrictions
         Cell cell = getPCCell(row, col);
@@ -146,12 +154,11 @@ public class WindowFrame implements Serializable {
     }
 
     /**
-     * This method is used to insert the die into the wanted position.
+     * This method is used to insert the die into the selected position.
      *
      * @param die The die passed to be positioned.
      * @param row The row of the wanted positioning place.
      * @param col The column of the wanted positioning place.
-     * @throws InvalidPlaceException
      */
     public void placeDie(Die die, int row, int col) {
         if (placements[row][col] == null) {
@@ -163,7 +170,7 @@ public class WindowFrame implements Serializable {
     }
 
     /**
-     * This method is used to remove a die in a getCell position in the Window-frame.
+     * This method is used to remove a die in a cell in the WindowFrame.
      *
      * @param row The row of the wanted positioning place.
      * @param col The column of the wanted positioning place.
@@ -179,7 +186,7 @@ public class WindowFrame implements Serializable {
     }
 
     /**
-     * This method is used to check the 'PatternCard' difficulty.
+     * This method is used to check the PatternCard difficulty.
      *
      * @return The PatternCard's level.
      */
@@ -199,7 +206,7 @@ public class WindowFrame implements Serializable {
     }
 
     /**
-     * This method is used to provide the Cell of the wanted WindowFrame.
+     * This method is used to provide the Cell of the selected WindowFrame.
      *
      * @param row The row of the wanted positioning place.
      * @param col The column of the wanted positioning place.

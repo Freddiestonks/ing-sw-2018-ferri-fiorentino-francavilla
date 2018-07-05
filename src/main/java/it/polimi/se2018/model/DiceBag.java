@@ -19,7 +19,7 @@ public class DiceBag {
     private int[] content = new int[5];
 
     /**
-     * This is the private constructor of the Dice-Bag.
+     * This is the private constructor of the DiceBag.
      */
     //Methods
     private DiceBag(){
@@ -75,7 +75,7 @@ public class DiceBag {
     }
 
     /**
-     * This method is used to reset the singleton instance.
+     * This method is used to reset the DiceBag state.
      */
     public void reset(){
         // there are 18 dice for each color

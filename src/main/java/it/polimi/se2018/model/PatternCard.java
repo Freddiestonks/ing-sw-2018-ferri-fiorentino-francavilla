@@ -44,10 +44,10 @@ public class PatternCard implements Serializable {
     /**
      * This method is used to return a specific cell from PatternCard afterward is selected the face.
      *
-     * @param wcFace A boolean representing the face; conventionally is true for the front side.
-     * @param row It's the row value of the board.
-     * @param col It's the column value of the board.
-     * @return A cell instance.
+     * @param wcFace representing the face, conventionally is true for the front side.
+     * @param row the row value of the board.
+     * @param col the column value of the board.
+     * @return a cell instance.
      */
     public Cell getCell(boolean wcFace, int row, int col){
         if(wcFace) {

@@ -13,16 +13,18 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 public class ServerController extends AbstractController {
-    //Attributes
+    // this object is used to synchronize the requests among players
     private final Object lock = new Object();
     private final ResourceLoader resourceLoader = new ResourceLoader();
     private Model model;
     private VirtualView view;
     private ClientGatherer clientGatherer;
+    // the list of Player Action instance related to the players requests
     private ArrayList<PlayerAction> playerActions = new ArrayList<>();
-    //private int numClients = 0;
+    // initialized from file
     private int lobbyTimeout;
     private int turnTimeout;
+    // count how many players has chosen a pattern card after entering the match
     private int readyPlayers = 0;
 
     public static final Logger LOGGER = Logger.getLogger(ServerController.class.getName());
@@ -35,6 +37,11 @@ public class ServerController extends AbstractController {
         clientGatherer = new ClientGatherer(this.lock);
     }
 
+    /**
+     * This method listen to the player actions in order to execute the requests.
+     *
+     * @throws InterruptedException
+     */
     private void waitForPlayerActions() throws InterruptedException {
         Timer turnTimer = new Timer(turnTimeout, lock);
         turnTimer.start();
@@ -85,6 +92,11 @@ public class ServerController extends AbstractController {
         LOGGER.fine("match ended");
     }
 
+    /**
+     * This method checks if there are player actions that are not execute.
+     *
+     * @return true if there are a new player action request.
+     */
     private boolean updatedPlayerActions() {
         for(PlayerAction pa : playerActions) {
             if(pa.isUpdated()) {
@@ -94,6 +106,13 @@ public class ServerController extends AbstractController {
         return false;
     }
 
+    /**
+     * This method during the lobby gathering collect up to four players that have a valid username (not already used),
+     * instead during the match started is intended to reinsert players that may have been disconnected from the game.
+     * Also checks if all the players are still connected.
+     *
+     * @throws InterruptedException
+     */
     private void gatherPlayers() throws InterruptedException {
         LOGGER.fine("begin gathering");
         if(model.isLobbyGathering()) {
@@ -110,8 +129,8 @@ public class ServerController extends AbstractController {
                     lock.wait();
                 }
                 LOGGER.fine("lobby end WAIT");
-                // check if other players are still connected by clientinfo
                 LOGGER.fine("begin check");
+                // check if other players are still connected by clientinfo
                 checkConnections();
                 LOGGER.fine("end check");
                 if(lobbyTimer.isTimeout()) {
@@ -145,7 +164,6 @@ public class ServerController extends AbstractController {
                             LOGGER.fine("PLAYER");
                             view.addClient(clientInfo.getView());
                             playerActions.add(pa);
-                            //clientGatherer.remove(clientInfo);
                             model.addPlayer(username, clientInfo.getLocalModel());
                             LOGGER.fine(username + " joined the game");
                             iterator.remove();
@@ -166,15 +184,14 @@ public class ServerController extends AbstractController {
                             iterator.remove();
                         }
                         else {
+                            // the client cannot be inserted in the game
                             try {
                                 clientInfo.getView().enteringError(model.isLobbyGathering());
                             } catch (IOException e) {
                                 //e.printStackTrace();
                             }
                         }
-                        //LOGGER.fine("+");
                         pa.clear();
-                        //LOGGER.fine("-");
                     }
                 }
             } while(model.isLobbyGathering());
@@ -182,6 +199,9 @@ public class ServerController extends AbstractController {
         LOGGER.fine("end gathering");
     }
 
+    /**
+     * This method checks whether all the players are connected.
+     */
     private void checkConnections() {
         int i = 0;
         while(i < model.getNumPlayers()) {
@@ -207,6 +227,11 @@ public class ServerController extends AbstractController {
         }
     }
 
+    /**
+     * This method checks whether there are clients that request to enter (or reenter) the game with a specific username.
+     *
+     * @return
+     */
     private boolean emptyPreLobby() {
         Iterator<ClientInfo> iterator = clientGatherer.iterator();
         while(iterator.hasNext()) {
@@ -217,6 +242,11 @@ public class ServerController extends AbstractController {
         return true;
     }
 
+    /**
+     * This method load and shuffle all game elements in order to start a match.
+     *
+     * @throws ResourceLoaderException
+     */
     private void gameSetup() throws ResourceLoaderException {
         int numPlayer = model.getNumPlayers();
         PatternCard[] patternCards = new PatternCard[numPlayer * 2];
@@ -241,19 +271,19 @@ public class ServerController extends AbstractController {
         for(int i = 0; i < numPlayer * 2; i++) {
             int num = random.nextInt(pcIds.size());
             int id = pcIds.remove(num);
-            LOGGER.fine("pattern card id:" + id);
+            LOGGER.fine("pattern card id: " + id);
             patternCards[i] = resourceLoader.loadPC(id);
         }
         for(int i = 0; i < 3; i++) {
             int num = random.nextInt(pubOCIds.size());
             int id = pubOCIds.remove(num);
-            LOGGER.fine("pubOC id:" + id);
+            LOGGER.fine("pubOC id: " + id);
             pubObjCards[i] = resourceLoader.loadPubOC(id);
         }
         for(int i = 0; i < 3; i++) {
             int num = random.nextInt(toolCardIds.size());
             int id = toolCardIds.remove(num);
-            LOGGER.fine("tool card id:" + id);
+            LOGGER.fine("tool card id: " + id);
             toolCards[i] = resourceLoader.loadToolCard(id);
         }
         model.setPatternCards(patternCards);
@@ -266,9 +296,15 @@ public class ServerController extends AbstractController {
         return playerActions.indexOf(pa);
     }
 
+    /**
+     * This method perform the action requested by a player.
+     *
+     * @param pa the action that a player requests to perform.
+     */
     private void performAction(PlayerAction pa) {
         int playerIndex = playerActions.indexOf(pa);
         if(!model.isLobbyGathering() && !model.isStarted()) {
+            // set the PatternCard selected by the player
             int index = pa.getPatternCard() / 2 + 2 * playerIndex;
             boolean wcFace = (pa.getPatternCard() % 2 == 0);
             PatternCard pc = model.getPatternCards()[index];
@@ -279,15 +315,18 @@ public class ServerController extends AbstractController {
             }
         }
         else if(pa.isSwitchConnReq()) {
+            // take into account that a player want to reconnect to the game switching connection type
             Player player = model.getPlayer(playerIndex);
             player.setSwitchingConn(true);
         }
         else if(model.isStarted()) {
             if(pa.isSkipTurn()) {
+                // the player skip his turn
                 model.updateTurn();
             }
             else if((pa.getIdToolCard() > 0)
                || ToolCard.isPendingAction()) {
+                // the player complete the pending action of a selected ToolCard
                 model.performToolCard(playerIndex, pa);
             }
             else {
@@ -299,6 +338,9 @@ public class ServerController extends AbstractController {
         }
     }
 
+    /**
+     * This method resets the whole game state into the initial one.
+     */
     private void reset() {
         LOGGER.fine("begin reset");
         model.reset();
@@ -323,7 +365,7 @@ public class ServerController extends AbstractController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ResourceLoaderException e) {
-            LOGGER.fine("ERROR LOADING RESOURCE FILES");
+            LOGGER.severe("ERROR LOADING RESOURCE FILES");
         }
     }
 }

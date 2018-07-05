@@ -65,7 +65,6 @@ public class TestModel {
         Player p1 = modelTest.getPlayer(0);
         Player p2 = modelTest.getPlayer(1);
         Player p3 = modelTest.getPlayer(2);
-        System.out.println(modelTest.getNumPlayers());
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC1 = resourceLoader.loadPC(0);
         PatternCard testPC2 = resourceLoader.loadPC(0);
@@ -170,7 +169,6 @@ public class TestModel {
         Player p1 = modelTest.getPlayer(0);
         Player p2 = modelTest.getPlayer(1);
         Player p3 = modelTest.getPlayer(2);
-        System.out.println(modelTest.getNumPlayers());
         ResourceLoader resourceLoader = new ResourceLoader();
         PatternCard testPC = resourceLoader.loadPC(0);
         WindowFrame wf = new WindowFrame(testPC,true);

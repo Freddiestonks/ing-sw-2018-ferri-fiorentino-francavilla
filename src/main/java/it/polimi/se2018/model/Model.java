@@ -15,8 +15,7 @@ import java.util.logging.Logger;
  * @author Federico Ferri
  * @author Alessio Fiorentino
  * @author Simone Francavilla
- *
- * */
+ */
 public class Model extends Observable implements ModelInterface {
     //Attributes
     private static Model instance = null;
@@ -69,7 +68,6 @@ public class Model extends Observable implements ModelInterface {
      *
      * @param username is the player's name to be added.
      * @param localModel is the reference to the LocalModel class.
-     * @throws MaxNumPlayersException
      */
     public void addPlayer(String username, LocalModelInterface localModel) {
         if(numPlayers >= 4) {
@@ -276,9 +274,9 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This method provides the number of dice in the Draft Pool.
+     * This method provides the number of dice in the DraftPool.
      *
-     * @return the size of the Draft Pool.
+     * @return the size of the DraftPool.
      */
     public int getDraftPoolSize() {
         return draftPool.size();
@@ -334,9 +332,9 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This method provides the number of dice inserted in a Round-Track's round.
+     * This method provides the number of dice inserted in a RoundTrack's round.
      * @param round is a round value.
-     * @return the number of dice in the Round-Track relatively to the specific round.
+     * @return the number of dice in the RoundTrack relatively to the specific round.
      */
     public int getRoundTrackSize(int round) {
         return roundTrack.get(round - 1).size();
@@ -352,7 +350,7 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This is the method used to calculate the overall score of the game, it will order the players by score in the Leader Board.
+     * This is the method used to calculate the overall score of the game, it will order the players by score in the LeaderBoard.
      * */
     private void calculateScore() {
         LOGGER.fine("begin calculate score");
@@ -387,17 +385,19 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This method is used to set the Tool-card chosen.
+     * This method is used to set the ToolCard chosen.
+     *
+     * @param toolCards the set of ToolCards to set.
      */
     public void setToolCards(ToolCard[] toolCards) {
         this.toolCards = toolCards.clone();
     }
 
     /**
-     * This method is used to provide a specific Tool-card.
+     * This method is used to provide a specific ToolCard.
      *
-     * @param i is the number of the requested Tool-card.
-     * @return a Tool-card reference.
+     * @param i is the number of the requested ToolCard.
+     * @return a ToolCard reference.
      */
     public ToolCard getToolCard(int i){
         return this.toolCards[i - 1];
@@ -413,9 +413,9 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This method is used to return the leader-board of the game.
+     * This method is used to return the LeaderBoard of the game.
      *
-     * @return an Arraylist on players that represents the leader-board.
+     * @return a list of players that represents the LeaderBoard.
      */
     public ArrayList<Player> getLeaderBoard() {
         return leaderBoard;
@@ -424,7 +424,7 @@ public class Model extends Observable implements ModelInterface {
     /**
      * This method provides a specific reference to a player.
      *
-     * @param i is the player's number in the array 'players'.
+     * @param i is the index in the list of players.
      * @return a Player reference.
      */
     public Player getPlayer(int i) {
@@ -434,7 +434,7 @@ public class Model extends Observable implements ModelInterface {
     /**
      * This method removes a specific player.
      *
-     * @param i is the player's number to be removed in the array 'players'.
+     * @param i is the index in the list of players.
      */
     public void removeClient(int i) {
         localModels.remove(i);
@@ -471,10 +471,10 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This method is used to check if a player is still connected to the game.
+     * This method checks whether the View remote reference are connected.
      *
-     * @param i is the number of the player ti be checked.
-     * @return a boolean value representing the check result.
+     * @param i the index of client in the View list.
+     * @return true if the selected client is connected.
      */
     public boolean checkConnection(int i) {
         boolean check = true;
@@ -500,18 +500,18 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * Thsi method provides the PatternCards used into the match.
+     * This method provides the PatternCards used into the match.
      *
-     * @return an array of Pattercards.
+     * @return an array of PatterCards.
      */
     public PatternCard[] getPatternCards() {
         return patCards.clone();
     }
 
     /**
-     * This method is used to set array of Patterncards will be used into the game.
+     * This method is used to set array of PatternCards will be used into the game.
      *
-     * @param patCards is the array of Patterncards to use
+     * @param patCards is the array of PatternCards to use
      */
     public void setPatternCards(PatternCard[] patCards) {
         this.patCards = patCards.clone();
@@ -521,7 +521,7 @@ public class Model extends Observable implements ModelInterface {
     /**
      * This method provides a reference to the players.
      *
-     * @return an Arraylist reference of the players.
+     * @return the list of player references.
      */
     public ArrayList<Player> getPlayers() {
         return new ArrayList<>(players);
@@ -530,7 +530,7 @@ public class Model extends Observable implements ModelInterface {
     /**
      * This method provides a reference to the DraftPool.
      *
-     * @return an Arraylist reference of the DraftPool.
+     * @return the list of die references of the DraftPool.
      */
     public ArrayList<Die> getDraftPool() {
         return new ArrayList<>(draftPool);
@@ -539,7 +539,7 @@ public class Model extends Observable implements ModelInterface {
     /**
      * This method provides a reference to the RoundTrack.
      *
-     * @return an Arraylist reference of the RoundTrack.
+     * @return the list of die references of the RoundTrack.
      */
     public ArrayList<ArrayList<Die>> getRoundTrack() {
         ArrayList<ArrayList<Die>> rt = new ArrayList<>();
@@ -550,7 +550,7 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This method is used to set-up the player for the first time, assigning him a private card.
+     * This method is used to set up the player for the first time, assigning him a private card.
      */
     public void playersSetup() {
         ArrayList<Color> availableColors = new ArrayList<>(Arrays.asList(Color.values()));
@@ -597,7 +597,7 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This methid provide the WindowsFrame of a specific player.
+     * This method provide the WindowFrame of a specific player.
      *
      * @param playerIndex is the player ordinal number in the set of players
      * @return a WindowFrame instance
@@ -618,7 +618,7 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This is used to check if a given player, can use a Tool Card during his turn.
+     * This is used to check if a given player, can use a ToolCard during his turn.
      *
      * @param playerIndex is the player ordinal number in the set of players
      * @return a boolean value representing the check result.
@@ -654,7 +654,7 @@ public class Model extends Observable implements ModelInterface {
      * This method is used to execute a player move.
      *
      * @param playerIndex is the player ordinal number in the set of players
-     * @param pa is the Player Action instance
+     * @param pa is the PlayerAction instance
      */
     public void performToolCard(int playerIndex, PlayerAction pa) {
         ToolCard toolCard = getToolCard(pa.getIdToolCard());
@@ -673,7 +673,7 @@ public class Model extends Observable implements ModelInterface {
     }
 
     /**
-     * This method is used to update the remote Local Models.
+     * This method is used to update the remote LocalModels.
      *
      */
     private void updateLocalModel(int playerIndex) {
@@ -711,16 +711,16 @@ public class Model extends Observable implements ModelInterface {
     /**
      * This method checks if the match is over.
      *
-     * @return a boolean representing the check result.
+     * @return true if the match is over.
      */
     public boolean isOver(){
         return over;
     }
 
     /**
-     * This method checks if the match is started after player selected a Pattern Card.
+     * This method checks if the match has started.
      *
-     * @return a boolean representing the check result.
+     * @return true if the match has started.
      */
     public boolean isStarted(){
         return started;

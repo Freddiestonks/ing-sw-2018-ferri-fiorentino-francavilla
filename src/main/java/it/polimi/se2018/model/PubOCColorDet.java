@@ -10,24 +10,25 @@ import java.util.ArrayList;
  * @author Alessio Fiorentino
  * @author Simone Francavilla
  *
- * */
+ */
 
 public class PubOCColorDet extends PubObjCard {
     //attributes
     private boolean rows;
     private boolean col;
     private boolean diagonals;
+
     //methods
     /**
-
      * This is the constructor method of the class
      *
-     * @param desc it is simply the description of the public card
+     * @param desc the description of the Public Objective Card
+     * @param name the name of the public card
      * @param row triggers on or off the public card that calculates the score of different colors by row
      * @param column triggers on or off the public card that calculates the score of different colors by column
      * @param diagonal triggers on or off the public card that calculates the score of different colors by diagonals
-     *
-     * */
+     * @param multiplier are the points related to the Public Objective Card
+     */
     public PubOCColorDet(String desc, String name, boolean row, boolean column, boolean diagonal, int multiplier) {
         super(desc, name, multiplier);
         rows = row;
@@ -51,10 +52,11 @@ public class PubOCColorDet extends PubObjCard {
         }
 
     }
+
     /**
      * This method calculates how many rows have no repetition of color
      * @param wf This is the WindowFrame on which is the calculation is needed
-     * @return  Returns the number of rows with no repetition of color
+     * @return the number of rows with no repetition of color
      * */
     private int getScoreRows(WindowFrame wf){
         ArrayList<Integer> check = new ArrayList<>();
@@ -79,10 +81,11 @@ public class PubOCColorDet extends PubObjCard {
         }
         return score;
     }
+
     /**
      * This method calculates how many columns have no repetition of color
      * @param wf This is the WindowFrame on which is the calculation is needed
-     * @return Returns the number of column with no repetition of color
+     * @return returns the number of column with no repetition of color
      * */
     private int getScoreCol(WindowFrame wf){
         ArrayList<Integer> check = new ArrayList<>();
@@ -115,7 +118,7 @@ public class PubOCColorDet extends PubObjCard {
     /**
      * This method calculates how many diagonals have the same color
      * @param wf This is the WindowFrame on which is the calculation is needed
-     * @return returns the number of dice that are the same color on a diagonal line
+     * @return the number of dice that are the same color on a diagonal line
      * */
     private int getScoreDiag(WindowFrame wf){
         //Start from dice (0,0) (top-left)
@@ -140,7 +143,7 @@ public class PubOCColorDet extends PubObjCard {
      * inside it there are if statements that can be triggered on or off by the attributes of the class
      *
      * @param wf It is used to pass the Player's WireFrame on which the with dice are on
-     * @return score this method returns the score that a player made with the public card
+     * @return the score that a player made with the public card
      * */
     public int calculateScore(WindowFrame wf) {
         //calculateScore is used to calculate the current score of the player

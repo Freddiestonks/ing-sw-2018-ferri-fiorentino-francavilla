@@ -9,9 +9,7 @@ import java.util.Random;
  * @author Federico Ferri
  * @author Alessio Fiorentino
  * @author Simone Francavilla
- *
  */
-
 
 public class Die implements Serializable {
     //Attributes
@@ -37,7 +35,7 @@ public class Die implements Serializable {
     //Methods
 
     /**
-     * This method is used to generate a pseudo-casual number, assigned to 'value' attribute.
+     * This method is used to generate a pseudo-casual number, assigning it as a new value.
      */
     public void roll() {
         Random random = new Random();
@@ -65,7 +63,7 @@ public class Die implements Serializable {
     /**
      * This method sets the number attribute.
      *
-     * @param value It's used to pass the value for the die instantiation.
+     * @param value used to pass the value for the die.
      */
     public void setValue(int value) {
         if((value >= 1) && (value <= 6)){
@@ -76,14 +74,9 @@ public class Die implements Serializable {
         }
     }
 
-    /**
-     * This method is classic ToString description of a Die instance.
-     *
-     * @return a String instance of the description.
-     */
     @Override
     public String toString(){
-        return value + " " + color.toString().substring(0,1);
+        return value + " " + color.toString().substring(0, 1);
     }
 
 }

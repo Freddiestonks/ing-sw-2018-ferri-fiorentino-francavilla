@@ -14,18 +14,19 @@ public class PubOCShadeSet extends PubObjCard {
      * @param name this is the name of the card
      * @param active indicates which of the shades are wanted to complete a set
      * @param multiplier this indicates how many points each set gives to the player
-     * */
+     */
     public PubOCShadeSet(String desc, String name, boolean[] active, int multiplier) {
         super(desc, name, multiplier);
         points = multiplier;
         activeShades = active;
     }
+
     /**
      * This method is used to update the ArrayList that is counting the shades
      * @param row this is the row of the analyzed cell
      * @param col this is the column of the analyzed cell
      * @param wf this is the WindowFrame on which the counting is happening
-     * */
+     */
     private void updateCheck(int row , int col, WindowFrame wf){
         //UpdateCheck is used to fill the "Check" vector with how many times each color appears on a line
         if(wf.getDie(row, col) != null){
@@ -33,6 +34,7 @@ public class PubOCShadeSet extends PubObjCard {
             check.set(value, check.get(value) + 1);
         }
     }
+
     /**
      * This method is used to calculate the score of a specific player throughout his WindowFrame
      *

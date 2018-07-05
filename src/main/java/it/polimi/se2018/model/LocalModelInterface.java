@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.rmi.Remote;
 import java.util.ArrayList;
 
+/**
+ * This is the LocalModel remote interface.
+ */
 public interface LocalModelInterface extends Remote {
+
     void setState(boolean started, boolean lobbyGathering) throws IOException;
 
     void setWindowFrame(WindowFrame wf) throws IOException;

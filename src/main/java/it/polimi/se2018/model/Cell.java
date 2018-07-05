@@ -12,8 +12,6 @@ import java.io.Serializable;
  */
 
 public class Cell implements Serializable {
-    //Methods
-
     /**
      * This method checks if a die is positionable on a specific 'Shade' cell.
      *
@@ -34,11 +32,6 @@ public class Cell implements Serializable {
         return true;
     }
 
-    /**
-     * Is the to string implementation.
-     *
-     * @return a string instance.
-     */
     @Override
     public String toString(){
         return "---";

@@ -3,18 +3,31 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PlayerAction implements PlayerActionInterface, Serializable {
+    // this object is used to synchronize the requests among players
     private transient Object lock = new Object();
+    // this boolean, if true, indicates that a PlayerAction instance is ready to be performed
     private boolean updated = false;
+    // the string used by a player to enter in the game
     private String usernameReq = null;
+    // this boolean, if true, indicates that a player asks to switch connection type
     private boolean switchConnReq = false;
+    // the PatternCard id that a player select before the match starts
     private int patternCard = 0;
+    // this boolean, if true, indicates that a player asks to skip his turn
     private boolean skipTurn = false;
+    // the list of values that a player asks to set to some selected dice
     private ArrayList<Integer> newDieValue = new ArrayList<>();
+    // the list of position of DraftPool dice that a player selects
     private ArrayList<Integer> posDPDie = new ArrayList<>();
+    // the list of position of RoundTrack dice that a player selects, indicated by Round index and a second index
     private ArrayList<int[]> posRTDie = new ArrayList<>();
+    // the list of placements of WindowFrame that a player selects in order to place DraftPool dice
     private ArrayList<int[]> placeDPDie = new ArrayList<>();
-    private ArrayList<int[]> placeWFDie = new ArrayList<>(); //Take from window frame
+    // the list of placements of WindowFrame dice that a player selects in order to move
+    private ArrayList<int[]> placeWFDie = new ArrayList<>();
+    // the list of placements of WindowFrame that a player selects in order to move WindowFrame dice to
     private ArrayList<int[]> placeNewWFDie = new ArrayList<>();
+    // this integer represents the ToolCard selected to be used (0 means not used)
     private int idToolCard = 0;
 
     public PlayerAction() {
@@ -24,6 +37,11 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
         this.lock = lock;
     }
 
+    /**
+     * This method is used to support the copy of an ArrayList composed of static Array.
+     * @param arrayList the ArrayList to be copied.
+     * @return the ArrayList copy.
+     */
     private ArrayList<int[]> copy(ArrayList<int[]> arrayList) {
         ArrayList<int[]> newArrayList = new ArrayList<>();
         for(int[] array : arrayList) {
@@ -32,6 +50,11 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
         return newArrayList;
     }
 
+    /**
+     * This method is used to set the current PlayerAction into the one given by parameter.
+     *
+     * @param pa the PlayerAction whose parameters have to to be set in the current one.
+     */
     public void setPlayerAction(PlayerAction pa) {
         synchronized (lock) {
             if(!updated) {
@@ -52,6 +75,11 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
         }
     }
 
+    /**
+     * This method checks if the PlayerAction instance has to be read by the server.
+     *
+     * @return true if there are a new player action request.
+     */
     public boolean isUpdated() {
         synchronized (lock) {
             return updated;
@@ -146,8 +174,14 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
         return idToolCard;
     }
 
+    /**
+     * This method checks whether the PlayerAction remote reference is connected.
+     */
     public void checkConnection() {}
 
+    /**
+     * This method clear all the PlayerAction parameters setting them to the default ones.
+     */
     public void clear() {
         synchronized (lock) {
             this.usernameReq = null;

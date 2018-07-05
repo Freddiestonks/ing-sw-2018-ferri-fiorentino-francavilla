@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.rmi.Remote;
 import java.util.ArrayList;
 
+/**
+ * This is the View remote interface.
+ */
 public interface ViewInterface extends Remote {
+
     void updateWaitingRoom(boolean starting) throws IOException;
 
     void updateMainScreen(MainScreenInfo mainScreenInfo) throws IOException;

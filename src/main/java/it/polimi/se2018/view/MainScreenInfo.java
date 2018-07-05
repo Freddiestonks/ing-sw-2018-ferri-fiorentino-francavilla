@@ -7,7 +7,11 @@ import it.polimi.se2018.model.PrivObjCard;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * This class represent all the information necessary to update a client View about the board screen.
+ */
 public class MainScreenInfo implements Serializable {
+
     private Player player;
     private ArrayList<Player> opponents;
     private int round;

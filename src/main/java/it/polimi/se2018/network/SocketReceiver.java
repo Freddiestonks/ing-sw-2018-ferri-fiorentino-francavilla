@@ -50,6 +50,9 @@ public class SocketReceiver extends Thread {
         this.playerAction = playerAction;
     }
 
+    /**
+     * This method dismiss the selected SocketReceiver closing the Socket connection
+     */
     public void dismiss() {
         try {
             socket.close();

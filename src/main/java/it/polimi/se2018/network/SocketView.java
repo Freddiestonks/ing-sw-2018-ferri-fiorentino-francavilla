@@ -13,7 +13,11 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * This class implements the Socket communication of the View remote reference.
+ */
 public class SocketView implements ViewInterface {
+
     private Socket socket;
     private Gson gson;
 

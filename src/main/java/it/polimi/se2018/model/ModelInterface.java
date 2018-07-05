@@ -1,5 +1,9 @@
 package it.polimi.se2018.model;
 
+/**
+ * This interface is used by both client and server in order to validate the player actions using respectively
+ * with Model and LocalModel.
+ */
 public interface ModelInterface {
 
     boolean isStarted();

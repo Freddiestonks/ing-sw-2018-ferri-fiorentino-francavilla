@@ -1,15 +1,11 @@
 package it.polimi.se2018.model;
-import it.polimi.se2018.model.Color;
-import it.polimi.se2018.model.Die;
-import it.polimi.se2018.model.ShadeCell;
+
 import org.junit.Test;
+
 import static org.junit.Assert.fail;
-
-
 
 public class TestShadeCell {
     @Test
-
     public void testPlaceable(){
         Die dice = new Die(Color.BLUE);
         ShadeCell cell;
@@ -20,13 +16,5 @@ public class TestShadeCell {
                 fail();
             }
         }
-        /*
-        try{
-            cell = new ShadeCell(7);
-        }catch (IllegalArgumentException e){
-            e.printStackTrace();
-            fail();
-        }*/
-
     }
 }

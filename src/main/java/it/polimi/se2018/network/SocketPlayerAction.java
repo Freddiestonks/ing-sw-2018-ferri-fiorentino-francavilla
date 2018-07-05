@@ -8,7 +8,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+/**
+ * This class implements the Socket communication of the PlayerAction remote reference.
+ */
 public class SocketPlayerAction implements PlayerActionInterface {
+
     private Socket socket;
     private Gson gson = new Gson();
 

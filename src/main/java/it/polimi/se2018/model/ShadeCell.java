@@ -1,4 +1,5 @@
 package it.polimi.se2018.model;
+
 /**
  * This is the class representing a single place in the Pattern Cards representing a shade-type cell.
  *
@@ -13,7 +14,7 @@ public class ShadeCell extends Cell {
     //Methods
 
     /**
-     * This method is the constructor of the class that instantiate a singe 'Cell' object by passing his color.
+     * The constructor of the class that instantiate a singe 'Cell' object by passing his color.
      *
      * @param shade is simply the number that expresses a type of shade on a specific cell.
      */
@@ -31,7 +32,7 @@ public class ShadeCell extends Cell {
      * so if the cell is represented by the same color.
      *
      * @param die the die passed to be controlled if can be positioned in the cell.
-     * @return a boolean value representing the correctness of the placing move.
+     * @return true if the die can be placed on it, respecting the placement rules.
      */
     @Override
     public boolean placeableShade(Die die) {

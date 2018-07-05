@@ -1,10 +1,12 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.view.MainScreenInfo;
-
 import java.util.ArrayList;
 
+/**
+ * This is the LocalModel class that contains all the information necessary to validate a player action
+ */
 public class LocalModel implements LocalModelInterface, ModelInterface {
+
     private boolean started = false;
     private boolean lobbyGathering = true;
     private WindowFrame windowFrame;
@@ -18,7 +20,6 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
     private ToolCard[] toolCards = new ToolCard[3];
     private boolean toolCardUsed = false;
     private int playerIndex;
-    private MainScreenInfo mainScreenInfo;
 
     public LocalModel() {
 
@@ -94,14 +95,6 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
     public synchronized Die getRoundTrackDie(int round, int i) {
         return roundTrack.get(round - 1).get(i);
     }
-
-    /*public ArrayList<ArrayList<Die>> getRoundTrack() {
-        ArrayList<ArrayList<Die>> rt = new ArrayList<>();
-        for(int i = 0; i < 10; i++) {
-            this.roundTrack.add(new ArrayList<>(roundTrack.get(i)));
-        }
-        return rt;
-    }*/
 
     public synchronized int getRoundTrackSize(int round) {
         return roundTrack.get(round - 1).size();

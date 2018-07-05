@@ -19,27 +19,25 @@ public abstract class View extends Observable implements ViewInterface {
 
     public abstract void updateWaitingRoom(boolean starting);
 
-    //public abstract void welcomeScreen();
+    protected abstract void updateRT(ArrayList<ArrayList<Die>> roundTrack);
 
-    public abstract void updateRT(ArrayList<ArrayList<Die>> roundTrack);
+    protected abstract void updateDP(ArrayList<Die> draftPool);
 
-    public abstract void updateDP(ArrayList<Die> draftPool);
+    protected abstract void updateTokens(int tokens);
 
-    public abstract void updateTokens(int tokens);
+    protected abstract void updateRound(int round);
 
-    public abstract void updateRound(int round);
+    protected abstract void updateOrder(boolean backward);
 
-    public abstract void updateOrder(boolean backward);
+    protected abstract void updateInfo(int tokens, int round, boolean backward, String turnPlayer);
 
-    public abstract void updateInfo(int tokens, int round, boolean backward, String turnPlayer);
-
-    public abstract void updatePrivOCs(PrivObjCard privObjCard);
+    protected abstract void updatePrivOCs(PrivObjCard privObjCard);
 
     public abstract void showPubOCs(PubObjCard pubObjCards[]);
 
-    public abstract void updateOpponentsWF(ArrayList<Player> opponents);
+    protected abstract void updateOpponentsWF(ArrayList<Player> opponents);
 
-    public abstract void updatePlayerWF(Player player);
+    protected abstract void updatePlayerWF(Player player);
 
     public abstract void showMainScreen();
 

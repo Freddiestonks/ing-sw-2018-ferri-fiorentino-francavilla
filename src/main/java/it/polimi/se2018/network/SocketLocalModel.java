@@ -11,7 +11,11 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * This class implements the Socket communication of the LocalModel remote reference.
+ */
 public class SocketLocalModel implements LocalModelInterface {
+
     private Socket socket;
     private Gson gson;
 

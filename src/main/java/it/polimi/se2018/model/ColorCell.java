@@ -12,9 +12,8 @@ public class ColorCell extends Cell {
     private Color color;
 
     //Methods
-
     /**
-     * This method is the constructor of the class that instantiate a singe 'Cell' object by passing his color.
+     * The constructor of the class that instantiate a singe 'Cell' object by passing his color.
      *
      * @param color is the set-up color of a single cell.
      */
@@ -27,7 +26,7 @@ public class ColorCell extends Cell {
      * so if the cell is represented by the same color.
      *
      * @param die the die passed to be controlled if can be positioned in the cell.
-     * @return a boolean value representing the correctness of the placing move.
+     * @return true if the die can be placed on it, respecting the placement rules.
      */
     @Override
     public boolean placeableColor(Die die){
@@ -36,6 +35,6 @@ public class ColorCell extends Cell {
 
     @Override
     public String toString(){
-        return "-" + color.toString().substring(0,1) + "-";
+        return "-" + color.toString().substring(0, 1) + "-";
     }
 }

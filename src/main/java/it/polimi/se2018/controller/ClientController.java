@@ -42,10 +42,16 @@ public class ClientController extends AbstractController implements Observer {
         try {
             PlayerAction playerAction = new PlayerAction();
             String[] string = str.split(SEPARATOR);
-            if (string[0].equalsIgnoreCase(TOOL_CARD)) {
-                toolCardParser(playerAction, string);
-            } else if (string[0].equalsIgnoreCase(PLACEMENT)) {
-                placementParser(playerAction, string);
+            if(model.isStarted()) {
+                if (string[0].equalsIgnoreCase(TOOL_CARD)) {
+                    toolCardParser(playerAction, string);
+                } else if (string[0].equalsIgnoreCase(PLACEMENT)) {
+                    placementParser(playerAction, string);
+                } else if (string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)) {
+                    view.showMainScreen();
+                } else if (string[0].equalsIgnoreCase("public")) {
+                    view.showPubOCs(model.getPubOCs());
+                }
             } else if (string[0].equalsIgnoreCase(HELP)) {
                 view.help();
             } else if (string[0].equalsIgnoreCase("connect")) {
@@ -91,12 +97,6 @@ public class ClientController extends AbstractController implements Observer {
             } else if (string[0].equalsIgnoreCase("skip")) {
                 playerAction.setSkipTurn(true);
                 performAction(playerAction);
-            } else if(model.isStarted()) {
-                if (string[0].equalsIgnoreCase(MAIN_SCREEN_INFO)) {
-                    view.showMainScreen();
-                } else if (string[0].equalsIgnoreCase("public")) {
-                    view.showPubOCs(model.getPubOCs());
-                }
             } else {
                 view.invalidMoveError();
             }

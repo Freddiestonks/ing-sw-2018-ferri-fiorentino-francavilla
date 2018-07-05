@@ -27,9 +27,9 @@ public class ToolCard implements Serializable {
     /**
      * This is the constructor of the class.
      *
-     * @param name that means the name of a specific Tool Card
-     * @param description is the effect of the Tool Card
-     * @param effects the set of effects related to the Tool Card
+     * @param name that means the name of a specific ToolCard
+     * @param description is the effect of the ToolCard
+     * @param effects the set of effects used by the ToolCard
      */
     public ToolCard(String name, String description, ArrayList<AbstractTCEffect> effects) {
         this.name = name;
@@ -82,6 +82,7 @@ public class ToolCard implements Serializable {
      */
     public void performAction(Model model, WindowFrame wf, PlayerAction pa) {
         if(!isPendingAction()) {
+            // there is no pending actions to perform
             for(AbstractTCEffect effect : effects) {
                 effect.performAction(model, wf, pa);
                 if(!effect.isSingleAction()) {
@@ -118,7 +119,7 @@ public class ToolCard implements Serializable {
     }
 
     /**
-     * This method is used to ask if a specific Tool Card is in a pending status.
+     * This method is used to ask if a specific ToolCard is in a pending status.
      *
      * @return a boolean value representing the result of the control.
      */
@@ -127,7 +128,7 @@ public class ToolCard implements Serializable {
     }
 
     /**
-     * This method is used to provide the Tool Card defined in a pending status.
+     * This method is used to provide the ToolCard defined in a pending status.
      *
      * @return a Tool Card instance.
      */
@@ -136,7 +137,7 @@ public class ToolCard implements Serializable {
     }
 
     /**
-     * This method is used to provide the die related at the pending Tool Card.
+     * This method is used to provide the die related to the pending ToolCard.
      *
      * @return a Die instance.
      */
@@ -145,7 +146,7 @@ public class ToolCard implements Serializable {
     }
 
     /**
-     * This method is used to save a die for a pending action.
+     * This method is used to save a die related to a pending action.
      *
      * @param die is the die to save for the pending action.
      */
@@ -154,7 +155,7 @@ public class ToolCard implements Serializable {
     }
 
     /**
-     * This method is used to rest the attribute resetting the pending status of a Tool Card.
+     * This method is used to reset the pending status of a ToolCard.
      */
     public static void resetPendingAction() {
         pendingDie = null;

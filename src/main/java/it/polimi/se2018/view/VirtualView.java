@@ -10,10 +10,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
+/**
+ * This class aims to update the players' View after a Model update.
+ */
 public class VirtualView implements Observer {
-    
-    ArrayList<ViewInterface> views = new ArrayList<>();
-    Model model = Model.instance();
+    // the list of Views remote reference
+    private ArrayList<ViewInterface> views = new ArrayList<>();
+    private Model model = Model.instance();
 
     public static final Logger LOGGER = Logger.getLogger(VirtualView.class.getName());
 
@@ -21,22 +24,34 @@ public class VirtualView implements Observer {
 
     }
 
+    /**
+     * This method add a client to the Views list.
+     * @param view related to a client.
+     */
     public void addClient(ViewInterface view) {
         views.add(view);
     }
 
+    /**
+     * This method remove a client from the View list.
+     * @param i the index of the client in the list.
+     */
     public void removeClient(int i) {
         views.remove(i);
     }
 
+    /**
+     * This method reinsert a client to the Views list.
+     * @param i the index of the client in the list.
+     * @param view the View remote reference to substitute to the current one.
+     */
     public void reinsertClient(int i, ViewInterface view) {
         views.set(i, view);
     }
 
-    public ViewInterface getView(int i) {
-        return views.get(i);
-    }
-
+    /**
+     * This method update the lobby state for all the connected players.
+     */
     private void updateLobby() {
         ArrayList<String> usernames = new ArrayList<>();
         for(int i = 0; i < model.getNumPlayers(); i++) {
@@ -51,6 +66,9 @@ public class VirtualView implements Observer {
         }
     }
 
+    /**
+     * This method update the LeaderBoard for all the connected players.
+     */
     private void updateMatchOver() {
         ArrayList<Player> leaderBoard = model.getLeaderBoard();
         int playerIndex = 0;
@@ -64,6 +82,9 @@ public class VirtualView implements Observer {
         }
     }
 
+    /**
+     * This method update the PatternCard to choose for all the connected players.
+     */
     private void patternCardChooser() {
         ArrayList<PatternCard> patternCards = new ArrayList<>(Arrays.asList(model.getPatternCards()));
         int offset = 0;
@@ -78,6 +99,9 @@ public class VirtualView implements Observer {
         }
     }
 
+    /**
+     * This method update the board state for all the connected players.
+     */
     private void updateBoardScreen() {
         MainScreenInfo msi = new MainScreenInfo();
         String turnPlayer = model.getPlayer(model.getTurn() - 1).getUsername();
@@ -119,10 +143,19 @@ public class VirtualView implements Observer {
         LOGGER.fine("end views update");
     }
 
+    /**
+     * This method resets the View list.
+     */
     public void reset() {
         views.clear();
     }
 
+    /**
+     * This method checks whether the View remote reference are connected.
+     *
+     * @param i the index of client in the View list.
+     * @return true if the selected client is connected.
+     */
     public boolean checkConnection(int i) {
         boolean check = true;
         try {

@@ -19,19 +19,21 @@ public class PubOCShadeDet extends PubObjCard {
 
     //methods
     /**
-
      * This is the constructor method of the class
      *
-     * @param desc it is simply the description of the public card
-     * @param row triggers on or off the public card that calculates the score of different shades by row
-     * @param column triggers on or off the public card that calculates the score of different shades by column
-     * */
+     * @param desc the description of the Public Objective Card
+     * @param name the name of the public card
+     * @param row triggers on or off the public card that calculates the score of different colors by row
+     * @param column triggers on or off the public card that calculates the score of different colors by column
+     * @param multiplier are the points related to the Public Objective Card
+     */
     public PubOCShadeDet(String desc, String name, boolean row, boolean column, int multiplier) {
         super(desc, name, multiplier);
         points = multiplier;
         rows = row;
         col = column;
     }
+
     /**
      * This method is used to update the ArrayList that is counting the shades
      * @param row this is the row of the analyzed cell

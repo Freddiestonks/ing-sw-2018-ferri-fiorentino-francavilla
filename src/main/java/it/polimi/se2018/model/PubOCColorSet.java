@@ -14,7 +14,7 @@ public class PubOCColorSet extends PubObjCard {
      * @param name this is the name of the card
      * @param color indicates which of the colors are wanted to complete a set
      * @param score this indicates how many points each set gives to the player
-     * */
+     */
     public PubOCColorSet(String desc, String name, boolean[] color, int score){
         super(desc, name, score);
         if(!color[0] && !color[1] && !color[2] && !color[3] && !color[4]){

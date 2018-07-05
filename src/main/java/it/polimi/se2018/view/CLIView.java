@@ -29,7 +29,7 @@ public class CLIView extends View {
     public CLIView() {
     }
 
-    public void readInput(){
+    private void readInput(){
         boolean active = true;
         while (active){
             out.print(CURSOR);
@@ -37,7 +37,6 @@ public class CLIView extends View {
             notifyObservers();
         }
     }
-
 
     public synchronized void updateWaitingRoom(boolean starting){
         if(starting){
@@ -48,26 +47,22 @@ public class CLIView extends View {
         }
     }
 
-    public synchronized void welcomeScreen() {
-    }
-
-
-    public synchronized void updateDP(ArrayList<Die> draftPool) {
+    protected synchronized void updateDP(ArrayList<Die> draftPool) {
         out.println("DraftPool:");
         for (int i = 0; i < draftPool.size(); i++){
             out.println(i + " : " + draftPool.get(i));
         }
     }
 
-    public synchronized void updateTokens(int tokens){
+    protected synchronized void updateTokens(int tokens){
         out.println("You currently have " + tokens + " tokens");
     }
 
-    public synchronized void updateRound(int round){
+    protected synchronized void updateRound(int round){
         out.println("Round: " + round);
     }
 
-    public synchronized void updateOrder(boolean backward) {
+    protected synchronized void updateOrder(boolean backward) {
         if (backward){
             out.println("You are in the backward order of this round");
         }
@@ -76,17 +71,18 @@ public class CLIView extends View {
         }
     }
 
-    public synchronized void updateTurnPlayer(String turnPlayer) {
+    protected synchronized void updateTurnPlayer(String turnPlayer) {
         out.println("It is " + turnPlayer + "'s turn");
     }
 
-    public synchronized void updateInfo(int tokens, int round, boolean backward, String turnPlayer) {
+    protected synchronized void updateInfo(int tokens, int round, boolean backward, String turnPlayer) {
         updateTokens(tokens);
         updateRound(round);
         updateOrder(backward);
         updateTurnPlayer(turnPlayer);
     }
-    public synchronized void updatePrivOCs(PrivObjCard privObjCard) {
+
+    protected synchronized void updatePrivOCs(PrivObjCard privObjCard) {
         clearScreen();
         String[] string = new String[PRIV_OC_SIZE];
         for (int i = 0; i < PRIV_OC_SIZE; i++) {
@@ -134,10 +130,10 @@ public class CLIView extends View {
         out.print(CURSOR);
     }
 
-    public void updateOpponentsWF(ArrayList<Player> opponents) {
+    protected void updateOpponentsWF(ArrayList<Player> opponents) {
         out.println();
         String offline = "(OFFLINE)";
-        WindowFrame[] wf = new  WindowFrame[opponents.size()];
+        WindowFrame[] windowFrames = new WindowFrame[opponents.size()];
         for (int i = 0; i < opponents.size(); i++) {
             if(!opponents.get(i).isConnected()){
                 out.print(offline);
@@ -153,11 +149,11 @@ public class CLIView extends View {
             out.print("       ");
         }
         out.println();
-        for(int i = 0;i<opponents.size();i++) {
+        for(int i = 0; i < opponents.size(); i++) {
             if(opponents.get(i).getUsername().length() <= 24){
                 out.print(opponents.get(i).getUsername() + ":");}
             else {
-                out.print(opponents.get(i).getUsername().substring(0,24) + ":");
+                out.print(opponents.get(i).getUsername().substring(0, 24) + ":");
             }
             for (int j = 0; j < (24 - opponents.get(i).getUsername().length()); j++){
                 out.print(" ");
@@ -166,9 +162,9 @@ public class CLIView extends View {
         }
         out.println("\n");
         for(int i = 0; i < opponents.size(); i++){
-            wf[i] = opponents.get(i).getWindowFrame();
+            windowFrames[i] = opponents.get(i).getWindowFrame();
         }
-        windowFrameGenerator(wf);
+        windowFrameGenerator(windowFrames);
     }
 
     public synchronized void updatePlayerWF(Player player){
@@ -446,7 +442,6 @@ public class CLIView extends View {
         for (int i = 0; i < numCards; i++) {
             size[i] = (string[i].length() - 1) / CARD_WIDTH + 1;
         }
-
         for (int i = 0; i < numCards; i++) {
             if(size[i]>big){
                 big = size[i];
@@ -467,9 +462,10 @@ public class CLIView extends View {
                     }
                 }
                 else if(i > string[j].length() / CARD_WIDTH){
-                        for (int z = 0; z < CARD_WIDTH; z++) {
+                    for (int z = 0; z < CARD_WIDTH; z++) {
                         out.print(" ");
-                    }                }
+                    }
+                }
                 else {
                     out.print(string[j].substring(i * CARD_WIDTH, i * CARD_WIDTH + CARD_WIDTH));
                 }
@@ -487,16 +483,16 @@ public class CLIView extends View {
         out.println();
     }
 
-    private void windowFrameGenerator(WindowFrame[] wf){
+    private void windowFrameGenerator(WindowFrame[] windowFrames){
         for(int i = 0; i< ROW_SIZE; i++){
-            for(int j = 0; j < wf.length; j++){
+            for(int j = 0; j < windowFrames.length; j++){
                 for(int k = 0; k < COL_SIZE; k++){
-                    Die die = wf[j].getPlacements()[i][k];
-                    if(wf[j].getPlacements()[i][k] != null){
+                    Die die = windowFrames[j].getPlacements()[i][k];
+                    if(windowFrames[j].getPlacements()[i][k] != null){
                         out.print("|" + die + "|");
                     }
                     else {
-                        out.print("|"  + wf[j].getPCCell(i, k) + "|");
+                        out.print("|"  + windowFrames[j].getPCCell(i, k) + "|");
                     }
                 }
                 out.print("       ");

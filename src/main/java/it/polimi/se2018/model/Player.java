@@ -11,15 +11,14 @@ import java.io.Serializable;
  * @author Simone Francavilla
  */
 
-
 public class Player implements Serializable {
     //Attr.
     private String username;
     private WindowFrame wf = null;
     private int tokens;
     private int score = 0;
+    private boolean connected = true;
     private transient PrivObjCard privObjCard;
-    private transient boolean connected = true;
     private transient boolean skip = false;
     private transient boolean switchingConn = false;
 
@@ -58,9 +57,8 @@ public class Player implements Serializable {
      * This method is used to decrease the tokens value when user spent it for a specific move.
      *
      * @param tokens is the number of tokens to be decreased.
-     * @throws IllegalArgumentException
      */
-    public void spendTokens(int tokens) throws IllegalArgumentException{
+    public void spendTokens(int tokens) {
         if(this.tokens >= tokens && tokens >= 0){
             this.tokens -= tokens;
         }

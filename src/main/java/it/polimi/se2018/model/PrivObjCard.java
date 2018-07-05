@@ -14,6 +14,7 @@ public class PrivObjCard implements Serializable {
     public Color getColor(){
         return this.color;
     }
+
     @Override
     public String toString(){
         return color.toString().toLowerCase();
