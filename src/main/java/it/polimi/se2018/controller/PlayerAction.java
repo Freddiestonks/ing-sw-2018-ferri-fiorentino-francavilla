@@ -175,7 +175,7 @@ public class PlayerAction implements PlayerActionInterface, Serializable {
     }
 
     /**
-     * This method checks whether the PlayerAction remote reference is connected.
+     * This method tests the network connection with the server by a remote reference.
      */
     public void checkConnection() {}
 

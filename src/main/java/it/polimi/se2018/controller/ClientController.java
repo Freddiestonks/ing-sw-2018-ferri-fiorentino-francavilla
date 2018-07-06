@@ -65,7 +65,7 @@ public class ClientController extends AbstractController implements Observer {
                     networkHandler = new RMINetworkHandler(string[2]);
                 }
                 else {
-                    view.invalidMoveError();
+                    view.invalidMoveError(true);
                     return;
                 }
                 try {
@@ -96,7 +96,7 @@ public class ClientController extends AbstractController implements Observer {
                     view.showPubOCs(model.getPubOCs());
                 }
                 else {
-                    view.invalidMoveError();
+                    view.invalidMoveError(true);
                 }
             }
             else {
@@ -110,20 +110,20 @@ public class ClientController extends AbstractController implements Observer {
                         try {
                             playerAction.setPatternCard(Integer.parseInt(string[2]));
                         } catch (NumberFormatException nfe) {
-                            view.invalidMoveError();
+                            view.invalidMoveError(true);
                         }
                         performAction(playerAction);
                     }
                     else {
-                        view.invalidMoveError();
+                        view.invalidMoveError(true);
                     }
                 }
                 else {
-                    view.invalidMoveError();
+                    view.invalidMoveError(true);
                 }
             }
         } catch (ArrayIndexOutOfBoundsException iob){
-            view.invalidMoveError();
+            view.invalidMoveError(true);
         }
     }
 
@@ -141,13 +141,13 @@ public class ClientController extends AbstractController implements Observer {
                     playerAction.addPlaceDPDie(row, col);
                     i += 3;
                 } else {
-                    view.invalidMoveError();
+                    view.invalidMoveError(true);
                     return;
                 }
             }
             performAction(playerAction);
         } catch (NumberFormatException nfe){
-            view.invalidMoveError();
+            view.invalidMoveError(true);
         }
 
     }
@@ -164,7 +164,7 @@ public class ClientController extends AbstractController implements Observer {
                 view.showToolCards(model.getToolCards());
                 break;
             default:
-                view.invalidMoveError();
+                view.invalidMoveError(true);
                 break;
         }
     }
@@ -197,7 +197,7 @@ public class ClientController extends AbstractController implements Observer {
                         i += 4;
                     }
                     else {
-                        view.invalidMoveError();
+                        view.invalidMoveError(true);
                         return;
                     }
                 }
@@ -215,17 +215,17 @@ public class ClientController extends AbstractController implements Observer {
                         i += 4;
                     }
                     else {
-                        view.invalidMoveError();
+                        view.invalidMoveError(true);
                         return;
                     }
                 } else {
-                    view.invalidMoveError();
+                    view.invalidMoveError(true);
                     return;
                 }
             }
             performAction(playerAction);
         } catch (NumberFormatException nfe){
-            view.invalidMoveError();
+            view.invalidMoveError(true);
         }
     }
 
@@ -242,7 +242,7 @@ public class ClientController extends AbstractController implements Observer {
             }
         }
         else {
-            view.invalidMoveError();
+            view.invalidMoveError(false);
         }
     }
 

@@ -13,9 +13,6 @@ import static java.lang.System.out;
 public class CLIView extends View {
 
     private Scanner scanner = new Scanner(System.in);
-    private String ip;
-    private String port;
-    private String type = null;
     private MainScreenInfo mainScreenInfo;
     private static final int CARD_WIDTH = 26;
     private static final int PRIV_OC_SIZE = 1;
@@ -29,10 +26,15 @@ public class CLIView extends View {
     public CLIView() {
     }
 
+    /**
+     * This method wait the user input from command line and notify the ClientController
+     */
     private void readInput(){
         boolean active = true;
-        while (active){
-            out.print(CURSOR);
+        while (active) {
+            synchronized (this) {
+                out.print(CURSOR);
+            }
             userInput = scanner.nextLine().toLowerCase();
             notifyObservers();
         }
@@ -283,8 +285,12 @@ public class CLIView extends View {
         layoutFormatter(description, toolCards.length);
     }
 
-    public synchronized void invalidMoveError(){
-        out.println("ERROR: Invalid Action");
+    public synchronized void invalidMoveError(boolean parsing){
+        out.print("ERROR: Invalid Action");
+        if(parsing) {
+            out.print(" (parsing)");
+        }
+        out.println();
     }
 
     public synchronized void help() {
@@ -321,6 +327,16 @@ public class CLIView extends View {
         out.println();
         out.print(CURSOR);
     }
+
+    /*
+    public synchronized void updatePlayerState(Player player) {
+        if(player.isConnected()){
+            out.println(player.getUsername() + " just disconnected from the game\n");
+        }
+        else {
+            out.println(player.getUsername() + " just came back into the game\n");
+        }
+    }*/
 
     public synchronized void connectionError() {
         clearScreen();

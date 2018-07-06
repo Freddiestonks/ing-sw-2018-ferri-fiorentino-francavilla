@@ -51,7 +51,7 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
     }
 
     public synchronized boolean playerCanUseToolCard(int playerIndex, int idToolCard) {
-        ToolCard toolCard = toolCards[idToolCard];
+        ToolCard toolCard = toolCards[idToolCard - 1];
         return (!toolCardUsed && (tokens >= toolCard.getPrice()));
     }
 
@@ -136,6 +136,9 @@ public class LocalModel implements LocalModelInterface, ModelInterface {
         return playerIndex;
     }
 
+    /**
+     * This method tests the network connection with a client by a remote reference.
+     */
     public void checkConnection() {
 
     }

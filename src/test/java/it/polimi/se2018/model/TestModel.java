@@ -14,10 +14,10 @@ public class TestModel {
     public void testAddingPlayers() throws MaxNumPlayersException {
         //tests the maximum number of players is respected.
         Model modelExample = Model.instance();
-        modelExample.addPlayer("Alessio", null);
-        modelExample.addPlayer("Sfidante", null);
-        modelExample.addPlayer("Tizio", null);
-        modelExample.addPlayer("Caio", null);
+        modelExample.addPlayer("Alessio", new LocalModel());
+        modelExample.addPlayer("Sfidante", new LocalModel());
+        modelExample.addPlayer("Tizio", new LocalModel());
+        modelExample.addPlayer("Caio", new LocalModel());
     }
     @After
     public void reset1() {

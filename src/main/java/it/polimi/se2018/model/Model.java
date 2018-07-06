@@ -32,7 +32,6 @@ public class Model extends Observable implements ModelInterface {
     private ArrayList<Die> draftPool = new ArrayList<>();
     private ArrayList<ArrayList<Die>> roundTrack = new ArrayList<>();
     private PubObjCard[] pubOCs = new PubObjCard[3];
-    //private PrivObjCard[] privOCs = new PrivObjCard[5];
     private ToolCard[] toolCards = new ToolCard[3];
     private boolean toolCardUsed = false;
     private PatternCard[] patCards = null;
@@ -76,6 +75,11 @@ public class Model extends Observable implements ModelInterface {
         players.add(new Player(username));
         localModels.add(localModel);
         numPlayers++;
+        try {
+            localModel.setState(started, lobbyGathering);
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
         notifyObservers();
     }
 
@@ -155,6 +159,7 @@ public class Model extends Observable implements ModelInterface {
         for(LocalModelInterface localModel : localModels) {
             try {
                 localModel.updateTurn(round, turn, backward);
+                localModel.setToolCardUsed(false);
             } catch (IOException e) {
                 //e.printStackTrace();
             }
@@ -351,7 +356,7 @@ public class Model extends Observable implements ModelInterface {
 
     /**
      * This is the method used to calculate the overall score of the game, it will order the players by score in the LeaderBoard.
-     * */
+     */
     private void calculateScore() {
         LOGGER.fine("begin calculate score");
         int connectedPlayers = 0;
@@ -494,9 +499,6 @@ public class Model extends Observable implements ModelInterface {
      */
     public void setPubOCs(PubObjCard[] pubOCs) {
         this.pubOCs = pubOCs.clone();
-        //LOGGER.fine(pubOCs[0]);
-        //LOGGER.fine(pubOCs[1]);
-        //LOGGER.fine(pubOCs[2]);
     }
 
     /**
@@ -625,7 +627,7 @@ public class Model extends Observable implements ModelInterface {
      */
     public boolean playerCanUseToolCard(int playerIndex, int idToolCard) {
         Player player = players.get(playerIndex);
-        ToolCard toolCard = toolCards[idToolCard];
+        ToolCard toolCard = toolCards[idToolCard - 1];
         return (!toolCardUsed && (player.getTokens() >= toolCard.getPrice()));
     }
 
@@ -666,8 +668,16 @@ public class Model extends Observable implements ModelInterface {
         toolCardUsed = true;
         try {
             localModels.get(playerIndex).setWindowFrame(windowFrame);
+            localModels.get(playerIndex).setToolCardUsed(true);
         } catch (IOException e) {
             //e.printStackTrace();
+        }
+        for(LocalModelInterface localModel : localModels) {
+            try {
+                localModel.setToolCards(toolCards);
+            } catch (IOException e) {
+                //e.printStackTrace();
+            }
         }
         notifyObservers();
     }

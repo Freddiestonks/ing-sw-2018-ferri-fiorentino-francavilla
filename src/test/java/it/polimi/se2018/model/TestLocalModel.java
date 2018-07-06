@@ -22,19 +22,19 @@ public class TestLocalModel {
         int tokens = 3;
         lm.setPlayerIndex(playerIndex);
         lm.setTokens(tokens);
-        if(!lm.playerCanUseToolCard(playerIndex, 2)) {
+        if(!lm.playerCanUseToolCard(playerIndex, 3)) {
             fail();
         }
         tokens = 1;
         lm.setTokens(tokens);
         toolCards[2].putTokens(1);
-        if(lm.playerCanUseToolCard(playerIndex, 2)) {
+        if(lm.playerCanUseToolCard(playerIndex, 3)) {
             fail();
         }
         tokens = 7;
         lm.setTokens(tokens);
         lm.setToolCardUsed(true);
-        if(lm.playerCanUseToolCard(playerIndex, 2)) {
+        if(lm.playerCanUseToolCard(playerIndex, 3)) {
             fail();
         }
     }

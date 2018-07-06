@@ -2,84 +2,84 @@
   "toolCards": [
     {
       "name": "Tool Card 1",
-      "description": "desc 1",
+      "description": "After drafting, increase or decrease the value of the drafted die by 1",
       "effects": [
         "addOrSubDPDie"
       ]
     },
     {
       "name": "Tool Card 2",
-      "description": "desc 2",
+      "description": "Move any one die in your window ignoring the color restrictions",
       "effects": [
         "moveDieIgnoringColor"
       ]
     },
     {
       "name": "Tool Card 3",
-      "description": "desc 3",
+      "description": "Move any one die in your window ignoring the value restrictions",
       "effects": [
         "moveDieIgnoringValue"
       ]
     },
     {
       "name": "Tool Card 4",
-      "description": "desc 4",
+      "description": "Move exactly two dice, obeying all placement restrictions",
       "effects": [
         "moveTwoDice"
       ]
     },
     {
       "name": "Tool Card 5",
-      "description": "desc 5",
+      "description": "After drafting, swap the drafted die with a die from the Round Track",
       "effects": [
         "swapDPAndRTDice"
       ]
     },
     {
       "name": "Tool Card 6",
-      "description": "desc 6",
+      "description": "After drafting re-roll the drafted die",
       "effects": [
         "rollDPDie"
       ]
     },
     {
       "name": "Tool Card 7",
-      "description": "desc 7",
+      "description": "Re-roll all dice in the Draft Pool",
       "effects": [
         "rollDraftPool"
       ]
     },
     {
       "name": "Tool Card 8",
-      "description": "desc 8",
+      "description": "After your first turn, immediately draft a die",
       "effects": [
         "doubleTurn"
       ]
     },
     {
       "name": "Tool Card 9",
-      "description": "desc 9",
+      "description": "After drafting, place the die in a spot that is not adjacent to another one",
       "effects": [
         "notAdjPlace"
       ]
     },
     {
       "name": "Tool Card 10",
-      "description": "desc 10",
+      "description": "After drafting, flip the die to its opposite side",
       "effects": [
         "flipDPDieOver"
       ]
     },
     {
       "name": "Tool Card 11",
-      "description": "desc 11",
+      "description": "After drafting, return the die to the Dice Bag and pull 1 die from the bag",
       "effects": [
         "diceBagPlace"
       ]
     },
     {
       "name": "Tool Card 12",
-      "description": "desc 12",
+      "description": "Move up to two dice of the same color that match the color of a die on the Round Track",
       "effects": [
         "moveDiceAsRTDieColor"
       ]

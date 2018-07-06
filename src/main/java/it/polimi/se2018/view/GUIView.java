@@ -78,7 +78,7 @@ public class GUIView extends View {
 
     }
 
-    public void invalidMoveError() {
+    public void invalidMoveError(boolean parsing) {
 
     }
 

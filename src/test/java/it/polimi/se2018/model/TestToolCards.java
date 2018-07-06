@@ -19,9 +19,7 @@ public class TestToolCards {
         WindowFrame wf = new WindowFrame(testPC,true);
         PlayerAction pa = new PlayerAction();
         pa.addPosDPDie(0);
-        pa.addPosDPDie(2);
         pa.addNewDieValue(5);
-        pa.addPlaceWFDie(0, 0);
         pa.addPlaceDPDie(0, 1);
         Die d1 = new Die(Color.YELLOW);
         d1.setValue(4);
