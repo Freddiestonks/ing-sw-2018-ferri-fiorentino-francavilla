@@ -30,6 +30,7 @@ public class Timer extends Thread {
         try {
             sleep(time * 1000);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             e.printStackTrace();
         }
         synchronized (lock) {

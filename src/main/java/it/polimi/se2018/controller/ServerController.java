@@ -363,6 +363,7 @@ public class ServerController extends AbstractController {
                 serverController.reset();
             }
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             e.printStackTrace();
         } catch (ResourceLoaderException e) {
             LOGGER.severe("ERROR LOADING RESOURCE FILES");
