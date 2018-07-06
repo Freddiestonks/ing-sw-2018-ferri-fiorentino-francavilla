@@ -13,7 +13,7 @@ public abstract class MoveDie extends AbstractTCEffect {
         Die die = wf.getDie(pa.getPlaceWFDie().get(0)[0], pa.getPlaceWFDie().get(0)[1]);
         // move the die
         wf.removeDie(pa.getPlaceWFDie().get(0)[0], pa.getPlaceWFDie().get(0)[1]);
-        wf.placeDie(die, pa.getPlaceNewWFDie().get(0)[0], pa.getPlaceWFDie().get(0)[1]);
+        wf.placeDie(die, pa.getPlaceNewWFDie().get(0)[0], pa.getPlaceNewWFDie().get(0)[1]);
     }
 
     public boolean validAction(ModelInterface model, WindowFrame wf, PlayerAction pa) {

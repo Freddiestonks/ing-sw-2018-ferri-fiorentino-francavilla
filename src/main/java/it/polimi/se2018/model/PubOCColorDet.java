@@ -126,10 +126,16 @@ public class PubOCColorDet extends PubObjCard {
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < 5; j++){
                 if(wf.getDie(i, j) != null) {
-                    if ((i - 1) >= 0 && (j - 1) >= 0 && (wf.getDie(i, j).getColor().equals(wf.getDie(i - 1, j - 1).getColor())) || (
-                            (i - 1) >= 0 && (j + 1) < 5 && (wf.getDie(i, j).getColor().equals(wf.getDie(i - 1, j + 1).getColor()))) ||
-                            ((i + 1) < 4 && (j - 1) >= 0 && (wf.getDie(i, j).getColor().equals(wf.getDie(i + 1, j - 1).getColor()))) ||
-                            ((i + 1) < 4 && (j + 1) < 5 && (wf.getDie(i, j).getColor().equals(wf.getDie(i + 1, j + 1).getColor())))) {
+                    if ((i - 1) >= 0 && (j - 1) >= 0 && (wf.getDie(i - 1, j - 1) != null) && (wf.getDie(i, j).getColor().equals(wf.getDie(i - 1, j - 1).getColor()))
+                            || ((i - 1) >= 0 && (j + 1) < 5
+                                && (wf.getDie(i - 1, j + 1) != null)
+                                && (wf.getDie(i, j).getColor().equals(wf.getDie(i - 1, j + 1).getColor())))
+                            || ((i + 1) < 4 && (j - 1) >= 0
+                                && (wf.getDie(i + 1, j - 1) != null)
+                                && (wf.getDie(i, j).getColor().equals(wf.getDie(i + 1, j - 1).getColor())))
+                            || ((i + 1) < 4 && (j + 1) < 5
+                                && (wf.getDie(i + 1, j + 1) != null)
+                                && (wf.getDie(i, j).getColor().equals(wf.getDie(i + 1, j + 1).getColor())))) {
                         score++;
                     }
                 }
