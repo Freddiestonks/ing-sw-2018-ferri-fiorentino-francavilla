@@ -1,8 +1,5 @@
-package it.polimi.se2018.controller;
+package it.polimi.se2018.view;
 
-import java.io.IOException;
-
-import it.polimi.se2018.view.GUIView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -13,7 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class GUIcontroller extends Application{
+import java.io.IOException;
+
+public class GUIController extends Application {
     private static GUIView view = null;
     private Stage primaryStage;
     private BorderPane rootLayout;
@@ -69,6 +68,7 @@ public class GUIcontroller extends Application{
         initRootLayout();
 
     }
+
     public void updateConnectionState(boolean connected){
         if(connected){
             Platform.runLater(()->{
@@ -83,6 +83,7 @@ public class GUIcontroller extends Application{
         }
 
     }
+
     public GUIView getGuiView() {
         return view;
     }
@@ -91,9 +92,8 @@ public class GUIcontroller extends Application{
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUIcontroller.class.getResource("/fxml/MainScreen.fxml"));
-            rootLayout = (BorderPane) loader.load();
-
+            loader.setLocation(GUIController.class.getResource("/fxml/MainScreen.fxml"));
+            rootLayout = loader.load();
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
@@ -105,6 +105,7 @@ public class GUIcontroller extends Application{
     }
 
     public void connectClick(){}
+
     public Stage getPrimaryStage() {
         return primaryStage;
     }
