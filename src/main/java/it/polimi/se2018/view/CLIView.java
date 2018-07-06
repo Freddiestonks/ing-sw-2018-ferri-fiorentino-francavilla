@@ -233,15 +233,6 @@ public class CLIView extends View {
         out.print(CURSOR);
     }
 
-    /*public synchronized void updateConnectionRequest(boolean success){
-        if(success){
-            out.println("Congratulations you are now connected\n");
-        }
-        else{
-            out.println("Sorry, there was a problem connecting to the server, please check ip and port\n");
-        }
-    }*/
-
     public void endGame(ArrayList<Player> leaderBoard, Player player) {
         clearScreen();
         out.println("Match is over, here is the Leader Board:\n");
@@ -296,14 +287,6 @@ public class CLIView extends View {
         out.println("ERROR: Invalid Action");
     }
 
-    /*public synchronized void selectionMaker(String[] string){
-        out.println("Please select an option:");
-        for(int i=0; i<string.length;i++){
-            out.print(i + ": ");
-            out.println(string[i]);
-        }
-    }*/
-
     public synchronized void help() {
         clearScreen();
         out.println("All of the commands need to be on the same line separated by a comma(,), all the lines should either start with toolcard");
@@ -338,16 +321,6 @@ public class CLIView extends View {
         out.println();
         out.print(CURSOR);
     }
-
-    /*
-    public synchronized void updatePlayerState(Player player) {
-        if(player.isConnected()){
-            out.println(player.getUsername() + " just disconnected from the game\n");
-        }
-        else {
-            out.println(player.getUsername() + " just came back into the game\n");
-        }
-    }*/
 
     public synchronized void connectionError() {
         clearScreen();

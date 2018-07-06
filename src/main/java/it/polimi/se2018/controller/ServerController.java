@@ -209,7 +209,7 @@ public class ServerController extends AbstractController {
             if((!model.checkConnection(i) || !view.checkConnection(i))
                && player.isConnected()
                && !player.isSwitchingConn()) {
-                //take into account that the player has quitted
+                //take into account that the player has quit
                 if(model.isLobbyGathering()) {
                     model.removeClient(i);
                     view.removeClient(i);
