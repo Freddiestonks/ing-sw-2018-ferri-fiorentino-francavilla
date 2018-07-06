@@ -1,11 +1,17 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.GUIcontroller;
 import it.polimi.se2018.model.*;
 
 import java.util.ArrayList;
 
-public class GUIView extends View {
 
+public class GUIView extends View{
+    GUIcontroller guIcontroller = new GUIcontroller();
+    private boolean connected;
+    public void readInput(){
+        notifyObservers();
+    }
     public void updateWaitingRoom(boolean starting) {
 
     }
@@ -75,7 +81,7 @@ public class GUIView extends View {
     }
 
     public void connectionError() {
-
+        connected=false;
     }
 
     public void invalidMoveError(boolean parsing) {
@@ -91,7 +97,6 @@ public class GUIView extends View {
     }
 
     public void updatePlayerLobby(ArrayList<String> usernames) {
-
     }
 
     public void updatePlayerState(Player player) {
@@ -102,11 +107,24 @@ public class GUIView extends View {
 
     }
 
-    public void enteringError(boolean lobbyGathering) {
+    public synchronized void enteringError(boolean lobbyGathering) {
 
     }
 
     public void startView() {
+        guIcontroller.setView(this);
+        guIcontroller.main(null);
+    }
+    public synchronized void setUserInput(String input){
+        userInput = input;
+        readInput();
+    }
 
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }
